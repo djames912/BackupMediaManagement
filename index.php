@@ -6,7 +6,9 @@
   </head>
   <body>
     <?php
-    // put your code here
+    require_once "configure.php";
+    echo "<br>";
+    echo "User: $dbUser";
     ?>
   </body>
 </html>
