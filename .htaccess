@@ -1,0 +1,8 @@
+AuthName "Backup Media Inventory"
+AuthType Kerberos
+KrbMethodNegotiate On
+KrbMethodK5Passwd On
+KrbAuthRealms MORINDA.COM
+Krb5KeyTab /etc/krb5.keytab
+KrbServiceName HTTP/rsync01.morinda.com@MORINDA.COM
+require valid-user
