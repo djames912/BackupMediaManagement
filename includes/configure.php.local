@@ -4,4 +4,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
+// Database credentials:
+$dbHost = "localhost";
+$dbName = "backup_media";
+$dbUser = "mngbkupmedia";
+$dbPass = "Api3c3UvjUnk!";
 ?>
