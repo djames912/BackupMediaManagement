@@ -6,9 +6,12 @@
   </head>
   <body>
     <?php
-    require_once "configure.php";
+    require_once "includes/configure.php";
     echo "<br>";
-    echo "User: $dbUser";
+    $userName = $_SERVER['REMOTE_USER'];
+    if($userName == null || $userName == "")
+      $userName = "unknown";
+    echo "$userName";
     ?>
   </body>
 </html>
