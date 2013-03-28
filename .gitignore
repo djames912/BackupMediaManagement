@@ -1,2 +1,4 @@
 nbproject
 configure.php.local
+dbconfig.php.local
+test.php
