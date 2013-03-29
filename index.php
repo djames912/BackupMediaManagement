@@ -6,12 +6,19 @@
   </head>
   <body>
     <?php
-    require_once "includes/configure.php";
-    echo "<br>";
-    $userName = $_SERVER['REMOTE_USER'];
-    if($userName == null || $userName == "")
-      $userName = "unknown";
-    echo "$userName";
+    require_once "includes/functions.php";
+    $suppliedUserName = $_SERVER['REMOTE_USER'];
+    $userName = cleanUserName($suppliedUserName);
+    if($userName == null || $userName = '')
+    {
+      $myBaseURL = str_replace('index.php', 'locallogin.php', $_SERVER['REQUEST_URI']);
+      echo '<meta http-equiv="refresh" content="0; url=http://' . $_SERVER["HTTP_HOST"] . $myBaseURL .'">';
+    }
+    else
+    {
+      $myBaseURL = str_replace('index.php', 'main.php', $_SERVER['REQUEST_URI']);
+      echo '<meta http-equiv="refresh" content="0; url=http://' . $_SERVER["HTTP_HOST"] . $myBaseURL .'">';
+    }
     ?>
   </body>
 </html>

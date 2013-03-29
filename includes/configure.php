@@ -6,14 +6,9 @@
  * values which are specified in the configure.php.local file will override
  * those contained in this file.
  */
-
-// Database credentials:
-$dbHost = "localhost";
-$dbName = "backup_media";
-$dbUser = "changeme";
-$dbPass = "changeme";
+$applicationName = "Backup Media Management";
+$applicationInstance = "Development";
 
 // REMOVE THE FOLLOWING LINES FROM THE configure.php.local file:
 include 'configure.php.local';
-include 'functions.php';
 ?>

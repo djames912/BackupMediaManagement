@@ -26,6 +26,21 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/ `backup_media` /*!40100 DEFAULT CHARACT
 USE `backup_media`;
 
 --
+-- Table structure for table `access`
+--
+
+DROP TABLE IF EXISTS `access`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `access` (
+  `rn` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `al` tinyint(4) NOT NULL,
+  `description` varchar(32) NOT NULL,
+  PRIMARY KEY (`rn`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `batch`
 --
 
@@ -41,15 +56,6 @@ CREATE TABLE `batch` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `batch`
---
-
-LOCK TABLES `batch` WRITE;
-/*!40000 ALTER TABLE `batch` DISABLE KEYS */;
-/*!40000 ALTER TABLE `batch` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `history`
@@ -71,15 +77,6 @@ CREATE TABLE `history` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `history`
---
-
-LOCK TABLES `history` WRITE;
-/*!40000 ALTER TABLE `history` DISABLE KEYS */;
-/*!40000 ALTER TABLE `history` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `locations`
 --
 
@@ -94,15 +91,6 @@ CREATE TABLE `locations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `locations`
---
-
-LOCK TABLES `locations` WRITE;
-/*!40000 ALTER TABLE `locations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `locations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `mtype`
 --
 
@@ -115,15 +103,6 @@ CREATE TABLE `mtype` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `mtype`
---
-
-LOCK TABLES `mtype` WRITE;
-/*!40000 ALTER TABLE `mtype` DISABLE KEYS */;
-/*!40000 ALTER TABLE `mtype` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tapes`
@@ -141,15 +120,6 @@ CREATE TABLE `tapes` (
   KEY `label` (`label`(10))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tapes`
---
-
-LOCK TABLES `tapes` WRITE;
-/*!40000 ALTER TABLE `tapes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tapes` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `users`
@@ -170,15 +140,6 @@ CREATE TABLE `users` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `users`
---
-
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `vendors`
 --
 
@@ -191,15 +152,6 @@ CREATE TABLE `vendors` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `vendors`
---
-
-LOCK TABLES `vendors` WRITE;
-/*!40000 ALTER TABLE `vendors` DISABLE KEYS */;
-/*!40000 ALTER TABLE `vendors` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -210,4 +162,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-03-27 14:28:47
+-- Dump completed on 2013-03-29 10:07:55
