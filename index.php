@@ -6,6 +6,7 @@
   </head>
   <body>
     <?php
+    session_start();
     require_once "includes/functions.php";
     $suppliedUserName = $_SERVER['REMOTE_USER'];
     $userName = cleanUserName($suppliedUserName);
@@ -16,6 +17,7 @@
     }
     else
     {
+      $_SESSION['UserName'] = $userName;
       $myBaseURL = str_replace('index.php', 'main.php', $_SERVER['REQUEST_URI']);
       echo '<meta http-equiv="refresh" content="0; url=http://' . $_SERVER["HTTP_HOST"] . $myBaseURL .'">';
     }

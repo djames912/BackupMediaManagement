@@ -10,27 +10,30 @@ and open the template in the editor.
   </head>
   <body>
     <?php
-    if(isset($_SERVER['REMOTE_USER']))
+    session_start();
+    require_once "includes/functions.php";
+    if(!$_SESSION['authenticated'])
     {
-      $suppliedUserName = $_SERVER['REMOTE_USER'];
-      $userName = cleanUserName($suppliedUserName);
+      if(isset($_SESSION['UserName']))
+      {
+        $userName = $_SESSION['UserName'];
+      }
+      elseif(isset($_POST['UserName']))
+      {
+        $userName = $_POST['UserName'];
+        $password = $_POST['Password'];
+        $hashedPW = crypt($password, 69);
+        
+      }
+      else
+      {
+        echo "Uh oh!  Couldn't find any valid credentials.";
+        echo "<br>";
+        echo "Check with your system administrator.";
+        exit();
+      }
     }
-    elseif(isset($_POST['UserName']))
-    {
-      $userName = $_POST['UserName'];
-    }
-    else
-    {
-      echo "Uh oh!  Couldn't find any valid credentials.";
-      echo "<br>";
-      echo "Check with your system administrator.";
-      exit();
-    }
-    echo "Main Program";
-    echo "<br>";
-    echo "User: $userName"; 
-    echo "<br>";
-    //echo "Pass: " . $_POST['Password'];
+     
     ?>
   </body>
 </html>
