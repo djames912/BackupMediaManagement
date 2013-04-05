@@ -9,6 +9,19 @@
 $applicationName = "Backup Media Management";
 $applicationInstance = "Development";
 
+// Sets the default timezone:
+date_default_timezone_set('GMT');
+
+// These are default settings that can be changed in the configure.php.local file.
+// Be sure the locations match what you have set up for locations in your database.
+// If these work for you, then there is no need to change them.
+$batchCreateLocation = "Offsite Storage";
+$newTapeLocation = "Tape Library";
+
+// This sets the default return time in the number of days.  This can also be changed
+// to match your needs.
+$defaultReturnTime = 35;
+
 // REMOVE THE FOLLOWING LINES FROM THE configure.php.local file:
 include 'configure.php.local';
 ?>

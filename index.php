@@ -8,6 +8,7 @@
     <?php
     session_start();
     require_once "includes/functions.php";
+    $_SESSION['Authenticated'] = false;
     $suppliedUserName = $_SERVER['REMOTE_USER'];
     $userName = cleanUserName($suppliedUserName);
     if($userName == null || $userName = '')

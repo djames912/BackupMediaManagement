@@ -63,20 +63,30 @@ function checkLocalAuth($userName)
  * the user name and the password.  If the user name is left NULL then a suitable user
  * name is generated using the first name and first character of the last name.  If
  * the password is left null then that means that an external authentication system is
- * being used (e.g. kerberos, NTLM) and the password doesn't need to be set locally.
+ * being used (e.g. kerberos, NTLM) and the password doesn't need to be set locally.  If
+ * the password has a value it is hashed and inserted into the database.
  */
 function addUser($userGivenName, $userSurname, $accessLevel, $uname = NULL, $password = NULL)
 {
+  $unameProblem = 1;
   if(is_null($password))
     $password = "EXT AUTH MECH USED";
+  else
+    $password = crypt($password, 69);
   
   if(is_null($uname))
   {
     $unameLowerFirst = strtolower($userGivenName);
     $unameLowerLast = strtolower($userSurname);
-    $unameFirstInit = substr($unameLowerFirst, 0);
-    $uname = $unameLowerFirst .+ $unameFirstInit;
+    $unameLastInit = substr($unameLowerLast, 0, 1);
+    $uname = $unameLowerFirst . $unameLastInit;
   }
+  
+  $checkUname = checkUserNameExists($uname);
+  if($checkUname['RSLT'] == "0")
+    $unameProblem = 1;
+  else
+    $unameProblem = 0;
   
   if(!(isset($uname) || $userGivenName || $userSurname || $accessLevel))
   {
@@ -85,19 +95,69 @@ function addUser($userGivenName, $userSurname, $accessLevel, $uname = NULL, $pas
   }
   else
   {
+    if(!$unameProblem)
+    {
+      try
+      {
+        $bldQuery = "INSERT INTO users(uname, givenname, surname, password, access) VALUES('$uname', '$userGivenName', '$userSurname', '$password', '$accessLevel');";
+        $dbLink = dbconnect();
+        $statement = $dbLink->prepare($bldQuery);
+        $statement->execute();
+        $r_val['RSLT'] = "0";
+        $r_val['MSSG'] = "User successfully inserted into database.";
+        $r_val['DATA'] = $dbLink->lastInsertId();
+      }
+      catch(PDOException $exception)
+      {
+        echo "Unable to insert the requested data into the database.  Sorry.";
+        $r_val['RSLT'] = "1";
+        $r_val['MSSG'] = $exception->getMessage();
+      }
+    }
+    else
+    {
+      $r_val['RSLT'] = "1";
+      $r_val['MSSG'] = "User name already present in database.";
+    }
+  }
+  return $r_val;
+}
+
+/* This function accepts a user name as an argument and returns whether or not that
+ * username is already in the database.
+ */
+function checkUserNameExists($uname)
+{
+  $rowCount = 0;
+  if(!isset($uname))
+  {
+    $r_val['RSLT'] = "1";
+    $r_val['MSSG'] = "No user name passed.";
+  }
+  else
+  {
     try
     {
-      $bldQuery = "INSERT INTO users(uname, givenname, surname, password, access) VALUES('$uname', '$userGivenName', '$userSurname', '$password', $accessLevel');";
+      $bldQuery = "SELECT uname FROM users WHERE uname='$uname';";
       $dbLink = dbconnect();
       $statement = $dbLink->prepare($bldQuery);
       $statement->execute();
-      $r_val['RSLT'] = "0";
-      $r_val['MSSG'] = "User successfully inserted into database.";
-      $r_val['DATA'] = $dbLink->lastInsertId();
+      $rowCount = $statement->rowCount();
+      if($rowCount)
+      {
+        $r_val['RSLT'] = "0";
+        $r_val['MSSG'] = "User name found in database.";
+        $r_val['DATA'] = $rowCount;
+      }
+      else
+      {
+        $r_val['RSLT'] = "1";
+        $r_val['MSSG'] = "User name not found in database.";
+      }
     }
     catch(PDOException $exception)
     {
-      echo "Unable to insert the requested data into the database.  Sorry.";
+      echo "Unable to retrieve the requested data.  Sorry.";
       $r_val['RSLT'] = "1";
       $r_val['MSSG'] = $exception->getMessage();
     }
