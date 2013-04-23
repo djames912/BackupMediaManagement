@@ -10,8 +10,8 @@ function init(u) {
     //console.log("# ---- init");
     new_tape = new add_tape(document.getElementById('add'));
     new_tape.init();
-    var menu_args = [{"mname":"Modify Batch","divName":"mod_batch"},{"mname":"Create Batch","divName":"batch"},{"mname":"Reports","divName":"stats"},{"mname":"Add Tape","divName":"add"},{"mname":"Modify Tape","divName":"mod"},{"mname":"Admin","divName":"admin"}];
-    new menu('menu', menu_args);
+    //var menu_args = [{"mname":"Modify Batch","divName":"mod_batch"},{"mname":"Create Batch","divName":"batch"},{"mname":"Reports","divName":"stats"},{"mname":"Add Tape","divName":"add"},{"mname":"Modify Tape","divName":"mod"},{"mname":"Admin","divName":"admin"}];
+    //new menu('menu', menu_args);
     new basic_report(document.getElementById('stats'));
     new mod_tape(document.getElementById('mod'));
     new create_batch(document.getElementById('batch'));
