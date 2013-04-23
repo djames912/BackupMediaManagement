@@ -6,9 +6,15 @@ and open the template in the editor.
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title></title>
+    <title>Backup Media Management</title>
+    <link rel="stylesheet" type="text/css" media="all" href="js/jqueryui/css/ui-lightness/jquery-ui-1.8.17.custom.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="css/style.css" />
+    <script type="text/javascript" src="js/jqueryui/js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="js/jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
+    <script type="text/javascript" src="js/lgen.js"></script>   
+    <script type="text/javascript" src="js/main.js"></script>
   </head>
-  <body bgcolor="#000000" text="#FFFFFF" >
+  <body>
     <?php
     session_start();
     require_once "includes/functions.php";
@@ -59,8 +65,8 @@ and open the template in the editor.
       {
         echo '<table width="100%" border="0" cellspacing="0">';
         echo '<tr>';
-        echo '<td bgcolor="#000000">';
-        echo '<div align="center"><font size="4" color="#FFFFFF"><b><font face="Arial, Helvetica, sans-serif">';
+        echo '<td>';
+        echo '<div align="center"><font color="#FFFFFF">';
         echo "$applicationName";
         if($applicationInstance != '' || $applicationInstance = "Production")
             echo " - $applicationInstance";
@@ -70,7 +76,7 @@ and open the template in the editor.
         echo "Check with your system administrator.";
         echo '<br>';
         echo "***** End of Line *****";
-        echo '</font></b></font></div>';
+        echo '</font></div>';
         echo '</td>';
         echo '</tr>';
         echo '</table>';
@@ -82,8 +88,8 @@ and open the template in the editor.
     {
       echo '<table width="100%" border="0" cellspacing="0">';
       echo '<tr>';
-      echo '<td bgcolor="#000000">';
-      echo '<div align="center"><font size="4" color="#FFFFFF"><b><font face="Arial, Helvetica, sans-serif">';
+      echo '<td>';
+      echo '<div align="center"><font color="#FFFFFF">';
       echo "$applicationName";
       if($applicationInstance != '' || $applicationInstance = "Production")
           echo " - $applicationInstance";
@@ -93,15 +99,33 @@ and open the template in the editor.
       echo "Access denied.";
       echo '<br>';
       echo "***** End of Line *****";
-      echo '</font></b></font></div>';
+      echo '</font></div>';
       echo '</td>';
       echo '</tr>';
       echo '</table>';
       exit();
     }
-    
-    echo '<br>';
-    echo "Cleared!  Running main program.";
+    $testVar = 1;
+    echo '<div style="width:960px; margin-left:auto; margin-right:auto;">';
+    echo '<div id="header">';
+    echo 'Backup Media Management';
+    echo '</div>';
+    echo '<div id="menu"></div>';
+    echo '<div class="content" id="main">';
+    if($testVar >= $addTapeLevel)
+      echo '<div id="add" ></div>';
+    if($testVar >= $createBatchLevel)
+      echo '<div id="batch" ></div>';
+    if($testVar >= $modBatchLevel)
+      echo '<div id="mod_batch" ></div>';
+    if($testVar >= $runReportLevel)
+      echo '<div id="stats"></div>';
+    if($testVar >= $modTapeLevel)
+      echo '<div id="mod"></div>';
+    if($testVar >= $adminLevel)
+      echo '<div id="admin"></div>';
+    echo '</div>';
+    echo '</div>';
     ?>
   </body>
 </html>

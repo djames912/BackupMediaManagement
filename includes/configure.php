@@ -22,6 +22,15 @@ $newTapeLocation = "Tape Library";
 // to match your needs.
 $defaultReturnTime = 35;
 
+// Sets the default access levels for various pages in the system.  Assign your own
+// levels in the configure.php.local file.
+$adminLevel = 8;
+$modTapeLevel = 6;
+$addTapeLevel = 1;
+$runReportLevel = 3;
+$createBatchLevel = 2;
+$modBatchLevel = 3;
+
 // REMOVE THE FOLLOWING LINES FROM THE configure.php.local file:
 include 'configure.php.local';
 ?>
