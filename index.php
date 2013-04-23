@@ -31,24 +31,5 @@ $userName = cleanUserName($suppliedUserName);
     <script type="text/javascript" src="js/jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
   </head>
   <body>
-    <div style="width:960px; margin-left:auto; margin-right:auto;">
-        <div id="header"> Tape Inventory System </div>
-        <div id="menu">
-            <div id="Modify BatchmMark" class="mbut">Modify Batch</div>
-            <div id="Create BatchmMark" class="mbut">Create Batch</div>
-            <div id="ReportsmMark" class="mbut">Reports</div>
-            <div id="Add TapemMark" class="msel">Add Tape</div>
-            <div id="Modify TapemMark" class="mbut">Modify Tape</div>
-            <div id="AdminmMark" class="mbut">Admin</div>
-        </div>
-        <div id="main" class="content">
-            <div id="add" style="display: block;">
-            <div id="batch" style="display: none;">
-            <div id="mod_batch" style="display: none;">
-            <div id="stats" style="display: none;">
-            <div id="mod" style="display: none;">
-            <div id="admin" style="display: none;"></div>
-        </div>
-    </div>
   </body>
 </html>

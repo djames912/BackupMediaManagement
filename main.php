@@ -106,7 +106,8 @@ and open the template in the editor.
       exit();
     }
     $testVar = 1;
-    echo '<div style="width:960px; margin-left:auto; margin-right:auto;">';
+    /*
+     echo '<div style="width:960px; margin-left:auto; margin-right:auto;">';
     echo '<div id="header">';
     echo 'Backup Media Management';
     echo '</div>';
@@ -126,6 +127,26 @@ and open the template in the editor.
       echo '<div id="admin"></div>';
     echo '</div>';
     echo '</div>';
+    */
     ?>
+    <div style="width:960px; margin-left:auto; margin-right:auto;">
+        <div id="header"> Tape Inventory System </div>
+        <div id="menu">
+            <div id="Modify BatchmMark" class="mbut">Modify Batch</div>
+            <div id="Create BatchmMark" class="mbut">Create Batch</div>
+            <div id="ReportsmMark" class="mbut">Reports</div>
+            <div id="Add TapemMark" class="msel">Add Tape</div>
+            <div id="Modify TapemMark" class="mbut">Modify Tape</div>
+            <div id="AdminmMark" class="mbut">Admin</div>
+        </div>
+        <div id="main" class="content">
+            <div id="add" style="display: block;">
+            <div id="batch" style="display: none;">
+            <div id="mod_batch" style="display: none;">
+            <div id="stats" style="display: none;">
+            <div id="mod" style="display: none;">
+            <div id="admin" style="display: none;"></div>
+        </div>
+    </div>
   </body>
 </html>
