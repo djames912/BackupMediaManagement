@@ -68,7 +68,7 @@ and open the template in the editor.
         echo '<td>';
         echo '<div align="center"><font color="#FFFFFF">';
         echo "$applicationName";
-        if($applicationInstance != '' || $applicationInstance = "Production")
+        if($applicationInstance != '' || $applicationInstance == 'Production')
             echo " - $applicationInstance";
         echo '<br><br>';
         echo "Uh oh!  Couldn't find any valid credentials.";
@@ -105,7 +105,6 @@ and open the template in the editor.
       echo '</table>';
       exit();
     }
-    $testVar = 1;
     /*
      echo '<div style="width:960px; margin-left:auto; margin-right:auto;">';
     echo '<div id="header">';
@@ -128,25 +127,38 @@ and open the template in the editor.
     echo '</div>';
     echo '</div>';
     */
+    echo '<div style="width:960px; margin-left:auto; margin-right:auto;">';
+    echo '<div id="header"> Tape Inventory System </div>';
+    echo '<div id="menu">';
+    if($_SESSION['AccessLevel'] >= $modBatchLevel)
+      echo '<div id="Modify BatchmMark" class="mbut">Modify Batch</div>';
+    if($_SESSION['AccessLevel'] >= $createBatchLevel)
+      echo '<div id="Create BatchmMark" class="mbut">Create Batch</div>';
+    if($_SESSION['AccessLevel'] >= $runReportLevel)
+      echo '<div id="ReportsmMark" class="mbut">Reports</div>';
+    if($_SESSION['AccessLevel'] >= $addTapeLevel)
+      echo '<div id="Add TapemMark" class="mbut">Add Tape</div>';
+    if($_SESSION['AccessLevel'] >= $modTapeLevel)
+      echo '<div id="Modify TapemMark" class="mbut">Modify Tape</div>';
+    if($_SESSION['AccessLevel'] >= $adminLevel)
+      echo '<div id="AdminmMark" class="mbut">Admin</div>';
+    echo '</div>';
+    echo '<div id="main" class="content">';
+    if($_SESSION['AccessLevel'] >= $addTapeLevel)
+      echo '<div id="add" style="display: none;">';
+    if($_SESSION['AccessLevel'] >= $createBatchLevel)
+      echo '<div id="batch" style="display: none;">';
+    if($_SESSION['AccessLevel'] >= $modBatchLevel)
+      echo '<div id="mod_batch" style="display: none;">';
+    if($_SESSION['AccessLevel'] >= $runReportLevel)
+      echo '<div id="stats" style="display: none;">';
+    if($_SESSION['AccessLevel'] >= $modTapeLevel)
+      echo '<div id="mod" style="display: none;">';
+    if($_SESSION['AccessLevel'] >= $adminLevel)
+      echo '<div id="admin" style="display: none;">';
+    echo '</div>';
+    echo '</div>';
     ?>
-    <div style="width:960px; margin-left:auto; margin-right:auto;">
-        <div id="header"> Tape Inventory System </div>
-        <div id="menu">
-            <div id="Modify BatchmMark" class="mbut">Modify Batch</div>
-            <div id="Create BatchmMark" class="mbut">Create Batch</div>
-            <div id="ReportsmMark" class="mbut">Reports</div>
-            <div id="Add TapemMark" class="msel">Add Tape</div>
-            <div id="Modify TapemMark" class="mbut">Modify Tape</div>
-            <div id="AdminmMark" class="mbut">Admin</div>
-        </div>
-        <div id="main" class="content">
-            <div id="add" style="display: block;">
-            <div id="batch" style="display: none;">
-            <div id="mod_batch" style="display: none;">
-            <div id="stats" style="display: none;">
-            <div id="mod" style="display: none;">
-            <div id="admin" style="display: none;"></div>
-        </div>
     </div>
   </body>
 </html>
