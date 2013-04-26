@@ -20,7 +20,7 @@ function dbconnect()
   try
   {
     $connection = "mysql:host=" . $dbHost . "; dbname=" . $dbName;
-    $dbcon = new PDO($connection, $dbUser, $dbPass, array(PDO::ATTR_EMULATE_PREPARES => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+    $dbcon = new PDO($connection, $dbUser, $dbPass, array(PDO::ATTR_PERSISTENT => true, PDO::ATTR_EMULATE_PREPARES => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
     return $dbcon;
   }
   catch (PDOException $exception)
