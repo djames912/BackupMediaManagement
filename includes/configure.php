@@ -7,6 +7,7 @@
  * those contained in this file.
  */
 $applicationName = "Backup Media Management";
+$applicationRoot = '/BackupMediaManagement/';
 $applicationInstance = "Development";
 
 // Sets the default timezone:

@@ -13,6 +13,26 @@ and open the template in the editor.
     <script type="text/javascript" src="js/jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
     <script type="text/javascript" src="js/lgen.js"></script>   
     <script type="text/javascript" src="js/main.js"></script>
+    <script>$(function() { 
+      $('.mbut').click(function() { 
+        $('.mbut').removeClass("msel"); 
+        $(this).addClass("msel");
+        $(".page_content").hide();
+        if(this.id == "Add_TapemMark")
+          $("#addtape").show();
+        if(this.id == "ReportsmMark")
+          $("#reports").show();
+        if(this.id == "Create_BatchmMark")
+          $("#batch").show();
+        if(this.id == "Modify_BatchmMark")
+          $("#mod_batch").show();
+        if(this.id == "Modify_TapemMark")
+          $("#modtape").show();
+        if(this.id == "AdminmMark")
+          $("#admin").show();
+      });
+      $(".page_content").hide();
+    });</script>
   </head>
   <body>
     <?php
@@ -105,57 +125,36 @@ and open the template in the editor.
       echo '</table>';
       exit();
     }
-    /*
-     echo '<div style="width:960px; margin-left:auto; margin-right:auto;">';
-    echo '<div id="header">';
-    echo 'Backup Media Management';
-    echo '</div>';
-    echo '<div id="menu"></div>';
-    echo '<div class="content" id="main">';
-    if($testVar >= $addTapeLevel)
-      echo '<div id="add" ></div>';
-    if($testVar >= $createBatchLevel)
-      echo '<div id="batch" ></div>';
-    if($testVar >= $modBatchLevel)
-      echo '<div id="mod_batch" ></div>';
-    if($testVar >= $runReportLevel)
-      echo '<div id="stats"></div>';
-    if($testVar >= $modTapeLevel)
-      echo '<div id="mod"></div>';
-    if($testVar >= $adminLevel)
-      echo '<div id="admin"></div>';
-    echo '</div>';
-    echo '</div>';
-    */
+    
     echo '<div style="width:960px; margin-left:auto; margin-right:auto;">';
     echo '<div id="header"> Tape Inventory System </div>';
     echo '<div id="menu">';
     if($_SESSION['AccessLevel'] >= $modBatchLevel)
-      echo '<div id="Modify BatchmMark" class="mbut">Modify Batch</div>';
+      echo '<div id="Modify_BatchmMark" class="mbut">Modify Batch</div>';
     if($_SESSION['AccessLevel'] >= $createBatchLevel)
-      echo '<div id="Create BatchmMark" class="mbut">Create Batch</div>';
+      echo '<div id="Create_BatchmMark" class="mbut">Create Batch</div>';
     if($_SESSION['AccessLevel'] >= $runReportLevel)
       echo '<div id="ReportsmMark" class="mbut">Reports</div>';
     if($_SESSION['AccessLevel'] >= $addTapeLevel)
-      echo '<div id="Add TapemMark" class="mbut">Add Tape</div>';
+      echo '<div id="Add_TapemMark" class="mbut">Add Tape</div>';
     if($_SESSION['AccessLevel'] >= $modTapeLevel)
-      echo '<div id="Modify TapemMark" class="mbut">Modify Tape</div>';
+      echo '<div id="Modify_TapemMark" class="mbut">Modify Tape</div>';
     if($_SESSION['AccessLevel'] >= $adminLevel)
       echo '<div id="AdminmMark" class="mbut">Admin</div>';
     echo '</div>';
     echo '<div id="main" class="content">';
     if($_SESSION['AccessLevel'] >= $addTapeLevel)
-      echo '<div id="add" style="display: none;">';
+      include 'pages/addtape.php';
     if($_SESSION['AccessLevel'] >= $createBatchLevel)
-      echo '<div id="batch" style="display: none;">';
+      include 'pages/createbatch.php';
     if($_SESSION['AccessLevel'] >= $modBatchLevel)
-      echo '<div id="mod_batch" style="display: none;">';
+      include 'pages/modifybatch.php';
     if($_SESSION['AccessLevel'] >= $runReportLevel)
-      echo '<div id="stats" style="display: none;">';
+      include 'pages/reports.php';
     if($_SESSION['AccessLevel'] >= $modTapeLevel)
-      echo '<div id="mod" style="display: none;">';
+      include 'pages/modifytape.php';
     if($_SESSION['AccessLevel'] >= $adminLevel)
-      echo '<div id="admin" style="display: none;">';
+      include 'pages/admin.php';
     echo '</div>';
     echo '</div>';
     ?>

@@ -116,21 +116,10 @@ ul {
 list-style-type: none;
 }
 .msel {
-	position: relative;
-	text-align:center;
-    padding-top: 8px;
-	margin-left: 10px;
-	width: 98px;
-	height: 34px;
-	float:right;
-	display: inline;
-    color:white;
-     background: url("../images/inside_cool.png") repeat scroll 50% 0  transparent;
-	/*background-color: 	#C8C8C8  ;*/
+	color: white !important;
+    background: url("../images/inside_cool.png") repeat scroll 50% 0 transparent;
 	border: solid 1px gray;
 	border-bottom: none;
-	/*border-top-left-radius: 10px 5px;
-	border-top-right-radius: 10px 5px;*/
 }
 
 .mbut {
@@ -145,23 +134,12 @@ list-style-type: none;
 	display: inline;
 	border-bottom: none;
     background: none repeat scroll 0 0 rgba(100, 100, 100, 0.3);
-	/*border-top-left-radius: 10px 5px;
-	border-top-right-radius: 10px 5px;*/
+    cursor: pointer;
 }
-.mhov {
-	position: relative;
-	text-align:center;
-	padding-top: 8px;	
-    color:#F4F4F4;
-	margin-left: 10px;
-	width: 97px;
-	height: 35px;
-	float:right;
-	display: inline;
-	border-bottom: none;
+
+.mbut:hover {
+	color:#F4F4F4;
 	background: none repeat scroll 0 0 rgba(0, 0, 0, 0.7); 
-	/*border-top-left-radius: 10px 5px;
-	border-top-right-radius: 10px 5px;*/
 }
 /*.content {
 width: 100%; position: absolute; margin-top:60px;
