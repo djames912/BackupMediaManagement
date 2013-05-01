@@ -4,6 +4,7 @@
  * This file contains all the major functions used by this application.
  */
 require_once 'configure.php';
+require_once 'configure.php.local';
 require_once 'dbconfig.php.local';
 
 /* This function accepts a KERBEROS or NTLM user name, strips off the unecessary
@@ -161,6 +162,40 @@ function checkUserNameExists($uname)
       $r_val['RSLT'] = "1";
       $r_val['MSSG'] = $exception->getMessage();
     }
+  }
+  return $r_val;
+}
+
+/* This is a generic function that retrieves the entire contents of a table.  It
+ * accepts as it's only argument the name of the table that data needs to be gathered
+ * from.  It returns the data as an associative containing individual objects that
+ * contain the requested data.
+ */
+function getTableContents($tableName)
+{
+  if(isset($tableName))
+  {
+    try
+    {
+      $dbLink = dbconnect();
+      $bldQuery = "SELECT * FROM $tableName;";
+      $statement = $dbLink->prepare($bldQuery);
+      $statement->execute();
+      $r_val['RSLT'] = "0";
+      $r_val['MSSG'] = "Data located in $tableName";
+      $r_val['DATA'] = $statement->fetchAll(PDO::FETCH_OBJ);
+    }
+    catch(PDOException $exception)
+    {
+      echo "Unable to retrieve requested data.";
+      $r_val['RSLT'] =  "1";
+      $r_val['MSSG'] = $exception->getMessage();
+    }
+  }
+  else
+  {
+    $r_val['RSLT'] = "1";
+    $r_val['MSSG'] = "Incomplete data set passed to function.";
   }
   return $r_val;
 }
