@@ -199,4 +199,58 @@ function getTableContents($tableName)
   }
   return $r_val;
 }
+
+/* This function accept three arguments: the table name, the column name and the data
+ * to be inserted into the table and column.  It checks the database to see if the
+ * information is already present, if it is then it takes no action, if it doesn't
+ * then the data is inserted into the database.  It returns what specific action,
+ * or lack thereof, was taken and the record number of the value inserted if new data
+ * was actually inserted.
+ */
+function addType($tableName, $fieldName, $dataValue)
+{
+  if(!(isset($tableName) || isset($fieldName) || isset($dataValue)))
+  {
+    $r_val['RSLT'] = "1";
+    $r_val['MSSG'] = "Incomplete data set passed.";
+  }
+  else
+  {
+    if($tableName == 'locations')
+      $targetValue = 'location';
+    if($tableName == 'mtype')
+      $targetValue = 'media type';
+    if($tableName == 'vendors')
+      $targetValue = 'vendor';
+    try
+    {
+      $dbLink = dbconnect();
+      $bldQuery = "SELECT * FROM $tableName WHERE $fieldName='$dataValue';";
+      $statement = $dbLink->prepare($bldQuery);
+      $statement->execute();
+      $rowCount = $statement->rowCount();
+      if($rowCount >= '1')
+      {
+        $r_val['RSLT'] = "1";
+        $r_val['MSSG'] = "Record already exists for $targetValue: $dataValue";
+      }
+      else
+      {
+        $bldQuery = "INSERT INTO $tableName($fieldName) VALUES('$dataValue')";
+        $statement = $dbLink->prepare($bldQuery);
+        $statement->execute();
+        $r_val['RSLT'] = "0";
+        $r_val['MSSG'] = "Inserted $targetValue $dataValue into the database.";
+        $r_val['DATA'] = $dbLink->lastInsertId();
+      }
+    }
+    catch(PDOException $exception)
+    {
+      echo "Unable to take requested action.";
+      $r_val['RSLT'] =  "1";
+      $r_val['MSSG'] = $exception->getMessage();
+    }
+  }
+  return $r_val;
+}
 ?>

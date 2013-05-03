@@ -1,15 +1,4 @@
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Backup Media Management Add Tape</title>
-    <link rel="stylesheet" type="text/css" media="all" href="js/jqueryui/css/ui-lightness/jquery-ui-1.8.17.custom.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="css/style.css" />
-    <script type="text/javascript" src="js/jqueryui/js/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="js/jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
-    <script type="text/javascript" src="js/lgen.js"></script>   
-    <script type="text/javascript" src="js/main.js"></script>
-     </head>
-  <body>
+
   <div id="addtape" class="page_content" style="display: block;">
     <div class="form1">
       <div class="div_tab">
@@ -50,7 +39,7 @@
       </div>
       <div class="div_tab">
         <label class="spn">Date</label>
-        <input id="dp1367008655880" class="iput hasDatepicker" type="text">
+        <input id="dp" class="iput hasDatepicker" type="text">
       </div>
       <div class="div_tab">
         <label class="spn">PO#</label>
@@ -63,5 +52,4 @@
     </div>
     <div class="results"></div>
   </div>
-  </body>
-</html>
+
