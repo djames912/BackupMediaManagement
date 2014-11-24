@@ -253,4 +253,55 @@ function addType($tableName, $fieldName, $dataValue)
   }
   return $r_val;
 }
+
+/* This function accepts a tape object as an argument, it then breaks the object into its individual
+ * properties and inserts them into the appropriate database tables and fields.  The function
+ * checks to see if the tape already exists in the database.  If it does, it throws the appropriate
+ * error message.  If it does not, it does some basic sanity checking and then inserts the tape into
+ * the database.  The function returns whether the insert was successful or not, or if the tape was
+ * already found and is a duplicate.\
+*/
+ function addTape($newTape)
+ {
+    if(!is_object($newTape))
+    {
+      $r_val['RSLT'] = "1";
+      $r_val['MSSG'] = "Data passed is not an object";
+    }
+    else
+    {
+      if(!($newTape->date && $newTape->tape_id && $newTape->loc_id &&$newTape->uname && $newTape->mtype && $newTape->ven_id && $newTape->po_num))
+      {
+        $r_val['RSLT'] = "1";
+        $r_val['MSSG'] = "Incomplete data set passed.";
+      }
+      else
+      {
+        try
+        {
+          $dbLink = dbconnect();
+          $bldQuery = "SELECT * FROM tapes WHERE label='$newTape->tape_id';";
+          $statement = $dbLink->prepare($bldQuery);
+          $statement->execute();
+          $rowCount = $statement->rowCount();
+          if($rowCount >= '1')
+          {
+            $r_val['RSLT'] = "1";
+            $r_val['MSSG'] = "Record for $newTape->tape_id already exists in database.";
+          }
+          else
+          {
+            
+          }
+        }
+        catch (Exception $exception) 
+        {
+          echo "Unable to take requested action.";
+          $r_val['RSLT'] = "1";
+          $r_val['MSSG'] = $exception->getMessage();
+        }
+      }
+    }
+    return $r_val;
+ }
 ?>
