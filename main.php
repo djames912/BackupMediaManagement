@@ -32,6 +32,28 @@ and open the template in the editor.
           $("#admin").show();
       });
       $(".page_content").hide();
+        
+      $('.admbtn').click(function() { 
+        $(".admdetail").hide();
+        console.log(this);
+        if(this.id == "list_users")
+          $("#show_users").show();
+        if(this.id == "add_user")
+          $("#adduser").show();
+        if(this.id == "change_password")
+          $("#chng_passwd").show();
+        if(this.id == "edit_user")
+          $("#edituser").show();
+        if(this.id == "del_user")
+          $("#delete_user").show();
+        if(this.id == "add_media")
+          $("#addmedia").show();
+        if(this.id == "add_location")
+          $("#addloc").show();
+        if(this.id == "add_vendor")
+          $("#addvendor").show();
+      });
+      $(".admdetail").hide();
     });</script>
   </head>
   <body>

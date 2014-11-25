@@ -291,10 +291,25 @@ function addType($tableName, $fieldName, $dataValue)
           }
           else
           {
-            
+            try
+            {
+              $dbLink = dbconnect();
+              $bldQuery = "INSERT INTO tapes(label, mtype, vendor, po_num) VALUES('$newTape->tape_id','$newTape->mtype','$newTape->ven_id','$newTape->po_num');";
+              $statement = $dbLink->prepare($bldQuery);
+              $statement->execute();
+              
+              $tapeHistory = assignTape($newTape->tape_id, $newTape->loc_id, $newTape->uname, "-1", "-1");
+              
+            } 
+            catch (PDOException $exception) 
+            {
+              echo "Unable to take requested action.";
+              $r_val['RSLT'] = "1";
+              $r_val['MSSG'] = $exception->getMessage();
+            }
           }
         }
-        catch (Exception $exception) 
+        catch (PDOException $exception) 
         {
           echo "Unable to take requested action.";
           $r_val['RSLT'] = "1";
@@ -303,5 +318,15 @@ function addType($tableName, $fieldName, $dataValue)
       }
     }
     return $r_val;
+ }
+ 
+ /* This function accepts a media bar code number, a location ID, user name, batch ID and batch
+  * count.  It then updates the history table for the tapes in question.  This function generates its
+  * own time stamp to ensure that the insert record is accurate as to exactly when a record was
+  * inserted.  It returns whether or not the insert was successful.
+  */
+ function assignTape($tapeBarCode, $locationID, $userName, $batchID, $batchCount)
+ {
+   
  }
 ?>
