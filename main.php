@@ -35,23 +35,43 @@ and open the template in the editor.
         
       $('.admbtn').click(function() { 
         $(".admdetail").hide();
-        console.log(this);
         if(this.id == "list_users")
+        {
+          console.log(toJSON(this));
+          var displayData = prepData("Generated User List.<BR>Coming soon.", "test");
+          ajaxCall(displayData, listUsersCallback);
           $("#show_users").show();
+        }
         if(this.id == "add_user")
+        {
+          var displayData = prepData("Add User form under development.", "test");
+          ajaxCall(displayData, adduserCallback);
           $("#adduser").show();
+        }
         if(this.id == "change_password")
+        {
           $("#chng_passwd").show();
+        }
         if(this.id == "edit_user")
+        {
           $("#edituser").show();
+        }
         if(this.id == "del_user")
+        {
           $("#delete_user").show();
+        }
         if(this.id == "add_media")
+        {
           $("#addmedia").show();
+        }
         if(this.id == "add_location")
+        {
           $("#addloc").show();
+        }
         if(this.id == "add_vendor")
+        {
           $("#addvendor").show();
+        }
       });
       $(".admdetail").hide();
     });</script>

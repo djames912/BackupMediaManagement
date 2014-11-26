@@ -41,11 +41,7 @@
     </button>
   </div>
   <div class="results">
-  <div id="show_users" class="admdetail">
-    <label class="title">Current Users</label>
-    <BR><BR>
-    <label class="none">Some test text</label>
-    </div>
+  <div id="show_users" class="admdetail"></div>
     <div id="adduser" class="admdetail">
       <label class="title">Add User Form</label>
     </div>
