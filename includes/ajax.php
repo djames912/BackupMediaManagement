@@ -32,5 +32,12 @@ function test($junk)
   return $junk;
 }
 
-
+/* This function calls getTableContents() with appropriate entries passed to get a list of user names.
+ * It returns a properly formatted list of user names.
+ */
+function generateUserList()
+{
+  $rawOutput = getTableContents('users', 'uname');
+  return json_encode($rawOutput['DATA']);
+}
 ?>

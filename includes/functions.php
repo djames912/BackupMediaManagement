@@ -171,14 +171,21 @@ function checkUserNameExists($uname)
  * from.  It returns the data as an associative containing individual objects that
  * contain the requested data.
  */
-function getTableContents($tableName)
+function getTableContents($tableName, $colName = NULL)
 {
   if(isset($tableName))
   {
     try
     {
       $dbLink = dbconnect();
-      $bldQuery = "SELECT * FROM $tableName;";
+      if(is_null($colName))
+      {
+        $bldQuery = "SELECT * FROM $tableName;";
+      }
+      else
+      {
+        $bldQuery = "SELECT $colName FROM $tableName;";
+      }
       $statement = $dbLink->prepare($bldQuery);
       $statement->execute();
       $r_val['RSLT'] = "0";

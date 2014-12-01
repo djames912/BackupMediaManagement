@@ -38,13 +38,16 @@ and open the template in the editor.
         if(this.id == "list_users")
         {
           console.log(toJSON(this));
-          var displayData = prepData("Generated User List.<BR>Coming soon.", "test");
+          //var displayData = prepData("Generated User List.<BR>Coming soon.", "test");
+          var displayData = prepData("User List", "generateUserList");
+          console.log(displayData);
           ajaxCall(displayData, listUsersCallback);
           $("#show_users").show();
         }
         if(this.id == "add_user")
         {
           var displayData = prepData("Add User form under development.", "test");
+          console.log(displayData);
           ajaxCall(displayData, adduserCallback);
           $("#adduser").show();
         }

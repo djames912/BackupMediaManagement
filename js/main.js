@@ -53,7 +53,6 @@ var listUsersCallback = function(data)
 {
   //console.log("Inside listUsersCallback");
   var targetDiv = document.getElementById("show_users");
-  //console.log(targetDiv);
   targetDiv.innerHTML = data;
 };
 
