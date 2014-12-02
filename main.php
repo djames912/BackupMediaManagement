@@ -40,7 +40,7 @@ and open the template in the editor.
           console.log(toJSON(this));
           //var displayData = prepData("Generated User List.<BR>Coming soon.", "test");
           var displayData = prepData("User List", "generateUserList");
-          console.log(displayData);
+          //console.log(displayData);
           ajaxCall(displayData, listUsersCallback);
           $("#show_users").show();
         }
@@ -51,20 +51,11 @@ and open the template in the editor.
           ajaxCall(displayData, adduserCallback);
           $("#adduser").show();
         }
-        if(this.id == "change_password")
-        {
-          $("#chng_passwd").show();
-        }
-        if(this.id == "edit_user")
-        {
-          $("#edituser").show();
-        }
-        if(this.id == "del_user")
-        {
-          $("#delete_user").show();
-        }
         if(this.id == "add_media")
         {
+          console.log(toJSON(this));
+          var displayData = prepData("Media List", "generateMediaList");
+          ajaxCall(displayData, listMediaCallback);
           $("#addmedia").show();
         }
         if(this.id == "add_location")
@@ -73,6 +64,8 @@ and open the template in the editor.
         }
         if(this.id == "add_vendor")
         {
+          var displayData = prepData("Vendor List", "generateVendorList");
+          ajaxCall(displayData, listVendorCallback);
           $("#addvendor").show();
         }
       });

@@ -336,4 +336,9 @@ function addType($tableName, $fieldName, $dataValue)
  {
    
  }
+ 
+ /* This function accepts three arguments, a database field name, column name and value.  The function
+  * searches the database to see if the value exists in the database and returns a '0' if not found and a
+  * '1' if found.
+  */
 ?>

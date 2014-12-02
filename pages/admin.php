@@ -15,16 +15,6 @@
     <button id="add_user" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button admbtn" value="Submit" role="button" aria-disabled="false">
       <span class="ui-button-text">Add User</span>
     </button>
-    <button id="change_password" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button admbtn" value="Submit" role="button" aria-disabled="false">
-      <span class="ui-button-text">Change Password</span>
-    </button>
-    <button id="edit_user" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button admbtn" value="Submit" role="button" aria-disabled="false">
-      <span class="ui-button-text">Edit User</span>
-    </button>
-    <BR>
-    <button id="del_user" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button admbtn" value="Submit" role="button" aria-disabled="false">
-      <span class="ui-button-text">Delete User</span>
-    </button>
     <BR><BR>
     <div align="center">
     <label class="title">Manage Types</label>
@@ -45,15 +35,6 @@
     <div id="adduser" class="admdetail">
       <label class="title">Add User Form</label>
     </div>
-    <div id="chng_passwd" class="admdetail">
-      <label class="title">Change Password</label>
-    </div>
-    <div id="edituser" class="admdetail">
-      <label class="title">Edit User Form</label>
-  </div>
-    <div id="delete_user" class="admdetail">
-      <label class="title">Delete User</label>
-    </div>
     <div id="addmedia" class="admdetail">
       <label class="title">Add Media</label>
     </div>
@@ -61,7 +42,14 @@
       <label class="title">Add Location</label>
     </div>
     <div id="addvendor" class="admdetail">
-      <label class="title">Add Vendor</label>
+      <div id="vendorlist"></div>
+      <BR><BR>
+      <form id="addvendorform" class="form1">
+        <input class="iput" type="text" name="vendorname" value="Add new vendor.">
+        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button" value="Submit" role="button" aria-disabled="false" onclick="addVendor()">
+          <span class="ui-button-text">Submit</span>
+        </button>
+      </form>
     </div>
   </div>
 </div>

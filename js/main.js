@@ -25,7 +25,7 @@ function ajaxCall(jsonString, callBackFuncName)
     
    request.onreadystatechange = function () 
    {	
-       if(request.readyState == 4) 
+       if(request.readyState === 4) 
        {
           var jObj = fromJSON(request.responseText);
            callBackFuncName(jObj);
@@ -48,12 +48,31 @@ function prepData(data, funcName)
   return toJSON(tempObj);
 }
 
-// Call back function for generating a current list of users.
+/* This function accepts data from ajaxCall() in the form of an array of objects containing the current
+ * list of users.  It places a header at the beginning in the textOut variable.  It then loops through the
+ * array of objects (the first loop) and loops through the object (the second loop) and gets the user
+ * name out of the object.  The name of the user is added to the textOut variable which is ultimately
+ * displayed on the scren with the finished list of users.  It returns nothing.
+ */
 var listUsersCallback = function(data)
 {
-  //console.log("Inside listUsersCallback");
   var targetDiv = document.getElementById("show_users");
-  targetDiv.innerHTML = data;
+  var textOut = "Current Users: <BR><BR>";
+  if(data.length === 0)
+  {
+    textOut += "No users found.<BR>";
+  }
+  else
+  {
+    for(cntr = 0, len = data.length; cntr < len; cntr++)
+    {
+      for(objs in data[cntr])
+      {
+        textOut += data[cntr][objs] + "<BR>";
+      }
+    }
+  }
+  targetDiv.innerHTML = textOut;
 };
 
 // Call back function for add user form.
@@ -61,4 +80,61 @@ var adduserCallback = function(data)
 {
   var targetDiv = document.getElementById("adduser");
   targetDiv.innerHTML = data;
+};
+
+/* This is the list media types call back function.
+ * 
+ */
+var listMediaCallback = function(data)
+{
+  var targetDiv = document.getElementById("addmedia");
+  var textOut = "Current Media Types:<BR><BR>";
+  if(data.length === 0)
+  {
+    textOut += "None on file.<BR>";
+  }
+  else
+  {
+    for(cntr = 0, len = data.length; cntr < len; cntr++)
+    {
+      for(objs in data[cntr])
+      {
+        textOut += data[cntr][objs] + "<BR>";
+      }
+    }
+  }
+  targetDiv.innerHTML = textOut;
+};
+
+/* This is the vendor list callback function.
+ * 
+ */
+var listVendorCallback = function(data)
+{
+  var targetDiv = document.getElementById("vendorlist");
+  var textOut = "Current Vendors on File:<BR><BR>";
+  if(data.length === 0)
+  {
+    textOut += "None on file.<BR>";
+  }
+  else
+  {
+    for(cntr = 0, len = data.length; cntr < len; cntr++)
+    {
+      for(objs in data[cntr])
+      {
+        textOut += data[cntr][objs] + "<BR>";
+      }
+    }
+  }
+  targetDiv.innerHTML = textOut;
+};
+
+function addVendor()
+{
+  var formObj = document.getElementById("addvendorform");
+  var tempObj = new Object();
+  tempObj.vendorname = formObj.elements["vendorname"].value;
+  var displayData = prepData(tempObj, "addNewVendor");
+  ajaxCall(displayData, listVendorCallback);
 }

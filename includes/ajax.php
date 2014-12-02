@@ -33,11 +33,38 @@ function test($junk)
 }
 
 /* This function calls getTableContents() with appropriate entries passed to get a list of user names.
- * It returns a properly formatted list of user names.
+ * It returns an array of objects containing the user names.
  */
 function generateUserList()
 {
   $rawOutput = getTableContents('users', 'uname');
-  return json_encode($rawOutput['DATA']);
+  return $rawOutput['DATA'];
+}
+
+/* This function calls getTablecontents() with appropriate entries passed to get a list of media types.
+ * It returns an array of objects that contain the media types.
+ */
+function generateMediaList()
+{
+  $rawOutput = getTableContents('mtype', 'label');
+  return $rawOutput['DATA'];
+}
+
+/* This function calls getTableContents() with appropriate entries passed to get a list of vendors.  It
+ * returns an array of objects that contain the vendor names.
+ */
+function generateVendorList()
+{
+  $rawOutput = getTableContents('vendors', 'v_name');
+  return $rawOutput['DATA'];
+}
+
+/* This is the helper function that receives and prepares data submitted from the appropriate web form
+ * to the backend PHP function that actually submits that data to the database.
+ */
+function addNewVendor($vendorData)
+{
+  //error_log(print_r($vendorData, true));
+  $tempVar = addVendor($vendorData->vendorname);
 }
 ?>
