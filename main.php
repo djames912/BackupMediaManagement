@@ -19,6 +19,11 @@ and open the template in the editor.
 	addVendor();
 	e.preventDefault();
       });
+      $('#addmediaform').on('submit', function(e)
+      {
+	addMedia();
+	e.preventDefault();
+      });
       $('.mbut').click(function() { 
         $('.mbut').removeClass("msel"); 
         $(this).addClass("msel");
@@ -42,8 +47,7 @@ and open the template in the editor.
         $(".admdetail").hide();
         if(this.id == "list_users")
         {
-          console.log(toJSON(this));
-          //var displayData = prepData("Generated User List.<BR>Coming soon.", "test");
+          //console.log(toJSON(this));
           var displayData = prepData("User List", "generateUserList");
           //console.log(displayData);
           ajaxCall(displayData, listUsersCallback);
@@ -52,13 +56,13 @@ and open the template in the editor.
         if(this.id == "add_user")
         {
           var displayData = prepData("Add User form under development.", "test");
-          console.log(displayData);
+          //console.log(displayData);
           ajaxCall(displayData, adduserCallback);
           $("#adduser").show();
         }
         if(this.id == "add_media")
         {
-          console.log(toJSON(this));
+          //console.log(toJSON(this));
           var displayData = prepData("Media List", "generateMediaList");
           ajaxCall(displayData, listMediaCallback);
           $("#addmedia").show();

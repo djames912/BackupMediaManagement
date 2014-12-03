@@ -36,10 +36,24 @@
       <label class="title">Add User Form</label>
     </div>
     <div id="addmedia" class="admdetail">
-      <label class="title">Add Media</label>
+      <div id="medialist"></div>
+      <BR><BR>
+      <form id="addmediaform" class="form1">
+        <input class="iput" type="text" name="mediatypename" value="Add new media type.">
+        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button" role="button" aria-disabled="false" >
+          <span class="ui-button-text">Submit</span>
+        </button>
+      </form>
     </div>
     <div id="addloc" class="admdetail">
-      <label class="title">Add Location</label>
+      <div id="locationlist"></div>
+      <BR><BR>
+      <form id="addlocationform" class="form1">
+        <input class="iput" type="text" name="locationname" value="Add new location.">
+        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button" role="button" aria-disabled="false" >
+          <span class="ui-button-text">Submit</span>
+        </button>
+      </form>
     </div>
     <div id="addvendor" class="admdetail">
       <div id="vendorlist"></div>

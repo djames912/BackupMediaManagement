@@ -82,12 +82,14 @@ var adduserCallback = function(data)
   targetDiv.innerHTML = data;
 };
 
-/* This is the list media types call back function.
+/* This is the list media types call back function.  It accepts an array of objects from the PHP side of the
+ * house, checks to see if the array is empty and prints a message if it is.  If the arry contains objects, it
+ * iterates through them and displays them.  It returns nothing.
  * 
  */
 var listMediaCallback = function(data)
 {
-  var targetDiv = document.getElementById("addmedia");
+  var targetDiv = document.getElementById("medialist");
   var textOut = "Current Media Types:<BR><BR>";
   if(data.length === 0)
   {
@@ -106,7 +108,9 @@ var listMediaCallback = function(data)
   targetDiv.innerHTML = textOut;
 };
 
-/* This is the vendor list callback function.
+/* This is the vendor list callback function.  It accepts an array of objects from the PHP side of the house,
+ * checks to see if the returned array is empty and displays a message if it is.  If the array contains objects,
+ * it iterates through them and displays them.  It returns nothing.
  * 
  */
 var listVendorCallback = function(data)
@@ -130,6 +134,11 @@ var listVendorCallback = function(data)
   targetDiv.innerHTML = textOut;
 };
 
+/* This function accepts an array from addVendor().  It does some checking to be sure that it actually
+ * received information from addVendor() and then, based on the results of the database call, displays
+ * an appropriate message.  The display is held for 5 seconds and then the form is reset to its original
+ * state.  The function returns nothing.
+ */
 var showAddVendorResultCallback = function(data)
 {
   var targetDiv = document.getElementById("vendorlist");
@@ -154,8 +163,11 @@ var showAddVendorResultCallback = function(data)
   setTimeout(function(){ $("#add_vendor").click(); }, 5000);
 };
 
-/* This function accepts no arguments.  I get's information out of the appropriate form, creates an object
- * and then submits the appropriate data to the addNewVendor() AJAX function.
+/* This function accepts no arguments.  It gets information out of the appropriate form, creates an object
+ * and then submits the appropriate data to the addNewVendor() AJAX function.  The result of the call
+ * to the database is returned from the PHP side of the house to this function.  This fuction then submits
+ * the returned information to the appropriate callback function and resets the form to defaults.  It
+ * returns nothing.
  */
 function addVendor()
 {
@@ -166,3 +178,48 @@ function addVendor()
   ajaxCall(procData, showAddVendorResultCallback);
   formObj.reset();
 }
+
+
+/* This function accepts no arguments.  It gets information out of the appropriate form, creates and object
+ * and then submits the object to the addNewMedia() AJAX function.  The result of the call to the database
+ * is returned from the PHP side of the house to this function.  This function then submits the returned
+ * information to the appropriate callback function and resets the form to defaults.  It returns nothing.
+ */
+function addMedia()
+{
+  var formObj = document.getElementById("addmediaform");
+  var tempObj = new Object();
+  tempObj.medianame = formObj.elements['mediatypename'].value;
+  var procData = prepData(tempObj, "addNewMedia");
+  ajaxCall(procData, showAddMediaResultCallback);
+  formObj.reset();
+}
+
+/* This function accepts an array from addMedia().  It does some checking to be sure that it actually
+ * received information from addMedia() and then, based on the results of the database call, displays
+ * an appropriate message.  The display is held for 5 seconds and then the form is reset to its original
+ * state.  The function returns nothing.
+ */
+var showAddMediaResultCallback = function(data)
+{
+  var targetDiv = document.getElementById("medialist");
+  var textOut = "<CENTER>STATUS:</CENTER><BR>";
+  if(data.length === 0)
+  {
+    textOut += "Strange. Empty data set sent.";
+  }
+  else
+  {
+    //console.log(data);
+    if(data.RSLT === "0")
+    {
+      textOut += "Success!<BR><BR>" + data.MSSG;
+    }
+    else
+    {
+      textOut += "Failed!<BR><BR>" + data.MSSG;
+    }
+  }
+  targetDiv.innerHTML = textOut;
+  setTimeout(function(){ $("#add_media").click(); }, 5000);
+};

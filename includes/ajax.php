@@ -60,7 +60,8 @@ function generateVendorList()
 }
 
 /* This is the helper function that receives and prepares data submitted from the appropriate web form
- * to the backend PHP function that actually submits that data to the database.
+ * to the backend PHP function that actually submits that data to the database.  It returns the output
+ * from the database submission function as an array.
  */
 function addNewVendor($vendorData)
 {
@@ -68,5 +69,15 @@ function addNewVendor($vendorData)
   $rawOutput = addType('vendors', 'v_name', $vendorData->vendorname);
   //error_log(print_r($rawOutput, true));
   return $rawOutput;
+}
+
+/* This is the helper function that receives and prepares data submitted by the appropriate web form to
+ * the backend PHP function that actually submits data to the database.  It returns the output from the
+ * database submission function as an array.
+ */
+function addNewMedia($mediaData)
+{
+  $rawOutput = addType('mtype', 'label', $mediaData->medianame);
+   return $rawOutput;
 }
 ?>
