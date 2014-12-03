@@ -46,7 +46,7 @@
       <BR><BR>
       <form id="addvendorform" class="form1">
         <input class="iput" type="text" name="vendorname" value="Add new vendor.">
-        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button" value="Submit" role="button" aria-disabled="false" onclick="addVendor()">
+        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button" role="button" aria-disabled="false" >
           <span class="ui-button-text">Submit</span>
         </button>
       </form>

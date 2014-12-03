@@ -11,9 +11,14 @@ and open the template in the editor.
     <link rel="stylesheet" type="text/css" media="all" href="css/style.css" />
     <script type="text/javascript" src="js/jqueryui/js/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="js/jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
-    <script type="text/javascript" src="js/lgen.js"></script>   
+    <!-- <script type="text/javascript" src="js/lgen.js"></script>  --> 
     <script type="text/javascript" src="js/main.js"></script>
     <script>$(function() { 
+      $('#addvendorform').on('submit', function(e)
+      {
+	addVendor();
+	e.preventDefault();
+      });
       $('.mbut').click(function() { 
         $('.mbut').removeClass("msel"); 
         $(this).addClass("msel");

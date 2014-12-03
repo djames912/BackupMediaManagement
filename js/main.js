@@ -130,11 +130,39 @@ var listVendorCallback = function(data)
   targetDiv.innerHTML = textOut;
 };
 
+var showAddVendorResultCallback = function(data)
+{
+  var targetDiv = document.getElementById("vendorlist");
+  var textOut = "<CENTER>STATUS:</CENTER><BR>";
+  if(data.length === 0)
+  {
+    textOut += "Strange. Empty data set sent.";
+  }
+  else
+  {
+    //console.log(data);
+    if(data.RSLT === "0")
+    {
+      textOut += "Success!<BR><BR>" + data.MSSG;
+    }
+    else
+    {
+      textOut += "Failed!<BR><BR>" + data.MSSG;
+    }
+  }
+  targetDiv.innerHTML = textOut;
+  setTimeout(function(){ $("#add_vendor").click(); }, 5000);
+};
+
+/* This function accepts no arguments.  I get's information out of the appropriate form, creates an object
+ * and then submits the appropriate data to the addNewVendor() AJAX function.
+ */
 function addVendor()
 {
   var formObj = document.getElementById("addvendorform");
   var tempObj = new Object();
   tempObj.vendorname = formObj.elements["vendorname"].value;
-  var displayData = prepData(tempObj, "addNewVendor");
-  ajaxCall(displayData, listVendorCallback);
+  var procData = prepData(tempObj, "addNewVendor");
+  ajaxCall(procData, showAddVendorResultCallback);
+  formObj.reset();
 }

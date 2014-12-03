@@ -65,6 +65,8 @@ function generateVendorList()
 function addNewVendor($vendorData)
 {
   //error_log(print_r($vendorData, true));
-  $tempVar = addVendor($vendorData->vendorname);
+  $rawOutput = addType('vendors', 'v_name', $vendorData->vendorname);
+  //error_log(print_r($rawOutput, true));
+  return $rawOutput;
 }
 ?>
