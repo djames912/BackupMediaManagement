@@ -59,6 +59,15 @@ function generateVendorList()
   return $rawOutput['DATA'];
 }
 
+/* This function calls getTableContents() with appropriate entries passed to get a list of locations.  It
+ * returns an array of objects that contain the location names.
+ */
+function generateLocationList()
+{
+   $rawOutput = getTableContents('locations', 'label');
+   return $rawOutput['DATA'];
+}
+
 /* This is the helper function that receives and prepares data submitted from the appropriate web form
  * to the backend PHP function that actually submits that data to the database.  It returns the output
  * from the database submission function as an array.
@@ -79,5 +88,15 @@ function addNewMedia($mediaData)
 {
   $rawOutput = addType('mtype', 'label', $mediaData->medianame);
    return $rawOutput;
+}
+
+/* This is the helper function that receives and prepares data submitted by the appropriate web form to
+ * the backend PHP function that actually submits data tot he database.  It returns the output from the
+ * database submission function as an array.
+ */
+function addNewLocation($locationData)
+{
+  $rawOutput = addType('locations', 'label', $locationData->locationname);
+  return $rawOutput;
 }
 ?>

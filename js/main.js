@@ -19,21 +19,21 @@ function fromJSON(jsonData)
  */
 function ajaxCall(jsonString, callBackFuncName)
 {
-   var	url = 'includes/ajax.php';
-   var params = 'request='+jsonString;
-   var request = new XMLHttpRequest();
-    
-   request.onreadystatechange = function () 
-   {	
-       if(request.readyState === 4) 
-       {
-          var jObj = fromJSON(request.responseText);
-           callBackFuncName(jObj);
-       }
-   };
-   request.open('POST', url, false);
-   request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-   request.send(params);
+  var url = 'includes/ajax.php';
+  var params = 'request=' + jsonString;
+  var request = new XMLHttpRequest();
+
+  request.onreadystatechange = function ()
+  {
+    if (request.readyState === 4)
+    {
+      var jObj = fromJSON(request.responseText);
+      callBackFuncName(jObj);
+    }
+  };
+  request.open('POST', url, false);
+  request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  request.send(params);
 }
 
 /* This function accepts a json object and a function name.  It takes both parameters, addes them to
@@ -54,19 +54,19 @@ function prepData(data, funcName)
  * name out of the object.  The name of the user is added to the textOut variable which is ultimately
  * displayed on the scren with the finished list of users.  It returns nothing.
  */
-var listUsersCallback = function(data)
+var listUsersCallback = function (data)
 {
   var targetDiv = document.getElementById("show_users");
   var textOut = "Current Users: <BR><BR>";
-  if(data.length === 0)
+  if (data.length === 0)
   {
     textOut += "No users found.<BR>";
   }
   else
   {
-    for(cntr = 0, len = data.length; cntr < len; cntr++)
+    for (cntr = 0, len = data.length; cntr < len; cntr++)
     {
-      for(objs in data[cntr])
+      for (objs in data[cntr])
       {
         textOut += data[cntr][objs] + "<BR>";
       }
@@ -76,7 +76,7 @@ var listUsersCallback = function(data)
 };
 
 // Call back function for add user form.
-var adduserCallback = function(data)
+var adduserCallback = function (data)
 {
   var targetDiv = document.getElementById("adduser");
   targetDiv.innerHTML = data;
@@ -87,19 +87,19 @@ var adduserCallback = function(data)
  * iterates through them and displays them.  It returns nothing.
  * 
  */
-var listMediaCallback = function(data)
+var listMediaCallback = function (data)
 {
   var targetDiv = document.getElementById("medialist");
   var textOut = "Current Media Types:<BR><BR>";
-  if(data.length === 0)
+  if (data.length === 0)
   {
     textOut += "None on file.<BR>";
   }
   else
   {
-    for(cntr = 0, len = data.length; cntr < len; cntr++)
+    for (cntr = 0, len = data.length; cntr < len; cntr++)
     {
-      for(objs in data[cntr])
+      for (objs in data[cntr])
       {
         textOut += data[cntr][objs] + "<BR>";
       }
@@ -111,27 +111,51 @@ var listMediaCallback = function(data)
 /* This is the vendor list callback function.  It accepts an array of objects from the PHP side of the house,
  * checks to see if the returned array is empty and displays a message if it is.  If the array contains objects,
  * it iterates through them and displays them.  It returns nothing.
- * 
  */
-var listVendorCallback = function(data)
+var listVendorCallback = function (data)
 {
   var targetDiv = document.getElementById("vendorlist");
   var textOut = "Current Vendors on File:<BR><BR>";
-  if(data.length === 0)
+  if (data.length === 0)
   {
     textOut += "None on file.<BR>";
   }
   else
   {
-    for(cntr = 0, len = data.length; cntr < len; cntr++)
+    for (cntr = 0, len = data.length; cntr < len; cntr++)
     {
-      for(objs in data[cntr])
+      for (objs in data[cntr])
       {
         textOut += data[cntr][objs] + "<BR>";
       }
     }
   }
   targetDiv.innerHTML = textOut;
+};
+
+/* This is the location list callback function.  It accepts an array of objects from the PHP side of the house,
+ *  checks to see if the returned array is empty and displays a message if it is.  If the array contains objects,
+ *  it iterates through them and displays them.  It returns nothing.
+ */
+var listLocationCallback = function(data)
+{
+   var targetDiv = document.getElementById("locationlist");
+   var textOut = "Current Locations:<BR><BR>";
+   if(data.length === 0)
+   {
+      textOut += "None set in system.<BR>";
+   }
+   else
+   {
+      for(cntr = 0, len = data.length; cntr < len; cntr++)
+      {
+         for(objs in data[cntr])
+         {
+            textOut += data[cntr][objs] + "<BR>";
+         }
+      }
+   }
+   targetDiv.innerHTML = textOut;
 };
 
 /* This function accepts an array from addVendor().  It does some checking to be sure that it actually
@@ -160,7 +184,7 @@ var showAddVendorResultCallback = function(data)
     }
   }
   targetDiv.innerHTML = textOut;
-  setTimeout(function(){ $("#add_vendor").click(); }, 5000);
+  setTimeout(function (){ $("#add_vendor").click(); }, 5000);
 };
 
 /* This function accepts no arguments.  It gets information out of the appropriate form, creates an object
@@ -180,7 +204,7 @@ function addVendor()
 }
 
 
-/* This function accepts no arguments.  It gets information out of the appropriate form, creates and object
+/* This function accepts no arguments.  It gets information out of the appropriate form, creates an object
  * and then submits the object to the addNewMedia() AJAX function.  The result of the call to the database
  * is returned from the PHP side of the house to this function.  This function then submits the returned
  * information to the appropriate callback function and resets the form to defaults.  It returns nothing.
@@ -193,6 +217,21 @@ function addMedia()
   var procData = prepData(tempObj, "addNewMedia");
   ajaxCall(procData, showAddMediaResultCallback);
   formObj.reset();
+}
+
+/* This function accepts no arguments.  It gets information out of the appropriate form, creates an object
+ * and then submits the object to the addNewLocation() AJAX function.  The result of the call to the database
+ * is returned from the PHP side of the house to this function.  This function then submits the returned 
+ * information to the appropriate callback function and resets the form to defaults.  It returns nothing.
+ */
+function addLocation()
+{
+   var formObj = document.getElementById("addlocationform");
+   var tempObj = new Object();
+   tempObj.locationname = formObj.elements['locationname'].value;
+   var procData = prepData(tempObj, "addNewLocation");
+   ajaxCall(procData, showAddLocationResultCallback);
+   formObj.reset();
 }
 
 /* This function accepts an array from addMedia().  It does some checking to be sure that it actually
@@ -221,5 +260,34 @@ var showAddMediaResultCallback = function(data)
     }
   }
   targetDiv.innerHTML = textOut;
-  setTimeout(function(){ $("#add_media").click(); }, 5000);
+  setTimeout(function (){ $("#add_media").click(); }, 5000);
+};
+
+/* This function accepts an array from addLocation().  It does some checking to be sure that it actually
+ * received information from addLocation() and then, based on the results of the database call, displays
+ * an appropriate message.  The display is held for 5 seconds and then the form is reset to its original
+ * state.  The function returns nothing.
+ */
+var showAddLocationResultCallback = function(data)
+{
+  var targetDiv = document.getElementById("locationlist");
+  var textOut = "<CENTER>STATUS:</CENTER><BR>";
+  if(data.length === 0)
+  {
+    textOut += "Strange. Empty data set sent.";
+  }
+  else
+  {
+    //console.log(data);
+    if(data.RSLT === "0")
+    {
+      textOut += "Success!<BR><BR>" + data.MSSG;
+    }
+    else
+    {
+      textOut += "Failed!<BR><BR>" + data.MSSG;
+    }
+  }
+  targetDiv.innerHTML = textOut;
+  setTimeout(function (){ $("#add_location").click(); }, 5000);
 };

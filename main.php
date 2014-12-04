@@ -24,6 +24,11 @@ and open the template in the editor.
 	addMedia();
 	e.preventDefault();
       });
+      $('#addlocationform').on('submit', function(e)
+      {
+	addLocation();
+	e.preventDefault();
+      });
       $('.mbut').click(function() { 
         $('.mbut').removeClass("msel"); 
         $(this).addClass("msel");
@@ -69,6 +74,8 @@ and open the template in the editor.
         }
         if(this.id == "add_location")
         {
+           var displayData = prepData("Location List", "generateLocationList");
+           ajaxCall(displayData, listLocationCallback);
           $("#addloc").show();
         }
         if(this.id == "add_vendor")

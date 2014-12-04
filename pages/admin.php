@@ -39,7 +39,7 @@
       <div id="medialist"></div>
       <BR><BR>
       <form id="addmediaform" class="form1">
-        <input class="iput" type="text" name="mediatypename" value="Add new media type.">
+        <input class="iput" type="text" name="mediatypename" value="Add new media type." onfocus="if(this.value === 'Add new media type.') this.value = '';">
         <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button" role="button" aria-disabled="false" >
           <span class="ui-button-text">Submit</span>
         </button>
@@ -49,8 +49,8 @@
       <div id="locationlist"></div>
       <BR><BR>
       <form id="addlocationform" class="form1">
-        <input class="iput" type="text" name="locationname" value="Add new location.">
-        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button" role="button" aria-disabled="false" >
+        <input class="iput" type="text" name="locationname" value="Add new location." onfocus="if(this.value === 'Add new location.') this.value = '';">
+        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button" role="button" aria-disabled="false">
           <span class="ui-button-text">Submit</span>
         </button>
       </form>
@@ -59,7 +59,7 @@
       <div id="vendorlist"></div>
       <BR><BR>
       <form id="addvendorform" class="form1">
-        <input class="iput" type="text" name="vendorname" value="Add new vendor.">
+        <input class="iput" type="text" name="vendorname" value="Add new vendor." onfocus="if(this.value === 'Add new vendor.') this.value = '';">
         <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button" role="button" aria-disabled="false" >
           <span class="ui-button-text">Submit</span>
         </button>
