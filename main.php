@@ -141,9 +141,9 @@ and open the template in the editor.
         echo '<tr>';
         echo '<td>';
         echo '<div align="center"><font color="#FFFFFF">';
-        echo "$applicationName";
-        if($applicationInstance != '' || $applicationInstance == 'Production')
-            echo " - $applicationInstance";
+        echo $GLOBALS['applicationName'];
+        if($GLOBALS['applicationInstance'] != '' || $GLOBALS['applicationInstance'] == 'Production')
+            echo " - " . $GLOBALS['applicationInstance'];
         echo '<br><br>';
         echo "Uh oh!  Couldn't find any valid credentials.";
         echo "<br>";
@@ -164,9 +164,9 @@ and open the template in the editor.
       echo '<tr>';
       echo '<td>';
       echo '<div align="center"><font color="#FFFFFF">';
-      echo "$applicationName";
-      if($applicationInstance != '' || $applicationInstance = "Production")
-          echo " - $applicationInstance";
+      echo $GLOBALS['applicationName'];
+      if($GLOBALS['applicationInstance'] != '' || $GLOBALS['applicationInstance'] = "Production")
+          echo " -  " . $GLOBALS['applicationInstance'];
       echo '<br><br>';
       echo "User name or password not found.";
       echo '<br>';
@@ -183,31 +183,31 @@ and open the template in the editor.
     echo '<div style="width:960px; margin-left:auto; margin-right:auto;">';
     echo '<div id="header"> Tape Inventory System </div>';
     echo '<div id="menu">';
-    if($_SESSION['AccessLevel'] >= $modBatchLevel)
+    if($_SESSION['AccessLevel'] >= $GLOBALS['modBatchLevel'])
       echo '<div id="Modify_BatchmMark" class="mbut">Modify Batch</div>';
-    if($_SESSION['AccessLevel'] >= $createBatchLevel)
+    if($_SESSION['AccessLevel'] >= $GLOBALS['createBatchLevel'])
       echo '<div id="Create_BatchmMark" class="mbut">Create Batch</div>';
-    if($_SESSION['AccessLevel'] >= $runReportLevel)
+    if($_SESSION['AccessLevel'] >= $GLOBALS['runReportLevel'])
       echo '<div id="ReportsmMark" class="mbut">Reports</div>';
-    if($_SESSION['AccessLevel'] >= $addTapeLevel)
+    if($_SESSION['AccessLevel'] >= $GLOBALS['addTapeLevel'])
       echo '<div id="Add_TapemMark" class="mbut">Add Tape</div>';
-    if($_SESSION['AccessLevel'] >= $modTapeLevel)
+    if($_SESSION['AccessLevel'] >= $GLOBALS['modTapeLevel'])
       echo '<div id="Modify_TapemMark" class="mbut">Modify Tape</div>';
-    if($_SESSION['AccessLevel'] >= $adminLevel)
+    if($_SESSION['AccessLevel'] >= $GLOBALS['adminLevel'])
       echo '<div id="AdminmMark" class="mbut">Admin</div>';
     echo '</div>';
     echo '<div id="main" class="content">';
-    if($_SESSION['AccessLevel'] >= $addTapeLevel)
+    if($_SESSION['AccessLevel'] >= $GLOBALS['addTapeLevel'])
       include 'pages/addtape.php';
-    if($_SESSION['AccessLevel'] >= $createBatchLevel)
+    if($_SESSION['AccessLevel'] >= $GLOBALS['createBatchLevel'])
       include 'pages/createbatch.php';
-    if($_SESSION['AccessLevel'] >= $modBatchLevel)
+    if($_SESSION['AccessLevel'] >= $GLOBALS['modBatchLevel'])
       include 'pages/modifybatch.php';
-    if($_SESSION['AccessLevel'] >= $runReportLevel)
+    if($_SESSION['AccessLevel'] >= $GLOBALS['runReportLevel'])
       include 'pages/reports.php';
-    if($_SESSION['AccessLevel'] >= $modTapeLevel)
+    if($_SESSION['AccessLevel'] >= $GLOBALS['modTapeLevel'])
       include 'pages/modifytape.php';
-    if($_SESSION['AccessLevel'] >= $adminLevel)
+    if($_SESSION['AccessLevel'] >= $GLOBALS['adminLevel'])
       include 'pages/admin.php';
     echo '</div>';
     echo '</div>';

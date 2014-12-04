@@ -19,6 +19,28 @@ date_default_timezone_set('GMT');
 $batchCreateLocation = "Offsite Storage";
 $newTapeLocation = "Tape Library";
 
+// These are default values for tape exceptions.  Tape exceptions are those that fall
+// outside of standard activities such as a new tape or a tape marked for destriction.
+// There really is no reason to change these variables.  If you're not careful, you can
+// really make a mess with these.
+$newTapeException = array(
+  "batchID" => "-1",
+  "batchCount" => "-1",
+  "name" => "Created"
+);
+
+$recycleTapeException = array(
+  "batchID" => "-2",
+  "batchCount" => "-2",
+  "name" => "Recycled"
+);
+
+$destroyTapeException = array(
+  "batchID" => "-3",
+  "batchCount" => "-3",
+  "name" => "Destroyed"
+);
+
 // This sets the default return time in the number of days.  This can also be changed
 // to match your needs.
 $defaultReturnTime = 35;

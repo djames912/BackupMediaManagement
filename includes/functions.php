@@ -284,47 +284,42 @@ function addType($tableName, $fieldName, $dataValue)
       }
       else
       {
-        try
+        $checkTape = tapeExists($newTape->tape_id);
+        if($checkTape == "0")
         {
-          $dbLink = dbconnect();
-          $bldQuery = "SELECT * FROM tapes WHERE label='$newTape->tape_id';";
-          $statement = $dbLink->prepare($bldQuery);
-          $statement->execute();
-          $rowCount = $statement->rowCount();
-          if($rowCount >= '1')
-          {
-            $r_val['RSLT'] = "1";
-            $r_val['MSSG'] = "Record for $newTape->tape_id already exists in database.";
-          }
-          else
-          {
-            try
-            {
-              $dbLink = dbconnect();
-              $bldQuery = "INSERT INTO tapes(label, mtype, vendor, po_num) VALUES('$newTape->tape_id','$newTape->mtype','$newTape->ven_id','$newTape->po_num');";
-              $statement = $dbLink->prepare($bldQuery);
-              $statement->execute();
-              
-              $tapeHistory = assignTape($newTape->tape_id, $newTape->loc_id, $newTape->uname, "-1", "-1");
-              
-            } 
-            catch (PDOException $exception) 
-            {
-              echo "Unable to take requested action.";
-              $r_val['RSLT'] = "1";
-              $r_val['MSSG'] = $exception->getMessage();
-            }
-          }
-        }
-        catch (PDOException $exception) 
-        {
-          echo "Unable to take requested action.";
           $r_val['RSLT'] = "1";
-          $r_val['MSSG'] = $exception->getMessage();
+          $r_val['MSSG'] = "Tape $newTape->tape_id found in database.  Cannot add.";
+        }
+        else
+        {
+          try
+          {
+            $dbLink = dbconnect();
+            $bldQuery = "INSERT INTO tapes(label, mtype, vendor, po_num) VALUES('$newTape->tape_id','$newTape->mtype','$newTape->ven_id','$newTape->po_num');";
+            $statement = $dbLink->prepare($bldQuery);
+            $statement->execute();
+            $tapeHistory = assignTape($newTape->tape_id, $newTape->loc_id, $newTape->uname, $GLOBALS['newTapeException']['batchID'], $GLOBALS['newTapeException']['batchCount']);
+            if($tapeHistory['RSLT'] == "1")
+            {
+               $r_val['RSLT'] = $tapeHistory['RSLT'];
+               $r_val['MSSG'] = $tapeHistory['MSSG'];
+            }
+            else
+            {
+               $r_val['RSLT'] = "0";
+               $r_val['MSSG'] = "$newTape->tape_id successfully added to the database.";
+            }
+          } 
+          catch (PDOException $exception) 
+          {
+            echo "Unable to take requested action.";
+            $r_val['RSLT'] = "1";
+            $r_val['MSSG'] = $exception->getMessage();
+          }
         }
       }
     }
-    return $r_val;
+   return $r_val;
  }
  
  /* This function accepts a media bar code number, a location ID, user name, batch ID and batch
@@ -334,11 +329,111 @@ function addType($tableName, $fieldName, $dataValue)
   */
  function assignTape($tapeBarCode, $locationID, $userName, $batchID, $batchCount)
  {
-   
+    $timeStamp = time();
+    try
+    {
+       $dbLink = dbconnect();
+       $bldQuery = "INSERT INTO history(date, tape_id, location, user, batch_id, batch_num) VALUES('$timeStamp', '$tapeBarCode', '$locationID', '$userName', '$batchID', '$batchCount');";
+       $statement = $dbLink->prepare($bldQuery);
+       $statement->execute();
+       $r_val['RSLT'] = "0";
+       $r_val['MSSG'] = "Database history insert for $tapeBarCode successful.";
+    }
+    catch (PDOException $exception) 
+    {
+       echo "Unable to take requested action.";
+       $r_val['RSLT'] = "1";
+       $r_val['MSSG'] = $exception->getMessage();
+    }
+    return $r_val;
  }
  
- /* This function accepts three arguments, a database field name, column name and value.  The function
-  * searches the database to see if the value exists in the database and returns a '0' if not found and a
-  * '1' if found.
+ /* This function accepts a tape bar code as an argument, checks the database to see if the tape is already
+  * present or not.  If the tape is found, it returns a '0'.  If the tape is not found it returns a '1';
   */
+ function tapeExists($tapeBarCode)
+ {
+   try
+   {
+     $dbLink = dbconnect();
+     $bldQuery = "SELECT * FROM tapes WHERE label='$tapeBarCode';";
+     $statement = $dbLink->prepare($bldQuery);
+     $statement->execute();
+     $rowCount = $statement->rowCount();
+      if($rowCount >= '1')
+     {
+       $r_val['RSLT'] = "0";
+       $r_val['MSSG'] = "Record for $tapeBarCode found in database.";
+     }
+     else
+     {
+       $r_val['RSLT'] = "1";
+       $r_val['MSSG'] = "Record for $tapeBarCode not found in database.";
+     }
+   }
+   catch (PDLException $exception)
+   {
+     echo "Unable to take requested action.";
+     $r_val['RSLT'] = "1";
+     $r_val['MSSG'] = $exception->getMessage();
+   }
+   return $r_val;
+ }
+ 
+ /* This function accepts a database table name and then the name of the item that needs to have its
+  * ID looked up.  It returns an array which includes whether the item was found and if so what its name
+  * is or if the item was not found.
+  */
+ function getIDLabel($tableName, $nameID)
+ {
+   if($nameID == $GLOBALS['newTapeException']['batchID'])
+   {
+     $r_val['RSLT'] = "0";
+     $r_val['MSSG'] = "ID located as default variable.";
+     $r_val['DATA'] = $GLOBALS['newTapeException']['name'];
+   }
+   elseif($nameID == $GLOBALS['recycleTapeException']['batchID'])
+   {
+     $r_val['RSLT'] = "0";
+     $r_val['MSSG'] = "ID located as default variable";
+     $r_val['DATA'] = $GLOBALS['recycleTapeException']['name'];
+   }
+   elseif($nameID == $GLOBALS['destroyTapeException']['batchID'])
+   {
+     $r_val['RSLT'] = "0";
+     $r_val['MSSG'] = "ID located as default variable.";
+     $r_val['DATA'] = $GLOBALS['destroyTapeException']['name'];
+   }
+   else
+   {
+     $cName = $tableName == "vendors" ? "v_name" : "label";
+     try
+     {
+       $dbLink = dbconnect();
+       $bldQuery = "SELECT $cName FROM $tableName WHERE ID='$nameID';";
+       $statement = $dbLink->prepare($bldQuery);
+       $statement->execute();
+       $rowCount = $statement->rowCount();
+       if($rowCount == '0')
+       {
+         $r_val['RSLT'] = "1";
+         $r_val['MSSG'] = "ID $nameID not found in $tableName";
+       }
+       else
+       {
+         $r_val['RSLT'] = "0";
+         $r_val['MSSG'] = "ID located in $tableName";
+         $returnedData = $statement->fetchAll(PDO::FETCH_OBJ);
+         $r_val['DATA'] = $returnedData['0']->$cName;
+       }
+     }
+     catch(PDOException $exception)
+     {
+       echo "Unable to take requested action";
+       $r_val['RSLT'] = "1";
+       $r_val['MSSG'] = $exception->getMessage();
+     }
+   }
+   return $r_val;
+ }
 ?>
