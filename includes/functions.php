@@ -435,7 +435,7 @@ function addType($tableName, $fieldName, $dataValue)
      }
      catch(PDOException $exception)
      {
-       echo "Unable to take requested action";
+       echo "Unable to take requested action";$tableName
        $r_val['RSLT'] = "1";
        $r_val['MSSG'] = $exception->getMessage();
      }
@@ -592,7 +592,7 @@ function addType($tableName, $fieldName, $dataValue)
    }
    $currentDate = getdate(time());
    $currentDate['mday'] = $currentDate['mday'] + $advanceDate;
-   $timeStamp = mktime($currentDate['housrs'], $currentDate['minutes'], $currentDate['seconds'], $currentDate['mon'], $currentDate['mday'], $currentDate['year']);
+   $timeStamp = mktime($currentDate['hours'], $currentDate['minutes'], $currentDate['seconds'], $currentDate['mon'], $currentDate['mday'], $currentDate['year']);
    $r_val['DATA'] =$timeStamp;
  
    return $r_val;
@@ -686,11 +686,13 @@ function addType($tableName, $fieldName, $dataValue)
    
    if(!$rtnDate)
    {
-     $returnDate = getReturnDate($GLOBALS['defaultReturnTime']);
+     $returnedData = getReturnDate($GLOBALS['defaultReturnTime']);
+     $returnDate = $returnedData['DATA'];
    }
    else
    {
-     $returnDate = getReturnDate($rtnDate);
+     $returnedData = getReturnDate($rtnDate);
+     $returnDate = $returnedData['DATA'];
    }
    
    if(!is_array($barCodes))
