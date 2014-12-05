@@ -270,6 +270,8 @@ function addType($tableName, $fieldName, $dataValue)
 */
  function addTape($newTape)
  {
+   $returnedData = getLableID('locations', $GLOBALS['newTapeLocation']);
+   $locationID = $returnedData['DATA'];
     if(!is_object($newTape))
     {
       $r_val['RSLT'] = "1";
@@ -277,28 +279,30 @@ function addType($tableName, $fieldName, $dataValue)
     }
     else
     {
-      if(!($newTape->date && $newTape->tape_id && $newTape->loc_id &&$newTape->uname && $newTape->mtype && $newTape->ven_id && $newTape->po_num))
+      if(!($newTape->tapeID && $newTape->uname && $newTape->venID && $newTape->poNum))
       {
         $r_val['RSLT'] = "1";
         $r_val['MSSG'] = "Incomplete data set passed.";
       }
       else
       {
-        $checkTape = tapeExists($newTape->tape_id);
-        if($checkTape == "0")
+        $checkTape = tapeExists($newTape->tapeID);
+        if($checkTape['RSLT'] == "0")
         {
           $r_val['RSLT'] = "1";
-          $r_val['MSSG'] = "Tape $newTape->tape_id found in database.  Cannot add.";
+          $r_val['MSSG'] = "Tape $newTape->tapeID found in database.  Cannot add.";
         }
         else
         {
           try
           {
+            $returnedMediaType = getMediaType($newTape->tapeID);
+            $mediaType = $returnedMediaType['DATA'];
             $dbLink = dbconnect();
-            $bldQuery = "INSERT INTO tapes(label, mtype, vendor, po_num) VALUES('$newTape->tape_id','$newTape->mtype','$newTape->ven_id','$newTape->po_num');";
+            $bldQuery = "INSERT INTO tapes(label, mtype, vendor, po_num) VALUES('$newTape->tapeID','$mediaType','$newTape->venID','$newTape->poNum');";
             $statement = $dbLink->prepare($bldQuery);
             $statement->execute();
-            $tapeHistory = assignTape($newTape->tape_id, $newTape->loc_id, $newTape->uname, $GLOBALS['newTapeException']['batchID'], $GLOBALS['newTapeException']['batchCount']);
+            $tapeHistory = assignTape($newTape->tapeID, $locationID, $newTape->uname, $GLOBALS['newTapeException']['batchID'], $GLOBALS['newTapeException']['batchCount']);
             if($tapeHistory['RSLT'] == "1")
             {
                $r_val['RSLT'] = $tapeHistory['RSLT'];
@@ -307,7 +311,7 @@ function addType($tableName, $fieldName, $dataValue)
             else
             {
                $r_val['RSLT'] = "0";
-               $r_val['MSSG'] = "$newTape->tape_id successfully added to the database.";
+               $r_val['MSSG'] = "$newTape->tapeID successfully added to the database.";
             }
           } 
           catch (PDOException $exception) 
@@ -380,9 +384,11 @@ function addType($tableName, $fieldName, $dataValue)
    return $r_val;
  }
  
- /* This function accepts a database table name and then the name of the item that needs to have its
-  * ID looked up.  It returns an array which includes whether the item was found and if so what its name
-  * is or if the item was not found.
+ /* This function accepts a database table name and then the ID number that needs to have it label name
+  * found.  It checks various values against some of the $GLOBALS that are set in configuration files to be
+  * sure the requested value isn't one of them.  If the value is not one of the $GLOBALS, it goes to the
+  * database table passed in to the function to look for the ID.  If the function finds the ID it will return the
+  * label belonging to that ID.  If the function does not find the ID, it returns that fact.
   */
  function getIDLabel($tableName, $nameID)
  {
@@ -432,6 +438,111 @@ function addType($tableName, $fieldName, $dataValue)
        echo "Unable to take requested action";
        $r_val['RSLT'] = "1";
        $r_val['MSSG'] = $exception->getMessage();
+     }
+   }
+   return $r_val;
+ }
+ 
+ /* This function accepts a database table name and then a label name.  It returns the ID number associated
+  * with that label.
+  */
+ function getLableID($tableName, $labelName)
+ {
+   if($labelName == $GLOBALS['newTapeException']['name'])
+   {
+     $r_val['RSLT'] = "0";
+     $r_val['MSSG'] = "Name located as default variable.";
+     $r_val['DATA'] = $GLOBALS['newTapeException']['batchID'];
+   }
+   elseif($labelName == $GLOBALS['recycleTapeException']['name'])
+   {
+     $r_val['RSLT'] = "0";
+     $r_val['MSSG'] = "Name located as default variable.";
+     $r_val['DATA'] = $GLOBALS['recycleTapeException']['batchID'];
+   }
+   elseif($labelName == $GLOBALS['destroyTapeException']['name'])
+   {
+     $r_val['RSLT'] = "0";
+     $r_val['MSSG'] = "Name located as default variable.";
+     $r_val['DATA'] = $GLOBALS['destroyTapeException']['name'];
+   }
+   else
+   {
+     $searchName = $tableName == "vendors" ? "v_name" : "label";
+     try
+     {
+       $dbLink = dbconnect();
+       $bldQuery = "SELECT ID FROM $tableName WHERE $searchName='$labelName';";
+       $statement = $dbLink->prepare($bldQuery);
+       $statement->execute();
+       $rowCount = $statement->rowCount();
+       if($rowCount == "0")
+       {
+         $r_val['RSLT'] = "1";
+         $r_val['MSSG'] = "ID for $labelName not found in database.";
+       }
+       else
+       {
+         $r_val['RSLT'] = "0";
+         $r_val['MSSG'] = "Label located in $tableName";
+         $returnedData = $statement->fetchAll(PDO::FETCH_OBJ);
+         $r_val['DATA'] = $returnedData['0']->ID;
+       }
+     }
+     catch (PDOException $exception) 
+     {
+       echo "Unable to take requested action.";
+       $r_val['RSLT'] = "1";
+       $r_val['MSSG'] = $exception->getMessage();
+     }
+   }
+   return $r_val;
+ }
+ 
+ function getMediaType($mediaBarCode = NULL)
+ {
+   if(is_null($mediaBarCode))
+   {
+     $r_val['RSLT'] = "1";
+     $r_val['MSSG'] = "No data passed to determineMediaType().";
+   }
+   else
+   {
+     $mediaNum = substr($mediaBarCode, strlen($mediaBarCode) - 1);
+     if(!is_numeric($mediaNum))
+     {
+       $r_val['RSLT'] = "1";
+       $r_val['MSSG'] = "Non-numeric value returned.  Unknown media type detected.";
+     }
+     else
+     {
+       $mediaLabel = "LTO" . $mediaNum;
+       try
+       {
+         $dbLink = dbconnect();
+         $bldQuery = "SELECT ID FROM mtype WHERE label='$mediaLabel';";
+         $statement = $dbLink->prepare($bldQuery);
+         $statement->execute();
+         $rowCount = $statement->rowCount();
+         if($rowCount == "0")
+         {
+           $r_val['RSLT'] = "1";
+           $r_val['MSSG'] = "Unknown media type for $mediaBarCode";
+         }
+         else
+         {
+           $returnedData = $statement->fetchAll(PDO::FETCH_OBJ);
+           $r_val['RSLT'] = "0";
+           $r_val['MSSG'] = "Media type found in database";
+           $r_val['DATA'] = $returnedData['0']->ID;
+         }
+       } 
+       catch (PDOException $exception)
+       {
+         echo "Unable to take requested action.";
+         $r_val['RSLT'] = "1";
+         $r_val['MSSG'] = $exception->getMessage();
+       }
      }
    }
    return $r_val;
