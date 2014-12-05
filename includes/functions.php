@@ -435,7 +435,7 @@ function addType($tableName, $fieldName, $dataValue)
      }
      catch(PDOException $exception)
      {
-       echo "Unable to take requested action";$tableName
+       echo "Unable to take requested action";
        $r_val['RSLT'] = "1";
        $r_val['MSSG'] = $exception->getMessage();
      }
