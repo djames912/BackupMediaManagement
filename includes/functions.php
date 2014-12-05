@@ -519,7 +519,7 @@ function addType($tableName, $fieldName, $dataValue)
        $mediaLabel = "LTO" . $mediaNum;
        try
        {
-         $dbLink = dbconnect();
+         $dbLink = dbconnect();$dbLink->lastInsertId();
          $bldQuery = "SELECT ID FROM mtype WHERE label='$mediaLabel';";
          $statement = $dbLink->prepare($bldQuery);
          $statement->execute();
@@ -543,6 +543,189 @@ function addType($tableName, $fieldName, $dataValue)
          $r_val['RSLT'] = "1";
          $r_val['MSSG'] = $exception->getMessage();
        }
+     }
+   }
+   return $r_val;
+ }
+ 
+ /* This function accepts a string and a number of characters as arguments.  The function truncates the
+  * string to match the number of characters provided.  The function returns the truncated string.
+  */
+ function truncateString($textString, $numberChars)
+ {
+   if(strlen($textString) > $numberChars)
+   {
+     $r_val['DATA'] = substr($textString, 0, $numberChars);
+   }
+   else
+   {
+     $r_val['DATA'] = $textString;
+   }
+   return $r_val;
+ }
+ 
+ /* This function accepts an abbreviated month name, converts it to a digit and then returns the digit.
+  * There is some intermeidate processing which is fairly rudimentary but it works reliably.
+  */
+ function month2digit($monthAbbrev)
+ {
+   $monthLower = strtolower($monthAbbrev);
+   $monthCorrected = ucfirst($monthLower);
+   for($monthNum = 1; $monthNum <= 12; $monthNum++)
+   {
+     if(date("M", mktime(0, 0, 0, $monthNum, 1, 0)) == $monthCorrected)
+     {
+       $r_val['DATA'] = $monthNum;
+     }
+   }
+   return $r_val;
+ }
+ 
+ /* This function accepts an optional number of days as an argument.  If no argument is passed, it uses the
+  * configured $defaultReturnTime.  The function returns the future timestamp.
+  */
+ function getReturnDate($advanceDate = NULL)
+ {
+   if(is_null($advanceDate))
+   {
+     $advanceDate = $GLOBALS['defaultReturnTime'];
+   }
+   $currentDate = getdate(time());
+   $currentDate['mday'] = $currentDate['mday'] + $advanceDate;
+   $timeStamp = mktime($currentDate['housrs'], $currentDate['minutes'], $currentDate['seconds'], $currentDate['mon'], $currentDate['mday'], $currentDate['year']);
+   $r_val['DATA'] =$timeStamp;
+ 
+   return $r_val;
+ }
+ 
+ /* This function accepts a formatted date (e.g. m/d/Y or M/d/Y) and uses it to build a time stamp.  The
+  * time stamp it creates is used to create a batch time stamp for entry into the database.  It returns the
+  * created time stamp to the calling function.  The function tests the month element of the array to see
+  * if it is numeric, if it isn't it converts it, if it is, it uses it.  The other check is to see if the year is longer than
+  * four digits, if it is it truncates it.  That may produce undesireable results if a random number is passed.
+  */
+ function createTimeStamp($suppliedDate)
+ {
+   $dateElements = explode("/", $suppliedDate);
+   $batchDay = $dateElements['1'];
+   if(is_numeric($dateElements['0']))
+   {
+     $batchMonth = $dateElements['0'];
+   }
+   else
+   {
+     $batchMonth = month2digit($dateElements['0']);
+   }
+   if(strlen($dateElements['2']) > 4)
+   {
+     $returnedData = truncateString($dateElements['2'], '4');
+     $batchYear = $returnedData['DATA'];
+   }
+   else
+   {
+     $batchYear = $dateElements['2'];
+   }
+   $timeStamp = mktime(date("H"), date("i"), date("s"), $batchMonth, $batchDay, $batchYear);
+   $r_val['DATA'] = $timeStamp;
+   return $r_val;
+ }
+ 
+ /* This function accepts two arguments, the batch label name and the time stamp under which the batch
+  * was created.  This function was created to prevent duplicate labels from being returned.  This function,
+  * as it now stands, is useful only in being called by the batch generation function since a user will have
+  * no real way of knowing exactly what time stamp belongs to a given batch.  It returns the batch ID number.
+  */
+ function getBatchID($labelName, $timeStamp)
+ {
+   try
+   {
+     $dbLink = dbconnect();
+     $bldQuery = "SELECT ID FROM batch WHERE label='$labelName' AND date='$timeStamp';";
+     $statement = $dbLink->prepare($bldQuery);
+     $statement->execute();
+     $returnedData = $statement->fetchAll(PDO::FETCH_OBJ);
+     $r_val['RSLT'] = "0";
+     $r_val['MSSG'] = "ID for batch $labelName with timestamp $timeStamp located.";
+     $r_val['DATA'] = $returnedData['0']->ID;
+   }
+   catch (PDOException $exception) 
+   {
+     echo "Unable to take requested action.";
+     $r_val['RSLT'] = "1";
+     $r_val['MSSG'] = $exception->getMessage();
+   }
+   return $r_val;
+ }
+ 
+ /* This function accepts an object containing information about a batch of tapes.  The first element in the
+  * object should be an array of media bar codes.  The other elements should be the user name of the user
+  * who created the batch and a date.  If the date element is not found, a time stamp is created.  If a date
+  * is found, the date is run through createTimeStamp().  Other values are set using $GLOBALS variables for
+  * the default storage location and the default return time.  The batch information is then inserted into
+  * the batch table and a history table entry is made for each tape in the batch reflecting that fact.  The
+  * function returns whether the history insert was successful or not.
+  */
+ function addTapeBatch($batchData)
+ {
+   $barCodes = $batchData->bcodes;
+   $userName = $batchData->uname;
+   $batchDate = $barCodes->date;
+   $rtnDate = $barCodes->rdays;
+   
+   if(!$batchDate)
+   {
+     $batchTimeStamp = time();
+     $batchTime = date("m/d/Y", time());
+   }
+   else
+   {
+     $returnedData = createTimeStamp($batchDate);
+     $batchTimeStamp = $returnedData['DATA'];
+     $batchTime = $batchDate;
+   }
+   
+   if(!$rtnDate)
+   {
+     $returnDate = getReturnDate($GLOBALS['defaultReturnTime']);
+   }
+   else
+   {
+     $returnDate = getReturnDate($rtnDate);
+   }
+   
+   if(!is_array($barCodes))
+   {
+     $r_val['RSLT'] = "1";
+     $r_val['MSSG'] = "The batch members were not passed as an array.";
+   }
+   else
+   {
+     $batchSize = count($barCodes);
+     try
+     {
+       $dbLink = dbconnect();
+       $bldQuery = "INSERT INTO batch(label, total, date, rdate) VALUES('$batchTime', '$batchSize', '$batchTimeStamp', '$returnDate');";
+       $statement = $dbLink->prepare($bldQuery);
+       $statement->execute();
+       // This should return the batch ID number.  No sense in making another database call to get what should already be available.
+       $batchID = $dbLink->lastInsertId();
+       $returnedData = getLableID('locations', $GLOBALS['batchCreateLocation']);
+       $locationID = $returnedData['DATA'];
+       $loop = 0;
+       foreach($barCodes as $tapeID)
+       {
+         $loop++;
+         $historyUpdate [] = assignTape(trim($tapeID), $locationID, $userName, $batchID, $loop);
+         $r_val['DATA'] = $historyUpdate;
+       }
+       $r_val['RSLT'] = "0";
+       $r_val['MSSG'] = "Batch created successfully.";
+     } 
+     catch (PDOException $exception) 
+     {
+       echo "Unable to take requested action.";
+       $r_val['RSLT'] = "1";
+       $r_val['MSSG'] = $exception->getMessage();
      }
    }
    return $r_val;
