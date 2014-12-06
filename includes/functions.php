@@ -783,4 +783,46 @@ function addType($tableName, $fieldName, $dataValue)
    }
    return $r_val;
  }
+ 
+ /* This function accepts a batch ID number as an argument, it returns the size of
+  * the batch.
+  */
+ function getBatchSize($batchID)
+ {
+   if(!is_numeric($batchID))
+   {
+     $r_val['RSLT'] = "1";
+     $r_val['MSSG'] = "Non-numeric value passed.";
+   }
+   else
+   {
+     try
+     {
+       $dbLink = dbconnect();
+       $bldQuery = "SELECT total FROM batch WHERE ID='$batchID';";
+       $statement = $dbLink->prepare($bldQuery);
+       $statement->execute();
+       $rowCount = $statement->rowCount();
+       if($rowCount == "0")
+       {
+         $r_val['RSLT'] = "1";
+         $r_val['MSSG'] = "No batch with ID $batchID found.";
+       }
+       else
+       {
+         $returnedData = $statement->fetchAll(PDO::FETCH_OBJ);
+         $r_val['RSLT'] = "0";
+         $r_val['MSSG'] = "Lookup for batch ID $batchID complete.";
+         $r_val['DATA'] = $returnedData['0']->total;
+       }
+     }
+     catch(PDOException $exception)
+     {
+       echo "Unable to take requested action.";
+       $r_val['RSLT'] = "1";
+       $r_val['MSSG'] = $exception->getMessage();
+     }
+   }
+   return $r_val;
+ }
 ?>
