@@ -669,9 +669,12 @@ function addType($tableName, $fieldName, $dataValue)
  {
    $barCodes = $batchData->bcodes;
    $userName = $batchData->uname;
-   $batchDate = $barCodes->date;
-   $rtnDate = $barCodes->rdays;
+   $batchDate = $batchData->date;
+   $rtnDate = $batchData->rdays;
+   $batchLoc = $batchData->bloc;
    
+   // This block checks to see if the batch date is set, if it isn't then a value
+   // is set.  If it is a valid time stamp is created.
    if(!$batchDate)
    {
      $batchTimeStamp = time();
@@ -684,6 +687,9 @@ function addType($tableName, $fieldName, $dataValue)
      $batchTime = $batchDate;
    }
    
+   // This block checks to see if the batch return date is set.  If it isn't then
+   // the default from the configuration file is used.  If it is, it is sent over
+   // to get a valid time stamp which is then used.
    if(!$rtnDate)
    {
      $returnedData = getReturnDate($GLOBALS['defaultReturnTime']);
@@ -694,7 +700,54 @@ function addType($tableName, $fieldName, $dataValue)
      $returnedData = getReturnDate($rtnDate);
      $returnDate = $returnedData['DATA'];
    }
+   // This block checks to see if the batch location is set.  If it isn't it goes
+   // with the default location.  If it is, it checks to see if it's a numeric value
+   // and then verifies the value with the database.  If the value is valid, it sets
+   // that as the location ID.  If not, it sets the default.  If the value is not
+   // numeric, it checks with the locations named in the database, if the location
+   // returns a valid location ID it sets it, otherwise it goes with the default.
+   if(!$batchLoc)
+   {
+     $returnedData = getLableID('locations', $GLOBALS['batchCreateLocation']);
+     $locationID = $returnedData['DATA'];
+   }
+   else
+   {
+     if(is_numeric($batchLoc))
+     {
+       $returnedData = getIDLabel('locations', $batchLoc);
+       if($returnedData['RSLT'] == "1")
+       {
+         error_log("$batchLoc not valid.  Setting default.", 0);
+         $failSafe = getLableID('locations', $GLOBALS['batchCreateLocation']);
+         $locationID = $failSafe['DATA'];
+       }
+       else
+       {
+         $locationID = $batchLoc;
+       }
+     }
+     else
+     {
+       $returnedData = getLableID('locations', $batchLoc);
+       if($returnedData['RSLT'] == "1")
+       {
+         error_log("$batchLoc not valid.  Setting default.", 0);
+         $failSafe = getLableID('locations', $GLOBALS['batchCreateLocation']);
+         $locationID = $failSafe['DATA'];
+       }
+       else
+       {
+         $locationID = $returnedData['DATA'];
+       }
+     }
+   }
    
+   // This block checks to see if the media bar codes came over as an array.  If not
+   // an error message is thrown and action halts.  If so, the array is looped through
+   // and the batch is inserted into the database.  A corresponding entry in the history
+   // table is then made for each tape associating it with the batch that was just
+   // created.
    if(!is_array($barCodes))
    {
      $r_val['RSLT'] = "1";
@@ -711,8 +764,6 @@ function addType($tableName, $fieldName, $dataValue)
        $statement->execute();
        // This should return the batch ID number.  No sense in making another database call to get what should already be available.
        $batchID = $dbLink->lastInsertId();
-       $returnedData = getLableID('locations', $GLOBALS['batchCreateLocation']);
-       $locationID = $returnedData['DATA'];
        $loop = 0;
        foreach($barCodes as $tapeID)
        {
