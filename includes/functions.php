@@ -825,4 +825,93 @@ function addType($tableName, $fieldName, $dataValue)
    }
    return $r_val;
  }
+ 
+ /* This function accepts a media bar code as an argument and then builds an object tha provides all the
+  * information on the media belonging to that bar code.  It returns an object with all available information
+  * on that piece of media.
+  */
+ function getMediaDetail($mediaBarCode)
+ {
+   class mediaData
+   {
+     public $mediaLabel, $mediaType, $vendor, $poNum, $mediaHistory = array();
+   }
+     $checkMedia = tapeExists($mediaBarCode);
+     If($checkMedia['RSLT'] == "1")
+     {
+       $r_val['RSLT'] = "1";
+       $r_val['MSSG'] = "Media bar code $mediaBarCode not found.";
+     }
+     else
+     { 
+       try
+       {
+         $curMedia = new mediaData();
+         $curMedia->mediaLabel = $mediaBarCode;
+         $dbLink = dbconnect();
+         $bldQuery = "SELECT * FROM tapes WHERE label='$curMedia->mediaLabel';";
+         $statement = $dbLink->prepare($bldQuery);
+         $statement->execute();
+         $returnedData = $statement->fetchAll(PDO::FETCH_OBJ);
+         $mediatypeReturned = getIDLabel('mtype',$returnedData['0']->mtype);
+         $vendorReturned = getIDLabel('vendors', $returnedData['0']->vendor);
+         $curMedia->poNum = $returnedData['0']->po_num;
+         $curMedia->mediaType = $mediatypeReturned['DATA'];
+         $curMedia->vendor = $vendorReturned['DATA'];
+         $returnedHistory = getMediaHistory($curMedia->mediaLabel);
+         $curMedia->mediaHistory = $returnedHistory['DATA'];
+         $r_val['RSLT'] = "0";
+         $r_val['MSSG'] = "Media detail lookup for $mediaBarCode complete.";
+         $r_val['DATA'] = $curMedia;
+       } 
+       catch (PDOException $exception) 
+       {
+         echo "Unable to take requested action.";
+         $r_val['RSLT'] = "1";
+         $r_val['MSSG'] = $exception->getMessage();
+       }
+     }
+   return $r_val;
+ }
+ 
+ /* this function accepts a media bar code as an argument and then builds an array that provides all the
+  * entries from the history table associated with the media bar code supplied.  It also loops through the
+  * data returned from the database and converts it to a more user friendly format and stores that in the
+  * array.  It returns the processed array.  This function is meant to be a helper function to getMediaDetail().
+  */
+ function getMediaHistory($mediaBarCode)
+ {
+   $loop =0;
+   $mediaHistory = array();
+   
+   $checkMedia = tapeExists($mediaBarCode);
+   if($checkMedia['RSLT'] == "1")
+   {
+     $r_val['RSTL'] = "1";
+     $r_val['MSSG'] = "Media bar code $mediaBarCode not found.";
+   }
+   else
+   {
+     $dbLink = dbconnect();
+     $bldQuery = "SELECT * FROM history WHERE tape_id='$mediaBarCode';";
+     $statement = $dbLink->prepare($bldQuery);
+     $statement->execute();
+     $returnedData = $statement->fetchAll(PDO::FETCH_ASSOC);
+     // This next code block converts many of the values from the form stored in the database to more
+     // user friendly data.  I can't think of a reason not to do this here at this point.
+     foreach($returnedData as $indHistory)
+     {
+       $returnedData[$loop]['date'] = date("D M j G:i:s T Y", $indHistory['date']);
+       $locationData = getIDLabel('locations', $indHistory['location']);
+       $returnedData[$loop]['location'] = $locationData['DATA'];
+       $batchData = getIDLabel('batch', $indHistory['batch_id']);
+       $returnedData[$loop]['batch_id'] = $batchData['DATA'];
+       $loop++;
+     }
+     $r_val['RSLT'] = "0";
+     $r_val['MSSG'] = "History for media $mediaBarCode located.";
+     $r_val['DATA'] = $returnedData;
+   }
+   return $r_val;
+ }
 ?>

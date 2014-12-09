@@ -25,19 +25,19 @@ $newTapeLocation = "Tape Library";
 // really make a mess with these.
 $newTapeException = array(
   "batchID" => "-1",
-  "batchCount" => "-1",
+  "batchCount" => "1",
   "name" => "Created"
 );
 
 $recycleTapeException = array(
   "batchID" => "-2",
-  "batchCount" => "-2",
+  "batchCount" => "1",
   "name" => "Recycled"
 );
 
 $destroyTapeException = array(
   "batchID" => "-3",
-  "batchCount" => "-3",
+  "batchCount" => "1",
   "name" => "Destroyed"
 );
 
