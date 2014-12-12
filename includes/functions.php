@@ -892,25 +892,74 @@ function addType($tableName, $fieldName, $dataValue)
    }
    else
    {
-     $dbLink = dbconnect();
-     $bldQuery = "SELECT * FROM history WHERE tape_id='$mediaBarCode';";
-     $statement = $dbLink->prepare($bldQuery);
-     $statement->execute();
-     $returnedData = $statement->fetchAll(PDO::FETCH_ASSOC);
-     // This next code block converts many of the values from the form stored in the database to more
-     // user friendly data.  I can't think of a reason not to do this here at this point.
-     foreach($returnedData as $indHistory)
+     try
      {
-       $returnedData[$loop]['date'] = date("D M j G:i:s T Y", $indHistory['date']);
-       $locationData = getIDLabel('locations', $indHistory['location']);
-       $returnedData[$loop]['location'] = $locationData['DATA'];
-       $batchData = getIDLabel('batch', $indHistory['batch_id']);
-       $returnedData[$loop]['batch_id'] = $batchData['DATA'];
-       $loop++;
+       $dbLink = dbconnect();
+       $bldQuery = "SELECT * FROM history WHERE tape_id='$mediaBarCode';";
+       $statement = $dbLink->prepare($bldQuery);
+       $statement->execute();
+       $returnedData = $statement->fetchAll(PDO::FETCH_ASSOC);
+       // This next code block converts many of the values from the form stored in the database to more
+       // user friendly data.  I can't think of a reason not to do this here at this point.
+       foreach($returnedData as $indHistory)
+       {
+         $returnedData[$loop]['date'] = date("D M j G:i:s T Y", $indHistory['date']);
+         $locationData = getIDLabel('locations', $indHistory['location']);
+         $returnedData[$loop]['location'] = $locationData['DATA'];
+         $batchData = getIDLabel('batch', $indHistory['batch_id']);
+         $returnedData[$loop]['batch_id'] = $batchData['DATA'];
+         $loop++;
+       }
+       $r_val['RSLT'] = "0";
+       $r_val['MSSG'] = "History for media $mediaBarCode located.";
+       $r_val['DATA'] = $returnedData;
      }
-     $r_val['RSLT'] = "0";
-     $r_val['MSSG'] = "History for media $mediaBarCode located.";
-     $r_val['DATA'] = $returnedData;
+     catch(PDOException $exception)
+     {
+       echo "Unable to take requested action.";
+       $r_val['RSLT'] = "1";
+       $r_val['MSSG'] = $exception->getMessage();
+     }
+   }
+   return $r_val;
+ }
+ 
+ /* This function accepts a batch ID number and returns an array containing the
+  * barcodes of the media that belong to that batch.
+  */
+ function getBatchMembers($batchID)
+ {
+   $loop = 0;
+   if(!is_numeric($batchID))
+   {
+     $r_val['RSLT'] = "1";
+     $r_val['MSSG'] = "Wrong data type supplied to getBatchMembers().";
+   }
+   else
+   {
+     try
+     {
+       $dbLink = dbconnect();
+       $bldQuery = "SELECT tape_id FROM history WHERE batch_id='$batchID';";
+       $statement = $dbLink->prepare($bldQuery);
+       $statement->execute();
+       $r_val['RSLT'] = "0";
+       $r_val['MSSG'] = "Located members of batch ID $batchID.";
+       $returnedData = $statement->fetchAll(PDO::FETCH_ASSOC);
+       //Loops through the data and builds the 'DATA' element of the array with
+       //just the media bar codes.  Hopefully this cleans things up a bit.
+       foreach($returnedData as $indMediaLabel)
+       {
+         $r_val['DATA'][$loop] = $indMediaLabel['tape_id'];
+         $loop++;
+       }
+     } 
+     catch(PDOException $exception) 
+     {
+       echo "Unable to take requested action.";
+       $r_val['RSLT'] = "1";
+       $r_val['MSSG'] = $exception->getMessage();
+     }
    }
    return $r_val;
  }
