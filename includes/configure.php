@@ -45,6 +45,11 @@ $destroyTapeException = array(
 // to match your needs.
 $defaultReturnTime = 35;
 
+// This sets the default max return days.  This value effects the number of batches
+// that are displayed that are assigned to the off site location.  It can be changed
+// to meet your desired needs.
+$maxReturnDays = 90;
+
 // Sets the default access levels for various pages in the system.  Assign your own
 // levels in the configure.php.local file.
 $adminLevel = 8;

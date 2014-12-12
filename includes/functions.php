@@ -963,4 +963,55 @@ function addType($tableName, $fieldName, $dataValue)
    }
    return $r_val;
  }
+ 
+ /* This function accepts an optional number of days that represent the search time
+  * frame and then returns an array of batches that fall within the current system
+  * time and the time supplied.  If no value is passed to the function, it uses the
+  * $GLOBALS['maxReturnDays'] value as the default.
+  */
+ function getReturningBatchIDs($numReturnDays = NULL)
+ {
+   if(is_null($numReturnDays))
+   {
+     $numReturnDays = $GLOBALS['maxReturnDays'];
+   }
+   if(!is_numeric($numReturnDays))
+   {
+     $r_val['RSLT'] = "1";
+     $r_val['MSSG'] = "Invalid value passed to getReturningBatchIDs().";
+   }
+   else
+   {
+     $addedSeconds = ($numReturnDays * 86400);
+     $currentDate = getdate(time());
+     $currentTimeStamp = $currentDate[0];
+     $srchTimeStamp = ($currentTimeStamp + $addedSeconds);
+     try
+     {
+       $dbLink = dbconnect();
+       $dbQuery = "SELECT ID, label FROM batch WHERE rdate <= $srchTimeStamp;";
+       $statement = $dbLink->prepare($dbQuery);
+       $statement->execute();
+       $rowCount = $statement->rowCount();
+       if($rowCount == "0")
+       {
+         $r_val['RSLT'] = "1";
+         $r_val['MSSG'] = "No batches scheduled to return within $numReturnDays days.";
+       }
+       else
+       {
+         $r_val['RSLT'] = "0";
+         $r_val['MSSG'] = "$rowCount batches scheduled to return within $numReturnDays days.";
+         $r_val['DATA'] = $statement->fetchAll(PDO::FETCH_ASSOC);
+       }
+     } 
+     catch(PDOException $exception) 
+     {
+       echo "Unable to take requested action.";
+       $r_val['RSLT'] = "1";
+       $r_val['MSSG'] = $exception->getMessage();
+     }
+   }
+   return $r_val;
+ }
 ?>
