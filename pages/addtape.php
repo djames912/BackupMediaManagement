@@ -1,55 +1,57 @@
 
   <div id="addtape" class="page_content" style="display: block;">
+    <form method="POST" action="#">
     <div class="form1">
       <div class="div_tab">
         <label class="spn">Vendors</label>
         <select class="iput">
-          <option value="1">ADSII</option>
-          <option value="4">CDW</option>
-          <option value="5">Quantum</option>
-          <option value="6">Unknown</option>
+          <?php
+            $tempVenData = getTableContents('vendors');
+            foreach($tempVenData['DATA'] as $indVendor)
+            {
+              echo '<option value=' . "\"$indVendor->ID\">$indVendor->v_name" . '</option>';
+            }
+            ?>
         </select>
       </div>
       <div class="div_tab">
         <label class="spn">Locations</label>
         <select class="iput">
-          <option value="1">Tape Library</option>
-          <option value="2">Offsite Storage</option>
-          <option value="3">Destroyed</option>
-          <option value="4">Basement Storage</option>
-          <option value="5">User Possession</option>
-          <option value="6">Data Center Cabinet 1</option>
-          <option value="7">Data Center Cabinet 2</option>
-          <option value="8">Safe 1 (3A Wiring Closet)</option>
-          <option value="9">Safe 2 (3C Wiring Closet)</option>
-          <option value="10">Safe 3 (3A Wiring Closet)</option>
-          <option value="11">Safe 4 (2A Wiring Closet)</option>
-          <option value="12">Restore </option>
-          <option value="13">Data Center Cabinet 3</option>
+          <?php
+            $tempLocData = getTableContents('locations');
+            foreach($tempLocData['DATA'] as $indLocation)
+            {
+              echo '<option value=' . "\"$indLocation->ID\">$indLocation->label" . '</option>';
+            }
+          ?>
         </select>
       </div>
       <div class="div_tab">
         <label class="spn">Media Type</label>
         <select class="iput">
-          <option value="1">LTO2</option>
-          <option value="2">LTO5</option>
-          <option value="3">LTO3</option>
-          <option value="4">LTO4</option>
+          <?php
+            $tempMedType = getTableContents('mtype');
+            foreach($tempMedType['DATA'] as $indMedType)
+            {
+              echo '<option value=' . "\"$indMedType->ID\">$indMedType->label" . '</option>';
+            }
+          ?>
         </select>
       </div>
       <div class="div_tab">
         <label class="spn">Date</label>
-        <input id="dp" class="iput hasDatepicker" type="text">
+        <input id="dp" class="iput setDate" type="text">
       </div>
       <div class="div_tab">
         <label class="spn">PO#</label>
-        <input class="iput" type="text">
+        <input class="iput" type="text" value="11111" onfocus="if(this.value === '11111') this.value = '';">
       </div>
       <div class="div_tab">
         <label class="spn">Tape Id</label>
         <input class="iput" type="text">
       </div>
+    </form>
     </div>
-    <div class="results"></div>
+    <div class="results">Results</div>
   </div>
 

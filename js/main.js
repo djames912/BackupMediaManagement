@@ -1,5 +1,20 @@
 // Main java script page for this project.
 
+// This function sets and formats the current time.
+function time_to_text(time)
+{
+  var tmp = new Date(time*1000);
+  var datestr = (tmp.getMonth()+1)+'/'+tmp.getDate()+'/'+tmp.getFullYear();
+  return datestr;
+}
+
+// This function returns today's time stamp.
+function today()
+{
+  var temp = new Date();
+  return parseInt(temp.getTime()/1000);
+}
+
 // This function accepts a json object and converts it to a json string.
 function toJSON(jsonObject)
 {

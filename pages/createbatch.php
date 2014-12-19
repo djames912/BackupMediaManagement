@@ -1,15 +1,9 @@
 <div id="batch" class="page_content" style="">
+  <form method="POST" action="#">
   <div class="form1">
     <div class="div_tab">
-      <label class="spn">Is Oracle ?</label>
-      <select class="iput">
-        <option value="0">No</option>
-        <option value="1">Yes</option>
-      </select>
-    </div>
-    <div class="div_tab">
       <label class="spn">Date</label>
-      <input id="dp1367008655879" class="iput hasDatepicker" type="text">
+      <input id="dp" class="iput setDate" type="text">
     </div>
     <div class="div_tab">
       <label class="spn">Tape Id</label>
@@ -19,6 +13,7 @@
       <span class="ui-button-text">Submit</span>
     </button>
   </div>
+  </form>
   <div class="results"></div>
 </div>
 

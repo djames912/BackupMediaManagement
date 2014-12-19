@@ -14,6 +14,8 @@ and open the template in the editor.
     <!-- <script type="text/javascript" src="js/lgen.js"></script>  --> 
     <script type="text/javascript" src="js/main.js"></script>
     <script>$(function() { 
+      $(".setDate").datepicker();
+      $(".setDate").datepicker("setDate", time_to_text(today()));
       $('#addvendorform').on('submit', function(e)
       {
 	addVendor();
@@ -45,6 +47,8 @@ and open the template in the editor.
           $("#modtape").show();
         if(this.id == "AdminmMark")
           $("#admin").show();
+        
+        
       });
       $(".page_content").hide();
         
