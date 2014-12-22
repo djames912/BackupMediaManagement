@@ -270,8 +270,16 @@ function addType($tableName, $fieldName, $dataValue)
 */
  function addTape($newTape)
  {
-   $returnedData = getLableID('locations', $GLOBALS['newTapeLocation']);
-   $locationID = $returnedData['DATA'];
+   if(!($newTape->locationID))
+   {
+     $returnedData = getLableID('locations', $GLOBALS['newTapeLocation']);
+     $locationID = $returnedData['DATA'];
+   }
+   else
+   {
+     $locationID = $newTape->locationID;
+   }
+   //error_log(print_r($newTape, true));
     if(!is_object($newTape))
     {
       $r_val['RSLT'] = "1";

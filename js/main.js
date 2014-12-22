@@ -33,6 +33,20 @@ function add_event(element, event, func) {
     }
 }
 
+// Add tape form builds the tape object, calls the AJAX function and the callback function.
+    function addTape() 
+    {
+          var formObj = document.getElementById("addtapeform");
+          var tempObj = new Object();
+          tempObj.venID = formObj.elements["vendor"].value;
+          tempObj.locationID = formObj.elements["location"].value;
+          tempObj.poNum = formObj.elements["ponumber"].value;
+          tempObj.tapeID = formObj.elements["tapeid"].value;
+          var procData = prepData(tempObj, "testNewTape");
+          ajaxCall(procData, showAddTapeResultCallback);
+          formObj.elements["tapeid"].value = "";
+    }
+
 // Create tape div and add it to the specified container
 //   * container is a DOM object, not a jQuery one
 //   * labelText is the tape barcode
@@ -55,26 +69,25 @@ function show_tape(container, labelText, flag) {
     $(container).prepend(tmpDiv);
 }
 
-// Analyze tape input and show in results
-tapeInputCapture = function (e) {
-    var str = this.value;
-    var successVal = "no_res";
+// Analyze tape input and submit the addtapeform().
+tapeInputCapture = function(e) 
+    {
+        var str = this.value;
+        var successVal = "no_res";
 
-    // Ignore all key presses except for Enter key
-    console.log(e.keyCode);
-    if (e.keyCode != 13){
-        return;
-    }
+        // Ignore all key presses except for Enter key
+        //console.log(e.keyCode);
+        //console.log(e);
+        if (e.keyCode != 13){
+            return;
+        }
 
-    // Check intput format for [5 or 6 numbers] [1 letter] [1 number]
-    if((match = str.match(/([0-9]{5,6}[L][0-9])/))) {
-      var mediaStatus = prepData(str, "testNewTape");
-      ajaxCall(mediaStatus, tapeCallback);
+        // Check intput format for [5 or 6 numbers] [1 letter] [1 number]
+        if((match = str.match(/([0-9]{5,6}[L][0-9])/))) {
+          //document.getElementById("addtapeform").submit();
+          $("#addtapeform").submit();
+        }
     }
-    else {
-        successVal = "failure";
-    }
-}
 
 // This function accepts a json object and converts it to a json string.
 function toJSON(jsonObject)
@@ -369,7 +382,7 @@ var showAddLocationResultCallback = function(data)
 }
 
 // tapeCallback function
-var tapeCallback = function(data)
+var showAddTapeResultCallback = function(data)
 {
   console.log(data);
   //var cleanData = fromJSON(data);

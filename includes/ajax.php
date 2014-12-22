@@ -1,6 +1,6 @@
 <?php
 require_once 'functions.php';
-
+session_start();
 #---------------------------------------------------------------
 # Great/Generic peice of code for handling ajax request/returns 
 # echos a Json string
@@ -100,34 +100,35 @@ function addNewLocation($locationData)
   return $rawOutput;
 }
 
-function testNewTape($mediaBarcode)
+function testNewTape($mediaData)
 {
   $r_val = array();
-  //error_log(print_r($mediaBarcode, true));
-  $rawOutput = tapeExists(trim($mediaBarcode));
+  $mediaData->uname = $_SESSION['UserName'];
+  error_log(print_r($mediaData, true));
+  $rawOutput = tapeExists(trim($mediaData->tapeID));
   error_log(print_r($rawOutput, true));
   if($rawOutput['RSLT'] == "1")
   {
-    $insertResult = addTape(trim($mediaBarcode));
+    $insertResult = addTape($mediaData);
     error_log(print_r($insertResult, true));
     if($insertResult['RSLT'] == "0")
     {
       $r_val['RSLT'] = "0";
-      $r_val['MSSG'] = "$mediaBarcode added to database.";
-      $r_val['DATA'] = trim($mediaBarcode);
+      $r_val['MSSG'] = "$mediaData->tapeID added to database.";
+      $r_val['DATA'] = trim($mediaData->tapeID);
     }
     else
     {
       $r_val['RSLT'] = "1";
-      $r_val['MSSG'] = "Failed to add $mediaBarcode to database.";
-      $r_val['DATA'] = trim($mediaBarcode);
+      $r_val['MSSG'] = "Failed to add $mediaData->tapeID to database.";
+      $r_val['DATA'] = trim($mediaData->tapeID);
     }
   }
   else
   {
     $r_val['RSLT'] = "1";
-    $r_val['MSSG'] = "$mediaBarcode already present in database.";
-    $r_val['DATA'] = trim($mediaBarcode);
+    $r_val['MSSG'] = "$mediaData->tapeID already present in database.";
+    $r_val['DATA'] = trim($mediaData->tapeID);
   }
   return $r_val;
 }

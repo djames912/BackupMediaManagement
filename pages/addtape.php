@@ -1,21 +1,24 @@
 
   <div id="addtape" class="page_content" style="display: block;">
-    <form method="POST" action="#">
+    <form id="addtapeform" method="POST" action="#">
     <div class="form1">
       <div class="div_tab">
-        <label class="spn">Vendors</label>
+        <label class="spn">Vendor</label>
         <select name="vendor" class="iput">
           <?php
             $tempVenData = getTableContents('vendors');
             foreach($tempVenData['DATA'] as $indVendor)
             {
-              echo '<option value=' . "\"$indVendor->ID\">$indVendor->v_name" . '</option>';
+              if($indVendor->v_name == $GLOBALS['newTapeLocation'])
+                echo'<option value=' . "\"$indVendor->ID\" selected>$indVendor->v_name" . '</option>';
+              else
+                echo '<option value=' . "\"$indVendor->ID\">$indVendor->v_name" . '</option>';
             }
             ?>
         </select>
       </div>
       <div class="div_tab">
-        <label class="spn">Locations</label>
+        <label class="spn">Location</label>
         <select name="location" class="iput">
           <?php
             $tempLocData = getTableContents('locations');
@@ -25,22 +28,6 @@
             }
           ?>
         </select>
-      </div>
-      <div class="div_tab">
-        <label class="spn">Media Type</label>
-        <select name="mediatype" class="iput">
-          <?php
-            $tempMedType = getTableContents('mtype');
-            foreach($tempMedType['DATA'] as $indMedType)
-            {
-              echo '<option value=' . "\"$indMedType->ID\">$indMedType->label" . '</option>';
-            }
-          ?>
-        </select>
-      </div>
-      <div class="div_tab">
-        <label class="spn">Date</label>
-        <input name="formdate" id="dp" class="iput setDate" type="text">
       </div>
       <div class="div_tab">
         <label class="spn">PO#</label>

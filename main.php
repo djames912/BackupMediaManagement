@@ -35,6 +35,11 @@ and open the template in the editor.
 	addLocation();
 	e.preventDefault();
       });
+      $('#addtapeform').on('submit', function(e)
+      {
+        addTape();
+        e.preventDefault();
+      });
       $('.mbut').click(function() { 
         $('.mbut').removeClass("msel"); 
         $(this).addClass("msel");
