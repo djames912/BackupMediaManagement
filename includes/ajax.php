@@ -99,4 +99,36 @@ function addNewLocation($locationData)
   $rawOutput = addType('locations', 'label', $locationData->locationname);
   return $rawOutput;
 }
+
+function testNewTape($mediaBarcode)
+{
+  $r_val = array();
+  //error_log(print_r($mediaBarcode, true));
+  $rawOutput = tapeExists(trim($mediaBarcode));
+  error_log(print_r($rawOutput, true));
+  if($rawOutput['RSLT'] == "1")
+  {
+    $insertResult = addTape(trim($mediaBarcode));
+    error_log(print_r($insertResult, true));
+    if($insertResult['RSLT'] == "0")
+    {
+      $r_val['RSLT'] = "0";
+      $r_val['MSSG'] = "$mediaBarcode added to database.";
+      $r_val['DATA'] = trim($mediaBarcode);
+    }
+    else
+    {
+      $r_val['RSLT'] = "1";
+      $r_val['MSSG'] = "Failed to add $mediaBarcode to database.";
+      $r_val['DATA'] = trim($mediaBarcode);
+    }
+  }
+  else
+  {
+    $r_val['RSLT'] = "1";
+    $r_val['MSSG'] = "$mediaBarcode already present in database.";
+    $r_val['DATA'] = trim($mediaBarcode);
+  }
+  return $r_val;
+}
 ?>

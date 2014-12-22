@@ -14,6 +14,10 @@ and open the template in the editor.
     <!-- <script type="text/javascript" src="js/lgen.js"></script>  --> 
     <script type="text/javascript" src="js/main.js"></script>
     <script>$(function() { 
+       // In the main.php page, jQuery on load anonymous function:
+    $(".submitOnCr").each(function(index) {
+        add_event(this, events.keyup, tapeInputCapture);
+      });
       $(".setDate").datepicker();
       $(".setDate").datepicker("setDate", time_to_text(today()));
       $('#addvendorform').on('submit', function(e)

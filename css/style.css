@@ -421,3 +421,10 @@ button.green-button:active
     border: 1px solid #002900;
     color:#132b14;
 }
+
+// CSS required for tape DIVs to look as they should
+.tape { 
+    width: 280px;
+    margin: 5px;
+    padding: 5px;
+}

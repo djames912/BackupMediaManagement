@@ -15,6 +15,67 @@ function today()
   return parseInt(temp.getTime()/1000);
 }
 
+// Arrays for specifying events based on an index
+nonie_events = ['click','keyup','mouseover','mouseout'];
+ie_events = ['onclick','onkeyup','onmouseover', 'onmouseout'];
+events = {'click':0,'keyup':1,'m_over':2,'m_out':3};
+
+// Attach an event listener to a JavaScript DOM object
+//   * element is a DOM element, not a jQuery one
+//   * event is an int, typically referenced by events.click (see above)
+//   * func is the callback Fn to run when the event fires
+function add_event(element, event, func) {
+    if(document.addEventListener){ //code for non-IE
+    	element.addEventListener(nonie_events[event],func,false);
+    }
+    else{
+	element.attachEvent(ie_events[event],func); //code for IE
+    }
+}
+
+// Create tape div and add it to the specified container
+//   * container is a DOM object, not a jQuery one
+//   * labelText is the tape barcode
+//   * flag is text for success, failure, or empty if unknown
+function show_tape(container, labelText, flag) {
+  console.log(container, labelText, flag);  
+  var tmpDiv = document.createElement('div');
+    tmpDiv.innerHTML = labelText;
+    tmpDiv.className = "tape";
+    
+    if (flag == "success") {
+        tmpDiv.className += " success";
+    } else if (flag == "failure") {
+        tmpDiv.className += " fail";
+    } else {
+        tmpDiv.className += " no_res";
+    }
+
+    // jQuery for adding to the top of a container
+    $(container).prepend(tmpDiv);
+}
+
+// Analyze tape input and show in results
+tapeInputCapture = function (e) {
+    var str = this.value;
+    var successVal = "no_res";
+
+    // Ignore all key presses except for Enter key
+    console.log(e.keyCode);
+    if (e.keyCode != 13){
+        return;
+    }
+
+    // Check intput format for [5 or 6 numbers] [1 letter] [1 number]
+    if((match = str.match(/([0-9]{5,6}[L][0-9])/))) {
+      var mediaStatus = prepData(str, "testNewTape");
+      ajaxCall(mediaStatus, tapeCallback);
+    }
+    else {
+        successVal = "failure";
+    }
+}
+
 // This function accepts a json object and converts it to a json string.
 function toJSON(jsonObject)
 {
@@ -250,7 +311,7 @@ function addLocation()
 }
 
 /* This function accepts an array from addMedia().  It does some checking to be sure that it actually
- * received information from addMedia() and then, based on the results of the database call, displays
+ * received information from addMedia() and then, based on the results of the databshow_tape(document.getElementById("results"), str, successVal);ase call, displays
  * an appropriate message.  The display is held for 5 seconds and then the form is reset to its original
  * state.  The function returns nothing.
  */
@@ -305,4 +366,21 @@ var showAddLocationResultCallback = function(data)
   }
   targetDiv.innerHTML = textOut;
   setTimeout(function (){ $("#add_location").click(); }, 5000);
+}
+
+// tapeCallback function
+var tapeCallback = function(data)
+{
+  console.log(data);
+  //var cleanData = fromJSON(data);
+  //console.log(cleanData);
+  if(data.RSLT === "0") 
+    successVal = "success";
+  else if (data.RSLT === "1") 
+    successVal = "failure";
+  else
+    successVal = "no_res";
+      // Create the tape div in results
+    show_tape(document.getElementById("tprslt"), data.DATA, successVal);
+    //show_tape(document.getElementById("results"), "Code", "successful");
 };

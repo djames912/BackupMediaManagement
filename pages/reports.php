@@ -1,10 +1,18 @@
 <div id="reports" class="page_content" style="">
-  <div style="width: 100%; height: 35%;">
-    <div class="rbox" style="left: 0px; top: 20px; display: none;"></div>
+  <div class="form1">
+    <div align="center">
+         <label class="title">Media History</label>
+    </div>
     <div class="div_tab">
-      <label class="spn">Tape ID </label>
+      <label class="spn">Media ID</label>
+    <form id="indmediahistory" class="form1">
       <input class="iput" type="text">
+    <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button" value="Submit" role="button" aria-disabled="false">
+      <span class="ui-button-text">Submit</span>
+    </button>
+    </form>
     </div>
   </div>
-  <div style="color: white; width: 100%; height: 65%; background-color: green;"></div>
+  <div class="results"></div>
 </div>
+
