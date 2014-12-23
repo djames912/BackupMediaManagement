@@ -104,13 +104,13 @@ function testNewTape($mediaData)
 {
   $r_val = array();
   $mediaData->uname = $_SESSION['UserName'];
-  error_log(print_r($mediaData, true));
+  //error_log(print_r($mediaData, true));
   $rawOutput = tapeExists(trim($mediaData->tapeID));
-  error_log(print_r($rawOutput, true));
+  //error_log(print_r($rawOutput, true));
   if($rawOutput['RSLT'] == "1")
   {
     $insertResult = addTape($mediaData);
-    error_log(print_r($insertResult, true));
+    //error_log(print_r($insertResult, true));
     if($insertResult['RSLT'] == "0")
     {
       $r_val['RSLT'] = "0";

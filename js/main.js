@@ -52,7 +52,7 @@ function add_event(element, event, func) {
 //   * labelText is the tape barcode
 //   * flag is text for success, failure, or empty if unknown
 function show_tape(container, labelText, flag) {
-  console.log(container, labelText, flag);  
+  //console.log(container, labelText, flag);  
   var tmpDiv = document.createElement('div');
     tmpDiv.innerHTML = labelText;
     tmpDiv.className = "tape";
@@ -384,9 +384,7 @@ var showAddLocationResultCallback = function(data)
 // tapeCallback function
 var showAddTapeResultCallback = function(data)
 {
-  console.log(data);
-  //var cleanData = fromJSON(data);
-  //console.log(cleanData);
+  //console.log(data);
   if(data.RSLT === "0") 
     successVal = "success";
   else if (data.RSLT === "1") 
@@ -395,5 +393,4 @@ var showAddTapeResultCallback = function(data)
     successVal = "no_res";
       // Create the tape div in results
     show_tape(document.getElementById("tprslt"), data.DATA, successVal);
-    //show_tape(document.getElementById("results"), "Code", "successful");
 };
