@@ -15,8 +15,12 @@ and open the template in the editor.
     <script type="text/javascript" src="js/main.js"></script>
     <script>$(function() { 
        // In the main.php page, jQuery on load anonymous function:
-    $(".submitOnCr").each(function(index) {
+    $(".submitOnCr").each(function(index) 
+     { 
         add_event(this, events.keyup, tapeInputCapture);
+      });
+      $(".batchAddTapeOnCr").each(function(index) {
+        add_event(this, events.keyup, batchTapeInputCapture);
       });
       $(".setDate").datepicker();
       $(".setDate").datepicker("setDate", time_to_text(today()));
@@ -96,6 +100,10 @@ and open the template in the editor.
           var displayData = prepData("Vendor List", "generateVendorList");
           ajaxCall(displayData, listVendorCallback);
           $("#addvendor").show();
+        }
+        if(this.id == "submitbatch")
+        {
+          addBatch();
         }
       });
       $(".admdetail").hide();

@@ -1,5 +1,8 @@
 // Main java script page for this project.
 
+// This array will hold the batch tapes (used in create batch)
+batchTapes = [];
+
 // This function sets and formats the current time.
 function time_to_text(time)
 {
@@ -34,18 +37,30 @@ function add_event(element, event, func) {
 }
 
 // Add tape form builds the tape object, calls the AJAX function and the callback function.
-    function addTape() 
-    {
-          var formObj = document.getElementById("addtapeform");
-          var tempObj = new Object();
-          tempObj.venID = formObj.elements["vendor"].value;
-          tempObj.locationID = formObj.elements["location"].value;
-          tempObj.poNum = formObj.elements["ponumber"].value;
-          tempObj.tapeID = formObj.elements["tapeid"].value;
-          var procData = prepData(tempObj, "testNewTape");
-          ajaxCall(procData, showAddTapeResultCallback);
-          formObj.elements["tapeid"].value = "";
-    }
+function addTape() 
+{
+  var formObj = document.getElementById("addtapeform");
+  var tempObj = new Object();
+  tempObj.venID = formObj.elements["vendor"].value;
+  tempObj.locationID = formObj.elements["location"].value;
+  tempObj.poNum = formObj.elements["ponumber"].value;
+  tempObj.tapeID = formObj.elements["tapeid"].value;
+  var procData = prepData(tempObj, "testNewTape");
+  ajaxCall(procData, showAddTapeResultCallback);
+  formObj.elements["tapeid"].value = "";
+}
+
+function addBatch()
+{
+  var formObj = document.getElementById("createbatchform");
+  var tempObj = new Object();
+  tempObj.createdate = formObj.elements['createdate'].value;
+  tempObj.tapeid = formObj.elements['tapeid'].value;
+  var procData = prepData(tempObj, "checkBatchMembers");
+  ajaxCall(procData, showCreateBatchResultCallback);
+  formObj.reset(); // reset form
+  batchTapes = []; // wipe out batchTapes array
+}
 
 // Create tape div and add it to the specified container
 //   * container is a DOM object, not a jQuery one
@@ -71,23 +86,21 @@ function show_tape(container, labelText, flag) {
 
 // Analyze tape input and submit the addtapeform().
 tapeInputCapture = function(e) 
-    {
-        var str = this.value;
-        var successVal = "no_res";
-
-        // Ignore all key presses except for Enter key
-        //console.log(e.keyCode);
-        //console.log(e);
-        if (e.keyCode != 13){
-            return;
-        }
-
-        // Check intput format for [5 or 6 numbers] [1 letter] [1 number]
-        if((match = str.match(/([0-9]{5,6}[L][0-9])/))) {
-          //document.getElementById("addtapeform").submit();
-          $("#addtapeform").submit();
-        }
-    }
+{
+   var str = this.value;
+   var successVal = "no_res";
+   // Ignore all key presses except for Enter key
+   //console.log(e.keyCode);
+   //console.log(e);
+   if (e.keyCode != 13){
+       return;
+   }
+   // Check intput format for [5 or 6 numbers] [1 letter] [1 number]
+   if((match = str.match(/([0-9]{5,6}[L][0-9])/))) {
+     //document.getElementById("addtapeform").submit();
+     $("#addtapeform").submit();
+   }
+}
 
 // This function accepts a json object and converts it to a json string.
 function toJSON(jsonObject)
@@ -394,3 +407,39 @@ var showAddTapeResultCallback = function(data)
       // Create the tape div in results
     show_tape(document.getElementById("tprslt"), data.DATA, successVal);
 };
+
+batchTapeInputCapture = function(e) 
+{
+  var str = this.value;
+  var successVal = "no_res";
+  // Ignore all key presses except for Enter key
+  //console.log(e.keyCode);
+  //console.log(e);
+  if (e.keyCode != 13){
+    return;
+  }
+  // Check intput format for [5 or 6 numbers] [1 letter] [1 number]
+  if((match = str.match(/([0-9]{5,6}[L][0-9])/))) 
+  {
+     /* make ajax call to check tape (use batchTapeCheckCallback as callback */
+     ajaxCall(str, batchTapeCheckCallback);
+  }
+}
+
+batchTapeCheckCallback = function(data) 
+{
+   showAddTapeResultCallback(data);      
+   // if successful
+   batchTapes.push(/* tape id from data */);
+}
+
+showCreateBatchResultCallback = function(data)
+{
+  // show success/failure message in result box
+  console.log(data);
+}
+
+showAddTapeResultCallback = function(data)
+{
+  console.log(data);
+}

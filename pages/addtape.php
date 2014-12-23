@@ -37,8 +37,8 @@
         <label class="spn">Tape Id</label>
         <input name="tapeid" class="iput submitOnCr" type="text">
       </div>
-    </form>
     </div>
+    </form>
     <div id="tprslt" class="results"></div>
   </div>
 

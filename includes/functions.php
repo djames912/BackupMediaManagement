@@ -1022,4 +1022,73 @@ function addType($tableName, $fieldName, $dataValue)
    }
    return $r_val;
  }
+ 
+ /* This function accepts a media barcode and returns the last record in the history table as an array.
+  * This function is depended on by canUseMedia().
+  */
+ function getLastRecord($mediaBarCode)
+ {
+   $r_val = array();
+   try
+   {
+     $dbLink = dbconnect();
+     $dbQuery = "SELECT * FROM history WHERE tape_id='$mediaBarCode' AND date=(SELECT max(date) FROM history WHERE tape_id='$mediaBarCode');";
+     $statement = $dbLink->prepare($dbQuery);
+     $statement->execute();
+     $rowCount = $statement->rowCount();
+     if($rowCount == "0")
+     {
+       $r_val['RSLT'] = "1";
+       $r_val['MSSG'] = "No last record fround for $mediaBarCode.";
+     }
+     else
+     {
+       $r_val['RSLT'] = "0";
+       $r_val['MSSG'] = "Record found for $mediaBarCode.";
+       $r_val['DATA'] = $statement->fetchAll(PDO::FETCH_OBJ);
+     }
+   } 
+   catch (PDOException $exception) 
+   {
+     echo "Unable to take requested action.";
+     $r_val['RSLT'] = "1";
+     $r_val['MSSG'] = $exception->getMessage();
+   }
+   return $r_val;
+ }
+ 
+ /* This function accepts a media barcode as an argument and then checks to see if the media is in a
+  * location acceptable for use or has a batch ID that is acceptable for use.  It returns one of the following:
+  * '0' = is available
+  * '1' = is NOT available.
+  */
+ function tapeAvailable($mediaBarCode)
+ {
+   $r_val = array();
+   // Get the default location ID from the configuration file.
+   $rawDefLocCheck = getLableID('locations', $GLOBALS['newTapeLocation']);
+   $defaultNewTapeLocationID = $rawDefLocCheck['DATA'];
+   $checkExists = tapeExists($mediaBarCode);
+   if($checkExists['RSLT'] == "1")
+   {
+     $r_val['RSLT'] = "1";
+     $r_val['MSSG'] = "$mediaBarCode not found.";
+   }
+   else
+   {
+     $rawData = getLastRecord($mediaBarCode);
+     error_log(print_r($rawData, true));
+     if($rawData['DATA']['0']->location == $defaultNewTapeLocationID || $rawData['DATA']['0']->batch_id == $GLOBALS['recycleTapeException']['batchID'])
+     {
+       $r_val['RSLT'] = "0";
+       $r_val['MSSG'] = "$mediaBarCode is available to add to this batch.";
+     }
+     else
+     {
+       $r_val['RSLT'] = "1";
+       $r_val['MSSG'] = "$mediaBarCode is not availble to be added to this batch.";
+     }
+   }
+   return $r_val;
+ }
 ?>

@@ -100,6 +100,11 @@ function addNewLocation($locationData)
   return $rawOutput;
 }
 
+/* This function accepts an object as an argument.  It checks to see if the tape is already present in the
+ * database.  If it is, it returns that the tape is already present.  If the tape is not present in the database
+ * passes the object to addTape() to be inserted into the database.  The function returns whether or not
+ * the insert was successful.
+ */
 function testNewTape($mediaData)
 {
   $r_val = array();
@@ -130,6 +135,16 @@ function testNewTape($mediaData)
     $r_val['MSSG'] = "$mediaData->tapeID already present in database.";
     $r_val['DATA'] = trim($mediaData->tapeID);
   }
+  return $r_val;
+}
+
+/* This function accepts a tape bar code.
+ * 
+ */
+function checkBatchMembers($mediaBarCode)
+{
+  $r_val = array();
+  error_log(print_r($mediaBarCode));
   return $r_val;
 }
 ?>
