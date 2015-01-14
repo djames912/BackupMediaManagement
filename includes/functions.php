@@ -1077,7 +1077,7 @@ function addType($tableName, $fieldName, $dataValue)
    else
    {
      $rawData = getLastRecord($mediaBarCode);
-     error_log(print_r($rawData, true));
+     //error_log(print_r($rawData, true));
      if($rawData['DATA']['0']->location == $defaultNewTapeLocationID || $rawData['DATA']['0']->batch_id == $GLOBALS['recycleTapeException']['batchID'])
      {
        $r_val['RSLT'] = "0";

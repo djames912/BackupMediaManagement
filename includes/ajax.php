@@ -143,8 +143,10 @@ function testNewTape($mediaData)
  */
 function checkBatchMembers($mediaBarCode)
 {
-  $r_val = array();
-  error_log(print_r($mediaBarCode));
-  return $r_val;
+  //error_log(print_r($mediaBarCode, true));
+  $rawOutput = tapeAvailable($mediaBarCode);
+  $rawOutput['DATA'] = trim($mediaBarCode);
+  //error_log(print_r($rawOutput, true));
+  return $rawOutput;
 }
 ?>

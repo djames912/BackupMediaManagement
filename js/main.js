@@ -56,8 +56,12 @@ function addBatch()
   var tempObj = new Object();
   tempObj.createdate = formObj.elements['createdate'].value;
   tempObj.tapeid = formObj.elements['tapeid'].value;
-  var procData = prepData(tempObj, "checkBatchMembers");
-  ajaxCall(procData, showCreateBatchResultCallback);
+  console.log(tempObj);
+ // var procData = prepData(tempObj.tapeid, "checkBatchMembers");
+  //console.log(procData);
+  //ajaxCall(procData, batchTapeCheckCallback);
+  //ajaxCall(procData, showCreateBatchResultCallback);
+  //ajaxCall(batchTapes, showCreateBatchResultCallback);
   formObj.reset(); // reset form
   batchTapes = []; // wipe out batchTapes array
 }
@@ -392,7 +396,7 @@ var showAddLocationResultCallback = function(data)
   }
   targetDiv.innerHTML = textOut;
   setTimeout(function (){ $("#add_location").click(); }, 5000);
-}
+};
 
 // tapeCallback function
 var showAddTapeResultCallback = function(data)
@@ -424,22 +428,28 @@ batchTapeInputCapture = function(e)
      /* make ajax call to check tape (use batchTapeCheckCallback as callback */
      ajaxCall(str, batchTapeCheckCallback);
   }
-}
+};
 
 batchTapeCheckCallback = function(data) 
 {
-   showAddTapeResultCallback(data);      
-   // if successful
-   batchTapes.push(/* tape id from data */);
-}
+  console.log(data);
+  var procData = prepData(data.tapeid, "checkBatchMembers");
+  //showAddTapeResultCallback(data);
+  showAddTapeResultCallback(procData.DATA);      
+  // If successful.
+  if(data.RSLT === "0")
+  {
+     batchTapes.push(data.DATA);
+   }
+};
 
 showCreateBatchResultCallback = function(data)
 {
   // show success/failure message in result box
   console.log(data);
-}
+};
 
 showAddTapeResultCallback = function(data)
 {
   console.log(data);
-}
+};
