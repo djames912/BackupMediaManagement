@@ -7,7 +7,7 @@
     </div>
     <div class="div_tab">
       <label class="spn">Tape Id</label>
-      <input name="tapeid" class="iput" type="text">
+      <input name="mediaid" class="iput batchAddTapeOnCr" type="text">
     </div>
     <button id="submitbatch" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button admbtn" value="Submit" role="button" aria-disabled="false">
       <span class="ui-button-text">Submit</span>

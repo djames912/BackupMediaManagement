@@ -52,12 +52,13 @@ function addTape()
 
 function addBatch()
 {
+  console.log("In addBatch function");
   var formObj = document.getElementById("createbatchform");
   var tempObj = new Object();
   tempObj.createdate = formObj.elements['createdate'].value;
-  tempObj.tapeid = formObj.elements['tapeid'].value;
+  tempObj.tapeid = formObj.elements['mediaid'].value;
   console.log(tempObj);
- // var procData = prepData(tempObj.tapeid, "checkBatchMembers");
+  var procData = prepData(tempObj.tapeid, "checkBatchMembers");
   //console.log(procData);
   //ajaxCall(procData, batchTapeCheckCallback);
   //ajaxCall(procData, showCreateBatchResultCallback);
@@ -76,9 +77,9 @@ function show_tape(container, labelText, flag) {
     tmpDiv.innerHTML = labelText;
     tmpDiv.className = "tape";
     
-    if (flag == "success") {
+    if (flag === "success") {
         tmpDiv.className += " success";
-    } else if (flag == "failure") {
+    } else if (flag === "failure") {
         tmpDiv.className += " fail";
     } else {
         tmpDiv.className += " no_res";
@@ -412,26 +413,38 @@ var showAddTapeResultCallback = function(data)
     show_tape(document.getElementById("tprslt"), data.DATA, successVal);
 };
 
-batchTapeInputCapture = function(e) 
+batchTapeInputCapture = function(mediaElement) 
 {
-  var str = this.value;
+  //console.log("In batchTapeInputCapture");
+  var mediaBarCode = this.value;
+  //console.log(mediaBarCode);
   var successVal = "no_res";
   // Ignore all key presses except for Enter key
   //console.log(e.keyCode);
-  //console.log(e);
-  if (e.keyCode != 13){
+  //console.log(mediaElement);
+  if(mediaElement.keyCode !== 13)
+  {
     return;
   }
+  console.log("Final barcode value");
+  console.log(mediaBarCode);
   // Check intput format for [5 or 6 numbers] [1 letter] [1 number]
-  if((match = str.match(/([0-9]{5,6}[L][0-9])/))) 
+  if((match = mediaBarCode.match(/([0-9]{5,6}[L][0-9])/))) 
   {
      /* make ajax call to check tape (use batchTapeCheckCallback as callback */
-     ajaxCall(str, batchTapeCheckCallback);
+    console.log("Inside bar code value check conditional");
+    console.log(mediaBarCode); 
+    ajaxCall(mediaBarCode, batchTapeCheckCallback);
+  }
+  else
+  {
+    console.log("Invalid media bar code");
   }
 };
 
 batchTapeCheckCallback = function(data) 
 {
+  console.log("Now in batchTapeCheckCallback");
   console.log(data);
   var procData = prepData(data.tapeid, "checkBatchMembers");
   //showAddTapeResultCallback(data);
@@ -449,7 +462,3 @@ showCreateBatchResultCallback = function(data)
   console.log(data);
 };
 
-showAddTapeResultCallback = function(data)
-{
-  console.log(data);
-};

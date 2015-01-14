@@ -19,7 +19,8 @@ and open the template in the editor.
      { 
         add_event(this, events.keyup, tapeInputCapture);
       });
-      $(".batchAddTapeOnCr").each(function(index) {
+      $(".batchAddTapeOnCr").each(function(index) 
+      {
         add_event(this, events.keyup, batchTapeInputCapture);
       });
       $(".setDate").datepicker();
@@ -44,13 +45,18 @@ and open the template in the editor.
         addTape();
         e.preventDefault();
       });
+      $('#createbatchform').on('submit', function(e)
+      {
+        addBatch();
+        e.preventDefault();
+      });
       $('.mbut').click(function() { 
         $('.mbut').removeClass("msel"); 
         $(this).addClass("msel");
         $(".page_content").hide();
-        if(this.id == "Add_TapemMark")
+        if(this.id === "Add_TapemMark")
           $("#addtape").show();
-        if(this.id == "ReportsmMark")
+        if(this.id === "ReportsmMark")
           $("#reports").show();
         if(this.id == "Create_BatchmMark")
           $("#batch").show();
