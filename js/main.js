@@ -399,10 +399,18 @@ var showAddLocationResultCallback = function(data)
   setTimeout(function (){ $("#add_location").click(); }, 5000);
 };
 
-// tapeCallback function
+/* Show tape callback function.  This function takes a data object and displays data in the correct
+ * results div on the calling page.
+ * @param {type} data
+ * @returns {undefined}
+ */
 var showAddTapeResultCallback = function(data)
 {
   //console.log(data);
+  if(data.CALLER === "batch")
+    displayLocation = "battprslt";
+  else
+    displayLocation = "tprslt";
   if(data.RSLT === "0") 
     successVal = "success";
   else if (data.RSLT === "1") 
@@ -410,9 +418,15 @@ var showAddTapeResultCallback = function(data)
   else
     successVal = "no_res";
       // Create the tape div in results
-    show_tape(document.getElementById("tprslt"), data.DATA, successVal);
+    show_tape(document.getElementById(displayLocation), data.DATA, successVal);
 };
-
+/* This function reads input from the keyboard on the createbatch.php page.  It listens for a
+ * carriage return.  When it sees a carriage return it checks the final value in the text box.  If the
+ * final value is valid, it moves on to the cose that checks to see if the tape is available for use in the
+ * batch.
+ * @param {type} mediaElement
+ * @returns {undefined}
+ */
 batchTapeInputCapture = function(mediaElement) 
 {
   //console.log("In batchTapeInputCapture");
@@ -420,35 +434,37 @@ batchTapeInputCapture = function(mediaElement)
   //console.log(mediaBarCode);
   var successVal = "no_res";
   // Ignore all key presses except for Enter key
-  //console.log(e.keyCode);
+  //console.log(mediaElement.keyCode);
   //console.log(mediaElement);
   if(mediaElement.keyCode !== 13)
   {
     return;
   }
-  console.log("Final barcode value");
-  console.log(mediaBarCode);
+  //console.log("Final barcode value");
+  //console.log(mediaBarCode);
   // Check intput format for [5 or 6 numbers] [1 letter] [1 number]
   if((match = mediaBarCode.match(/([0-9]{5,6}[L][0-9])/))) 
   {
      /* make ajax call to check tape (use batchTapeCheckCallback as callback */
-    console.log("Inside bar code value check conditional");
-    console.log(mediaBarCode); 
-    ajaxCall(mediaBarCode, batchTapeCheckCallback);
+    //console.log("Inside bar code value check conditional");
+    //console.log(mediaBarCode);
+    var procData = prepData(mediaBarCode, "checkBatchMembers");
+    //console.log(procData);
+    ajaxCall(procData, batchTapeCheckCallback);
   }
   else
   {
     console.log("Invalid media bar code");
   }
+  $('#mediaid').val("");
 };
 
 batchTapeCheckCallback = function(data) 
 {
-  console.log("Now in batchTapeCheckCallback");
-  console.log(data);
-  var procData = prepData(data.tapeid, "checkBatchMembers");
-  //showAddTapeResultCallback(data);
-  showAddTapeResultCallback(procData.DATA);      
+  //console.log("Now in batchTapeCheckCallback");
+  //console.log(data);
+  data.CALLER = "batch";
+  showAddTapeResultCallback(data);
   // If successful.
   if(data.RSLT === "0")
   {

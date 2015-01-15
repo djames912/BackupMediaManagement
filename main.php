@@ -15,13 +15,13 @@ and open the template in the editor.
     <script type="text/javascript" src="js/main.js"></script>
     <script>$(function() { 
        // In the main.php page, jQuery on load anonymous function:
-    $(".submitOnCr").each(function(index) 
-     { 
-        add_event(this, events.keyup, tapeInputCapture);
-      });
       $(".batchAddTapeOnCr").each(function(index) 
       {
         add_event(this, events.keyup, batchTapeInputCapture);
+       });
+      $(".submitOnCr").each(function(index) 
+      { 
+        add_event(this, events.keyup, tapeInputCapture);
       });
       $(".setDate").datepicker();
       $(".setDate").datepicker("setDate", time_to_text(today()));
@@ -45,10 +45,14 @@ and open the template in the editor.
         addTape();
         e.preventDefault();
       });
-      $('#createbatchform').on('submit', function(e)
+      /* $('#createbatchform').on('submit', function(e)
       {
         addBatch();
         e.preventDefault();
+      }); */
+      $('#submitbatch').click(function()
+      {
+        addBatch();
       });
       $('.mbut').click(function() { 
         $('.mbut').removeClass("msel"); 
