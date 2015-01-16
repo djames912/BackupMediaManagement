@@ -50,9 +50,10 @@ and open the template in the editor.
         addBatch();
         e.preventDefault();
       }); */
-      $('#submitbatch').click(function()
+      $('#submitbatch').click(function(e)
       {
         addBatch();
+        e.preventDefault();
       });
       $('.mbut').click(function() { 
         $('.mbut').removeClass("msel"); 

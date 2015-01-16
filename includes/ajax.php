@@ -139,7 +139,8 @@ function testNewTape($mediaData)
 }
 
 /* This function accepts a tape bar code.
- * 
+ * It then checks to see if the tape is available for use in a batch that is being created by the user.
+ * It returns whether or not the tape is available for use in the batch.
  */
 function checkBatchMembers($mediaBarCode)
 {
@@ -147,6 +148,26 @@ function checkBatchMembers($mediaBarCode)
   $rawOutput = tapeAvailable($mediaBarCode);
   $rawOutput['DATA'] = trim($mediaBarCode);
   //error_log(print_r($rawOutput, true));
+  return $rawOutput;
+}
+
+/* This function accepts an object consisiting of an array of tapes, the date and any other data that
+ * comes from the application UI.  The backend function will check for those values and if they are not
+ * found it will add appropriate defaults.
+ */
+function submitBatch($batchData)
+{
+  // The following lines check property values in the object passed in from Javascript.  If they don't
+  // exist, they are added to the object with default values.  Ideally, the object properties are set in
+  // the program via the UI.
+  if(!property_exists($batchData, 'uname'))
+    $batchData->uname = $_SESSION['UserName'];
+  if(!property_exists($batchData, 'rdays'))
+    $batchData->rdays = $GLOBALS['defaultReturnTime'];
+  if(!property_exists($batchData, 'bloc'))
+    $batchData->bloc = $GLOBALS['batchCreateLocation'];
+  error_log(print_r($batchData, true));
+  $rawOutput = addTapeBatch($batchData);
   return $rawOutput;
 }
 ?>

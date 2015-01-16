@@ -3,7 +3,7 @@
   <div class="form1">
     <div class="div_tab">
       <label class="spn">Date</label>
-      <input name="createdate" id="dp" class="iput setDate" type="text">
+      <input name="createdate" id="createdate" class="iput setDate" type="text">
     </div>
     <div class="div_tab">
       <label class="spn">Tape Id</label>

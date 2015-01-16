@@ -11,7 +11,7 @@ function time_to_text(time)
   return datestr;
 }
 
-// This function returns today's time stamp.
+// This function returns today's time stamp.$batchData
 function today()
 {
   var temp = new Date();
@@ -26,7 +26,7 @@ events = {'click':0,'keyup':1,'m_over':2,'m_out':3};
 // Attach an event listener to a JavaScript DOM object
 //   * element is a DOM element, not a jQuery one
 //   * event is an int, typically referenced by events.click (see above)
-//   * func is the callback Fn to run when the event fires
+//   * func is the callback Fn to run when the event fi$batchDatares
 function add_event(element, event, func) {
     if(document.addEventListener){ //code for non-IE
     	element.addEventListener(nonie_events[event],func,false);
@@ -53,17 +53,13 @@ function addTape()
 function addBatch()
 {
   console.log("In addBatch function");
-  var formObj = document.getElementById("createbatchform");
   var tempObj = new Object();
-  tempObj.createdate = formObj.elements['createdate'].value;
-  tempObj.tapeid = formObj.elements['mediaid'].value;
-  console.log(tempObj);
-  var procData = prepData(tempObj.tapeid, "checkBatchMembers");
-  //console.log(procData);
-  //ajaxCall(procData, batchTapeCheckCallback);
-  //ajaxCall(procData, showCreateBatchResultCallback);
-  //ajaxCall(batchTapes, showCreateBatchResultCallback);
-  formObj.reset(); // reset form
+  tempObj.date = $("#createdate").val();
+  tempObj.bcodes = batchTapes;
+  var procData = prepData(tempObj, "submitBatch");
+  console.log(procData);
+  ajaxCall(procData, showCreateBatchResultCallback);
+  //formObj.reset(); // reset form
   batchTapes = []; // wipe out batchTapes array
 }
 
@@ -77,9 +73,9 @@ function show_tape(container, labelText, flag) {
     tmpDiv.innerHTML = labelText;
     tmpDiv.className = "tape";
     
-    if (flag === "success") {
+    if (flag == "success") {
         tmpDiv.className += " success";
-    } else if (flag === "failure") {
+    } else if (flag == "failure") {
         tmpDiv.className += " fail";
     } else {
         tmpDiv.className += " no_res";
@@ -132,7 +128,7 @@ function ajaxCall(jsonString, callBackFuncName)
 
   request.onreadystatechange = function ()
   {
-    if (request.readyState === 4)
+    if (request.readyState == 4)
     {
       var jObj = fromJSON(request.responseText);
       callBackFuncName(jObj);
@@ -165,7 +161,7 @@ var listUsersCallback = function (data)
 {
   var targetDiv = document.getElementById("show_users");
   var textOut = "Current Users: <BR><BR>";
-  if (data.length === 0)
+  if (data.length == 0)
   {
     textOut += "No users found.<BR>";
   }
@@ -198,7 +194,7 @@ var listMediaCallback = function (data)
 {
   var targetDiv = document.getElementById("medialist");
   var textOut = "Current Media Types:<BR><BR>";
-  if (data.length === 0)
+  if (data.length == 0)
   {
     textOut += "None on file.<BR>";
   }
@@ -223,7 +219,7 @@ var listVendorCallback = function (data)
 {
   var targetDiv = document.getElementById("vendorlist");
   var textOut = "Current Vendors on File:<BR><BR>";
-  if (data.length === 0)
+  if (data.length == 0)
   {
     textOut += "None on file.<BR>";
   }
@@ -248,7 +244,7 @@ var listLocationCallback = function(data)
 {
    var targetDiv = document.getElementById("locationlist");
    var textOut = "Current Locations:<BR><BR>";
-   if(data.length === 0)
+   if(data.length == 0)
    {
       textOut += "None set in system.<BR>";
    }
@@ -274,7 +270,7 @@ var showAddVendorResultCallback = function(data)
 {
   var targetDiv = document.getElementById("vendorlist");
   var textOut = "<CENTER>STATUS:</CENTER><BR>";
-  if(data.length === 0)
+  if(data.length == 0)
   {
     textOut += "Strange. Empty data set sent.";
   }
@@ -350,14 +346,14 @@ var showAddMediaResultCallback = function(data)
 {
   var targetDiv = document.getElementById("medialist");
   var textOut = "<CENTER>STATUS:</CENTER><BR>";
-  if(data.length === 0)
+  if(data.length == 0)
   {
     textOut += "Strange. Empty data set sent.";
   }
   else
   {
     //console.log(data);
-    if(data.RSLT === "0")
+    if(data.RSLT == "0")
     {
       textOut += "Success!<BR><BR>" + data.MSSG;
     }
@@ -379,14 +375,14 @@ var showAddLocationResultCallback = function(data)
 {
   var targetDiv = document.getElementById("locationlist");
   var textOut = "<CENTER>STATUS:</CENTER><BR>";
-  if(data.length === 0)
+  if(data.length == 0)
   {
     textOut += "Strange. Empty data set sent.";
   }
   else
   {
     //console.log(data);
-    if(data.RSLT === "0")
+    if(data.RSLT == "0")
     {
       textOut += "Success!<BR><BR>" + data.MSSG;
     }
@@ -407,13 +403,13 @@ var showAddLocationResultCallback = function(data)
 var showAddTapeResultCallback = function(data)
 {
   //console.log(data);
-  if(data.CALLER === "batch")
+  if(data.CALLER == "batch")
     displayLocation = "battprslt";
   else
     displayLocation = "tprslt";
-  if(data.RSLT === "0") 
+  if(data.RSLT == "0") 
     successVal = "success";
-  else if (data.RSLT === "1") 
+  else if (data.RSLT == "1") 
     successVal = "failure";
   else
     successVal = "no_res";
@@ -436,7 +432,7 @@ batchTapeInputCapture = function(mediaElement)
   // Ignore all key presses except for Enter key
   //console.log(mediaElement.keyCode);
   //console.log(mediaElement);
-  if(mediaElement.keyCode !== 13)
+  if(mediaElement.keyCode != 13)
   {
     return;
   }
@@ -448,9 +444,13 @@ batchTapeInputCapture = function(mediaElement)
      /* make ajax call to check tape (use batchTapeCheckCallback as callback */
     //console.log("Inside bar code value check conditional");
     //console.log(mediaBarCode);
-    var procData = prepData(mediaBarCode, "checkBatchMembers");
-    //console.log(procData);
-    ajaxCall(procData, batchTapeCheckCallback);
+    var codePresent = $.inArray(mediaBarCode, batchTapes);
+    if(codePresent == "-1")
+    {
+      var procData = prepData(mediaBarCode, "checkBatchMembers");
+      //console.log(procData);
+      ajaxCall(procData, batchTapeCheckCallback);
+    }
   }
   else
   {
@@ -466,15 +466,28 @@ batchTapeCheckCallback = function(data)
   data.CALLER = "batch";
   showAddTapeResultCallback(data);
   // If successful.
-  if(data.RSLT === "0")
+  if(data.RSLT == "0")
   {
      batchTapes.push(data.DATA);
    }
+   //console.log(batchTapes);
 };
 
 showCreateBatchResultCallback = function(data)
 {
+  var targetDiv = document.getElementById("battprslt");
+  var textOut = "";
   // show success/failure message in result box
+  console.log("In showCreateBatchResultCallback");
   console.log(data);
+  if(data.RSLT == "0")
+  {
+    textOut = data.MSSG;
+  }
+  else
+  {
+    textOut = "Unable to create batch!";
+  }
+  targetDiv.innerHTML = textOut;
 };
 
