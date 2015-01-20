@@ -50,11 +50,14 @@ and open the template in the editor.
         addBatch();
         e.preventDefault();
       }); */
+      /*
       $('#submitbatch').click(function(e)
       {
+        console.log("Running addBatch()");
         addBatch();
         e.preventDefault();
       });
+      */
       $('.mbut').click(function() { 
         $('.mbut').removeClass("msel"); 
         $(this).addClass("msel");
@@ -115,6 +118,7 @@ and open the template in the editor.
         if(this.id == "submitbatch")
         {
           addBatch();
+          e.preventDefault();
         }
       });
       $(".admdetail").hide();

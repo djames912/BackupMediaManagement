@@ -50,17 +50,33 @@ function addTape()
   formObj.elements["tapeid"].value = "";
 }
 
+/* This function submits data provided by the UI to the appropriate AJAX helper function that actually
+ * adds a batch and its members to the database.  It accepts no input and returns no output.  It
+ * does check to see if the batchTapes array is empty or not which prevents submitting an empty
+ * batch to the database.
+ * 
+ * @returns {undefined}
+ */
 function addBatch()
 {
-  console.log("In addBatch function");
-  var tempObj = new Object();
-  tempObj.date = $("#createdate").val();
-  tempObj.bcodes = batchTapes;
-  var procData = prepData(tempObj, "submitBatch");
-  console.log(procData);
-  ajaxCall(procData, showCreateBatchResultCallback);
-  //formObj.reset(); // reset form
-  batchTapes = []; // wipe out batchTapes array
+  //console.log("In addBatch function");
+  if(batchTapes.length > 0)
+  {
+    var tempObj = new Object();
+    tempObj.date = $("#createdate").val();
+    tempObj.bcodes = batchTapes;
+    var procData = prepData(tempObj, "submitBatch");
+    //console.log(procData);
+    ajaxCall(procData, showCreateBatchResultCallback);
+    //formObj.reset(); // reset form
+    batchTapes = []; // wipe out batchTapes array
+  }
+  else
+  {
+    var targetDiv = document.getElementById("battprslt");
+    var textOut = "Cannot submit empty batch!";
+     targetDiv.innerHTML = textOut;
+  }
 }
 
 // Create tape div and add it to the specified container
