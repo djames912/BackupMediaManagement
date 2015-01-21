@@ -166,8 +166,19 @@ function submitBatch($batchData)
     $batchData->rdays = $GLOBALS['defaultReturnTime'];
   if(!property_exists($batchData, 'bloc'))
     $batchData->bloc = $GLOBALS['batchCreateLocation'];
-  error_log(print_r($batchData, true));
+  //error_log(print_r($batchData, true));
   $rawOutput = addTapeBatch($batchData);
+  return $rawOutput;
+}
+
+/* This function accepts a media bar code as an argument and calls the appropriate PHP function
+ * to look up all the information available on that media bar code.  It returns all the available data
+ * as an object.
+ */
+function lookupMediaDetail($mediaID)
+{
+  $rawOutput = getMediaDetail($mediaID->mediaid);
+  //error_log(print_r($rawOutput, true));
   return $rawOutput;
 }
 ?>

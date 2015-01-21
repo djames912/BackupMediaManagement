@@ -27,11 +27,14 @@ events = {'click':0,'keyup':1,'m_over':2,'m_out':3};
 //   * element is a DOM element, not a jQuery one
 //   * event is an int, typically referenced by events.click (see above)
 //   * func is the callback Fn to run when the event fi$batchDatares
-function add_event(element, event, func) {
-    if(document.addEventListener){ //code for non-IE
+function add_event(element, event, func) 
+{
+    if(document.addEventListener)
+    { //code for non-IE
     	element.addEventListener(nonie_events[event],func,false);
     }
-    else{
+    else
+    {
 	element.attachEvent(ie_events[event],func); //code for IE
     }
 }
@@ -77,6 +80,19 @@ function addBatch()
     var textOut = "Cannot submit empty batch!";
      targetDiv.innerHTML = textOut;
   }
+}
+/* This function gets the history of of an individual piece of media and displays it.  It returns nothing.
+ * 
+ * @returns {undefined}
+ */
+function getMediaHistory()
+{
+  var formObj = document.getElementById("indmediahistory");
+  var tempObj = new Object();
+  tempObj.mediaid = formObj.elements["mediaid"].value;
+  var procData = prepData(tempObj, "lookupMediaDetail");
+  ajaxCall(procData, showMediaDetailCallback);
+   formObj.elements["mediaid"].value = "";
 }
 
 // Create tape div and add it to the specified container
@@ -293,7 +309,7 @@ var showAddVendorResultCallback = function(data)
   else
   {
     //console.log(data);
-    if(data.RSLT === "0")
+    if(data.RSLT == "0")
     {
       textOut += "Success!<BR><BR>" + data.MSSG;
     }
@@ -503,6 +519,40 @@ showCreateBatchResultCallback = function(data)
   else
   {
     textOut = "Unable to create batch!";
+  }
+  targetDiv.innerHTML = textOut;
+};
+
+showMediaDetailCallback = function(data)
+{
+  var tempObj = new Object();
+  var targetDiv = document.getElementById("mediadetail");
+  var textOut = "";
+  //console.log("In showMediaDetailcallback");
+  //console.log(data);
+  if(data.RSLT == "1")
+  {
+    textOut = data.MSSG;
+  }
+  else
+  {
+    tempObj = data.DATA;
+    textOut = "<CENTER>Detail for: " + tempObj.mediaLabel + "</CENTER><BR>";
+    textOut += "Type:     " + tempObj.mediaType + "<BR>";
+    textOut += "Vendor: " + tempObj.vendor + "<BR>";
+    textOut += "PO:        " + tempObj.poNum + "<BR>";
+    textOut += "<CENTER>History</CENTER><BR>";
+    textOut += "=========================<BR>";
+    //console.log(tempObj.mediaHistory['0']);
+    for(cntr = 0, len = tempObj.mediaHistory.length; cntr < len; cntr++)
+    {
+      textOut += "Date:       " + tempObj.mediaHistory[cntr].date + "<BR>";
+      textOut += "Location: " + tempObj.mediaHistory[cntr].location + "<BR>";
+      textOut += "User:       " + tempObj.mediaHistory[cntr].user + "<BR>";
+      textOut += "Batch:     " + tempObj.mediaHistory[cntr].batch_id + "<BR>";
+      textOut += "Member: " + tempObj.mediaHistory[cntr].batch_num + "<BR>";
+      textOut += "=========================<BR>";
+    }
   }
   targetDiv.innerHTML = textOut;
 };

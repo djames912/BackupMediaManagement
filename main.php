@@ -45,6 +45,11 @@ and open the template in the editor.
         addTape();
         e.preventDefault();
       });
+      $('#indmediahistory').on('submit', function(e)
+      {
+        getMediaHistory();
+        e.preventDefault();
+      });
       /* $('#createbatchform').on('submit', function(e)
       {
         addBatch();
