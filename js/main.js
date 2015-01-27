@@ -95,6 +95,19 @@ function getMediaHistory()
    formObj.elements["mediaid"].value = "";
 }
 
+/* This function gets the returning batch IDs for the Modify Batch page.  It returns nothing.
+ * 
+ * @returns {undefined}
+ */
+function getReturningBatchIDs()
+{
+  console.log("In getReturningBatchIDs.");
+  var tempObj = new Object();
+  tempObj.name = "batch list";
+  var procData = prepData(tempObj, "lookupReturningBatches");
+  
+}
+
 // Create tape div and add it to the specified container
 //   * container is a DOM object, not a jQuery one
 //   * labelText is the tape barcode

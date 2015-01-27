@@ -74,13 +74,14 @@ and open the template in the editor.
         if(this.id == "Create_BatchmMark")
           $("#batch").show();
         if(this.id == "Modify_BatchmMark")
+        {
+          getReturningBatchIDs();
           $("#mod_batch").show();
+        }
         if(this.id == "Modify_TapemMark")
           $("#modtape").show();
         if(this.id == "AdminmMark")
-          $("#admin").show();
-        
-        
+          $("#admin").show();   
       });
       $(".page_content").hide();
         

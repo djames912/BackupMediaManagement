@@ -997,7 +997,7 @@ function addType($tableName, $fieldName, $dataValue)
      try
      {
        $dbLink = dbconnect();
-       $dbQuery = "SELECT ID, label FROM batch WHERE rdate <= $srchTimeStamp;";
+       $dbQuery = "SELECT ID, label FROM batch WHERE rdate <= $srchTimeStamp ORDER BY ID;";
        $statement = $dbLink->prepare($dbQuery);
        $statement->execute();
        $rowCount = $statement->rowCount();
