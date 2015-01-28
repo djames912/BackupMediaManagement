@@ -101,11 +101,12 @@ function getMediaHistory()
  */
 function getReturningBatchIDs()
 {
-  console.log("In getReturningBatchIDs.");
+  //console.log("In getReturningBatchIDs.");
   var tempObj = new Object();
-  tempObj.name = "batch list";
+  tempObj.returnDays = 90;
   var procData = prepData(tempObj, "lookupReturningBatches");
-  
+  //console.log(procData);
+  ajaxCall(procData, showReturningBatchesCallback);
 }
 
 // Create tape div and add it to the specified container
@@ -468,7 +469,7 @@ var showAddTapeResultCallback = function(data)
  * @param {type} mediaElement
  * @returns {undefined}
  */
-batchTapeInputCapture = function(mediaElement) 
+var batchTapeInputCapture = function(mediaElement) 
 {
   //console.log("In batchTapeInputCapture");
   var mediaBarCode = this.value;
@@ -504,7 +505,15 @@ batchTapeInputCapture = function(mediaElement)
   $('#mediaid').val("");
 };
 
-batchTapeCheckCallback = function(data) 
+/* This function accepts data from the calling AJAX function, calls the showAddTapeResultCallback
+ * which will display a colored message based on the backend function data provied.  It checks the
+ * results itself and if it finds the success condition, the media bar code is added to the batchTapes
+ * array.  If the result is not successful, the media bar code is NOT added to the array.
+ * 
+ * @param {type} data
+ * @returns {undefined}
+ */
+var batchTapeCheckCallback = function(data) 
 {
   //console.log("Now in batchTapeCheckCallback");
   //console.log(data);
@@ -518,7 +527,14 @@ batchTapeCheckCallback = function(data)
    //console.log(batchTapes);
 };
 
-showCreateBatchResultCallback = function(data)
+/* This function does noting more than displays the results of inserting a new batch into the database
+ * by means of an AJAX call to the appropriate backend function.  It displays in the appropriate
+ * location on the screen whether or not the insert was successful.
+ * 
+ * @param {type} data
+ * @returns {undefined}
+ */
+var showCreateBatchResultCallback = function(data)
 {
   var targetDiv = document.getElementById("battprslt");
   var textOut = "";
@@ -536,7 +552,10 @@ showCreateBatchResultCallback = function(data)
   targetDiv.innerHTML = textOut;
 };
 
-showMediaDetailCallback = function(data)
+/* This function accepts data passed in from the AJAX function and then parses it.  It outputs its results
+ * to the designated location on the page.  It returns nothing.
+ */
+var showMediaDetailCallback = function(data)
 {
   var tempObj = new Object();
   var targetDiv = document.getElementById("mediadetail");
@@ -570,3 +589,29 @@ showMediaDetailCallback = function(data)
   targetDiv.innerHTML = textOut;
 };
 
+/* This function accepts the database query results from the AJAX function, it then checks it for a valid
+ * query result.  If it doesn't find one, it prints a message contained in the returning data.  If it does
+ * find a valid query, it parses through the array of objects contained in the DATA field and displays
+ * buttons containing that data in the appropriate location on the web page.  It returns nothing.
+ */
+var showReturningBatchesCallback = function(data)
+{
+  //console.log("In showReturningBatchesCallback");
+  //console.log(data.DATA[0]);
+  var targetDiv = document.getElementById("retbatchlist");
+  var htmlOut = "";
+  if(data.RSLT == "1")
+  {
+    htmlOut = "<label class=\"spn\">" + data.MSSG + "</label>";
+  }
+  else
+  {
+    for(cntr = 0, len = data.DATA.length; cntr < len; cntr++)
+    {
+      htmlOut += "<button id=\"btchbtn\" class=\"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button\" value=\"" + data.DATA[cntr].ID + "\" role=\"button\" aria-disabled=\"false\">";
+      htmlOut += "<span class=\"ui-button-text\">" + data.DATA[cntr].label + "</span>";
+      htmlOut += "</button>";
+    }
+  }
+  targetDiv.innerHTML = htmlOut;
+};

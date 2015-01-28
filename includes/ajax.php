@@ -185,14 +185,19 @@ function lookupMediaDetail($mediaID)
 /* This function accepts an optional argument of a number of days into the future to look for returning
  * batches of media backup.  The function returns the details of the returning batches.
  */
-function lookupReturningBatches($returnDays = NULL)
+function lookupReturningBatches($returnData = NULL)
 {
-  if(is_null($returnDays))
+  //error_log("In lookupReturningBatches AJAX", 0);
+  if(is_null($returnData))
   {
     $returnDays = $GLOBALS['maxReturnDays'];
   }
+  else
+  {
+    $returnDays = $returnData->returnDays;
+  }
   $rawOutput = getReturningBatchIDs($returnDays);
-  error_log(print_r($rawOutput, true));
-  
+  //error_log(print_r($rawOutput, true));
+  return $rawOutput;
 }
 ?>

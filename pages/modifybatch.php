@@ -25,15 +25,6 @@
       <span class="ui-button-text">Submit</span>
     </button>
     <div id="retbatchlist" class="batch">
-      <?php
-        $rawBatchData = getReturningBatchIDs();
-        foreach ($rawBatchData['DATA'] as $indBatch)
-        {
-          echo '<button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button" value="' . $indBatch['ID'] . '" role="button" aria-disabled="false">';
-          echo '<span class="ui-button-text">' . $indBatch['label'] . '</span>';
-          echo '</button>';
-        }
-      ?>
     </div>
   </div>
   </form>
