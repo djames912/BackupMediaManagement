@@ -608,7 +608,7 @@ var showReturningBatchesCallback = function(data)
   {
     for(cntr = 0, len = data.DATA.length; cntr < len; cntr++)
     {
-      htmlOut += "<button id=\"btchbtn\" class=\"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button\" value=\"" + data.DATA[cntr].ID + "\" role=\"button\" aria-disabled=\"false\">";
+      htmlOut += "<button class=\"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button btchbtn\" value=\"" + data.DATA[cntr].ID + "\" role=\"button\" aria-disabled=\"false\">";
       htmlOut += "<span class=\"ui-button-text\">" + data.DATA[cntr].label + "</span>";
       htmlOut += "</button>";
     }
