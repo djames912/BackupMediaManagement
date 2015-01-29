@@ -2,6 +2,9 @@
 
 // This array will hold the batch tapes (used in create batch)
 batchTapes = [];
+// This array holds the objects containing the media barcode and status of the batch that is being
+// checked in.
+batchMembers = [];
 
 // This function sets and formats the current time.
 function time_to_text(time)
@@ -107,6 +110,17 @@ function getReturningBatchIDs()
   var procData = prepData(tempObj, "lookupReturningBatches");
   //console.log(procData);
   ajaxCall(procData, showReturningBatchesCallback);
+}
+
+/* This function accepts a batch ID submitted by the value of the button that was clicked.
+ * It then preps the data and makes the appropriate AJAX call.
+ * @param {type} batchID
+ * @returns {undefined}
+ */
+function getReturningBatchMembers(batchID)
+{
+  var procData = prepData(batchID, "lookupBatchMembers");
+  ajaxCall(procData, prepBatchMembersCallback);
 }
 
 // Create tape div and add it to the specified container
@@ -539,8 +553,8 @@ var showCreateBatchResultCallback = function(data)
   var targetDiv = document.getElementById("battprslt");
   var textOut = "";
   // show success/failure message in result box
-  console.log("In showCreateBatchResultCallback");
-  console.log(data);
+  //console.log("In showCreateBatchResultCallback");
+  //console.log(data);
   if(data.RSLT == "0")
   {
     textOut = data.MSSG;
@@ -614,4 +628,52 @@ var showReturningBatchesCallback = function(data)
     }
   }
   targetDiv.innerHTML = htmlOut;
+  // Listener to register a click on the buttons created by this function.
+  $('.btchbtn').click(function() 
+  {
+    //batchMembers = [];  //Wipes out the array at each click of a batch button.
+    $("#retbatchmbrs").empty();
+    getReturningBatchMembers(this.value);
+  });
+};
+
+/* This function accepts an array of media bar codes, and puts them in an array with the default
+ * status set.  It then passes the prepped array off to the function that handles the display.
+ */
+var prepBatchMembersCallback = function(data)
+{
+  var tmpObj = new Object();
+  if(data.RSLT == "1")
+  {
+    show_tape(document.getElementById("retbatchmbrs"), "No members found! Empty batch.", "failure");
+  }
+  else
+  {
+    for(cntr = 0, len = data.DATA.length; cntr < len; cntr++)
+    {
+      tmpObj.ID = data.DATA[cntr];
+      tmpObj.CHK = "false";
+      batchMembers.push(tmpObj);
+    }
+    showBatchMembersCallback(batchMembers);
+  }
+};
+
+/* This function accepts an array of media bar codes and their current status in the array.  In this case
+ * it checks to see if they have been entered or not and then displays the members with the appropriate
+ * color background.
+ */
+var showBatchMembersCallback = function(data)
+{
+  //console.log("In showBatchMembersCallback");
+  var successVal = "failure";
+  var targetDiv = document.getElementById("retbatchmbrs");
+  for(cntr = 0, len = data.length; cntr < len; cntr++)
+  {
+    if(data[cntr].CHK == "true")
+      successVal = "success";
+    else
+      successVal = "no_res";
+    show_tape(document.getElementById("retbatchmbrs"), data[cntr].ID, successVal);
+  }
 };

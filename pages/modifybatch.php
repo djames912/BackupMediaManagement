@@ -1,5 +1,5 @@
 <div id="mod_batch" class="page_content" style="">
-  <form id="modifyBatch" method="POST" action="#">
+  <!-- <form id="modifyBatch" method="POST" action="#"> -->
   <div class="form1">
     <div class="div_tab">
       <label class="spn">Date</label>
@@ -21,12 +21,11 @@
       <label class="spn">Tape Id</label>
       <input class="iput" type="text">
     </div>
-    <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button" value="Submit" role="button" aria-disabled="false" disabled="disabled">
+    <button id="checkedbatch" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button admbtn" value="Submit" role="button" aria-disabled="false">
       <span class="ui-button-text">Submit</span>
     </button>
-    <div id="retbatchlist" class="batch">
-    </div>
+    <div id="retbatchlist" class="batch"></div>
   </div>
-  </form>
+  <!-- </form> -->
   <div id="retbatchmbrs" class="results"></div>
 </div>

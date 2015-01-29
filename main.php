@@ -13,18 +13,22 @@ and open the template in the editor.
     <script type="text/javascript" src="js/jqueryui/js/jquery-ui-1.8.18.custom.min.js"></script>
     <!-- <script type="text/javascript" src="js/lgen.js"></script>  --> 
     <script type="text/javascript" src="js/main.js"></script>
-    <script>$(function() { 
+    <script>
+      $(function() { 
        // In the main.php page, jQuery on load anonymous function:
+       // Listener for create batch page.
       $(".batchAddTapeOnCr").each(function(index) 
       {
         add_event(this, events.keyup, batchTapeInputCapture);
        });
+       // Listener for the add tape page.
       $(".submitOnCr").each(function(index) 
       { 
         add_event(this, events.keyup, tapeInputCapture);
       });
       $(".setDate").datepicker();
       $(".setDate").datepicker("setDate", time_to_text(today()));
+      // Handlers for the submit buttons on the various pages.
       $('#addvendorform').on('submit', function(e)
       {
 	addVendor();
@@ -50,19 +54,7 @@ and open the template in the editor.
         getMediaHistory();
         e.preventDefault();
       });
-      /* $('#createbatchform').on('submit', function(e)
-      {
-        addBatch();
-        e.preventDefault();
-      }); */
-      /*
-      $('#submitbatch').click(function(e)
-      {
-        console.log("Running addBatch()");
-        addBatch();
-        e.preventDefault();
-      });
-      */
+     // Listener for the buttons with the mbut class.
       $('.mbut').click(function() { 
         $('.mbut').removeClass("msel"); 
         $(this).addClass("msel");
@@ -84,27 +76,24 @@ and open the template in the editor.
           $("#admin").show();   
       });
       $(".page_content").hide();
-        
+      // Listener for the buttons with the admbtn class.  
       $('.admbtn').click(function() { 
         $(".admdetail").hide();
         if(this.id == "list_users")
         {
           //console.log(toJSON(this));
           var displayData = prepData("User List", "generateUserList");
-          //console.log(displayData);
           ajaxCall(displayData, listUsersCallback);
           $("#show_users").show();
         }
         if(this.id == "add_user")
         {
           var displayData = prepData("Add User form under development.", "test");
-          //console.log(displayData);
           ajaxCall(displayData, adduserCallback);
           $("#adduser").show();
         }
         if(this.id == "add_media")
         {
-          //console.log(toJSON(this));
           var displayData = prepData("Media List", "generateMediaList");
           ajaxCall(displayData, listMediaCallback);
           $("#addmedia").show();
@@ -126,9 +115,14 @@ and open the template in the editor.
           addBatch();
           e.preventDefault();
         }
+        if(this.id == "checkedbatch")
+        {
+          console.log("Check in batch click.");
+        }
       });
       $(".admdetail").hide();
-    });</script>
+    });
+  </script>
   </head>
   <body>
     <?php

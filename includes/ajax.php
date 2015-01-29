@@ -200,4 +200,23 @@ function lookupReturningBatches($returnData = NULL)
   //error_log(print_r($rawOutput, true));
   return $rawOutput;
 }
+
+/* This function accepts a batch ID as an argument.  It fetches the members of the designated batch
+ * ID and returns them.
+ */
+function lookupBatchMembers($batchID)
+{
+  $rawOutput = array();
+  if(!$batchID)
+  {
+    $rawOutput['RSLT'] = "1";
+    $rawOutput['MSSG'] = "Batch ID required, not provided.";
+  }
+  else
+  {
+    $rawOutput = getBatchMembers($batchID);
+    //error_log(print_r($rawOutput, true));
+  }
+  return $rawOutput;
+}
 ?>
