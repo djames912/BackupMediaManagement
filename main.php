@@ -21,6 +21,11 @@ and open the template in the editor.
       {
         add_event(this, events.keyup, batchTapeInputCapture);
        });
+       // Listener for modify batch page to check batch members in.
+       $(".batchChkTapeOnCr").each(function(index)
+       {
+         add_event(this, events.keyup, batchMemberInputCapture);
+       });
        // Listener for the add tape page.
       $(".submitOnCr").each(function(index) 
       { 
@@ -117,7 +122,8 @@ and open the template in the editor.
         }
         if(this.id == "checkedbatch")
         {
-          console.log("Check in batch click.");
+          batchCheckIn();
+          e.preventDefault();
         }
       });
       $(".admdetail").hide();

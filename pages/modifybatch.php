@@ -19,9 +19,9 @@
     </div>
     <div class="div_tab">
       <label class="spn">Tape Id</label>
-      <input class="iput" type="text">
+      <input id="btchmbrid" class="iput batchChkTapeOnCr" type="text">
     </div>
-    <button id="checkedbatch" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button admbtn" value="Submit" role="button" aria-disabled="false">
+    <button id="checkedbatch" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button admbtn" value="Submit" role="button" disabled="disabled" aria-disabled="false">
       <span class="ui-button-text">Submit</span>
     </button>
     <div id="retbatchlist" class="batch"></div>

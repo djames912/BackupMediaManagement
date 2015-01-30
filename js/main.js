@@ -1,10 +1,12 @@
 // Main java script page for this project.
 
 // This array will hold the batch tapes (used in create batch)
-batchTapes = [];
+var batchTapes = [];
 // This array holds the objects containing the media barcode and status of the batch that is being
 // checked in.
-batchMembers = [];
+var batchMembers = [];
+// This variable stores the number of batch members that have been checked.  It has to be global.
+var membersChecked = 0;
 
 // This function sets and formats the current time.
 function time_to_text(time)
@@ -121,6 +123,16 @@ function getReturningBatchMembers(batchID)
 {
   var procData = prepData(batchID, "lookupBatchMembers");
   ajaxCall(procData, prepBatchMembersCallback);
+}
+
+/* This function takes the global batchMembers array, runs through it to make sure all the CHK values
+ * are set to true.  It then gathers the appropriate information on the modifybatch.php page and
+ * calls the AJAX function to check the batch in and assign it to the chosen location.  It returns nothing.
+ * @returns {undefined}
+ */
+function checkBatchIn()
+{
+  console.log("In checkBatchIn.");
 }
 
 // Create tape div and add it to the specified container
@@ -478,7 +490,7 @@ var showAddTapeResultCallback = function(data)
 };
 /* This function reads input from the keyboard on the createbatch.php page.  It listens for a
  * carriage return.  When it sees a carriage return it checks the final value in the text box.  If the
- * final value is valid, it moves on to the cose that checks to see if the tape is available for use in the
+ * final value is valid, it moves on to the code that checks to see if the tape is available for use in the
  * batch.
  * @param {type} mediaElement
  * @returns {undefined}
@@ -517,6 +529,58 @@ var batchTapeInputCapture = function(mediaElement)
     console.log("Invalid media bar code");
   }
   $('#mediaid').val("");
+};
+
+/* This function reads input from the text box on the modifybatch.php page which is where batches
+ * can be checked back upon return from offsite storage.  When a carriage return is detected, this
+ * function checks to be sure a valid bar code has been received and then calls the necessary
+ * functions to ensure that the value exists in the batch, and then switches the checked in value in
+ * the batchMembers array.  It also keeps a counter as the batch members are checked in.  Once the
+ * counter matches the number of members in the batch, the submit button is enabled on
+ * modifybatch.php.  Control is handed off to the functions called by the submit button once it is
+ * clicked.
+ * 
+ * @param {type} mediaElement
+ * @returns {undefined}
+ */
+var batchMemberInputCapture = function(mediaElement) 
+{
+  var mediaBarCode = this.value;
+  //console.log(mediaBarCode);
+  var toCheck = batchMembers.length;
+  // Ignore all key presses except for Enter key
+  //console.log(mediaElement.keyCode);
+  //console.log(mediaElement);
+  if(mediaElement.keyCode != 13)
+  {
+    return;
+  }
+  //console.log("Final bar code value: ", mediaBarCode);
+  // Check intput format for [5 or 6 numbers] [1 letter] [1 number]
+  if((match = mediaBarCode.match(/([0-9]{5,6}[L][0-9])/))) 
+  {
+    for(cntr = 0, len = batchMembers.length; cntr < len; cntr++)
+    {
+      if(batchMembers[cntr].ID == mediaBarCode && batchMembers[cntr].CHK == "false")
+      {
+        batchMembers[cntr].CHK = "true";
+        membersChecked++;
+        //console.log("Members: ", toCheck, "Checked: ", membersChecked);
+        $("#retbatchmbrs").empty();
+        showBatchMembersCallback(batchMembers);
+      }
+      if(membersChecked == toCheck)
+      {
+        document.getElementById('checkedbatch').disabled = false;
+        membersChecked = 0;
+      }
+    }
+  }
+  else
+  {
+    console.log("Invalid media bar code.");
+  }
+  $('#btchmbrid').val("");
 };
 
 /* This function accepts data from the calling AJAX function, calls the showAddTapeResultCallback
@@ -631,7 +695,8 @@ var showReturningBatchesCallback = function(data)
   // Listener to register a click on the buttons created by this function.
   $('.btchbtn').click(function() 
   {
-    //batchMembers = [];  //Wipes out the array at each click of a batch button.
+    batchMembers = [];  //Wipes out the array at each click of a batch button.
+    membersChecked = 0;  //Sets the global variable back to zero for a new batch.
     $("#retbatchmbrs").empty();
     getReturningBatchMembers(this.value);
   });
@@ -642,7 +707,7 @@ var showReturningBatchesCallback = function(data)
  */
 var prepBatchMembersCallback = function(data)
 {
-  var tmpObj = new Object();
+  //console.log("Data values received:", data.DATA);
   if(data.RSLT == "1")
   {
     show_tape(document.getElementById("retbatchmbrs"), "No members found! Empty batch.", "failure");
@@ -651,6 +716,7 @@ var prepBatchMembersCallback = function(data)
   {
     for(cntr = 0, len = data.DATA.length; cntr < len; cntr++)
     {
+      var tmpObj = new Object();
       tmpObj.ID = data.DATA[cntr];
       tmpObj.CHK = "false";
       batchMembers.push(tmpObj);
@@ -665,7 +731,7 @@ var prepBatchMembersCallback = function(data)
  */
 var showBatchMembersCallback = function(data)
 {
-  //console.log("In showBatchMembersCallback");
+  //console.log("Callback Display: ", data[0]);
   var successVal = "failure";
   var targetDiv = document.getElementById("retbatchmbrs");
   for(cntr = 0, len = data.length; cntr < len; cntr++)
