@@ -118,12 +118,10 @@ and open the template in the editor.
         if(this.id == "submitbatch")
         {
           addBatch();
-          e.preventDefault();
         }
         if(this.id == "checkedbatch")
         {
           batchCheckIn();
-          e.preventDefault();
         }
       });
       $(".admdetail").hide();

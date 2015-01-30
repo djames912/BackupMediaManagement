@@ -7,6 +7,11 @@ var batchTapes = [];
 var batchMembers = [];
 // This variable stores the number of batch members that have been checked.  It has to be global.
 var membersChecked = 0;
+/* This variable stores the ID of the returning media batch.  It's something of a kluge to solve a problem
+ * after the programmer (Douglas James) realized that the batch ID was not being tracked as the
+ * returning batch was being processed.  It was a simple way to fix that little problem.
+ */
+var returningBatchID = 0;
 
 // This function sets and formats the current time.
 function time_to_text(time)
@@ -121,18 +126,28 @@ function getReturningBatchIDs()
  */
 function getReturningBatchMembers(batchID)
 {
+  document.getElementById('checkedbatch').disabled = true;
   var procData = prepData(batchID, "lookupBatchMembers");
   ajaxCall(procData, prepBatchMembersCallback);
 }
 
-/* This function takes the global batchMembers array, runs through it to make sure all the CHK values
- * are set to true.  It then gathers the appropriate information on the modifybatch.php page and
- * calls the AJAX function to check the batch in and assign it to the chosen location.  It returns nothing.
+/* This function takes the global batchMembers array, gathers additional data from the form that is
+ * necessary to check the batch in and assign it a location and then submits it to the appropriate
+ * AJAX function for processing and insertion into the database.  It returns nothing.
+ * 
  * @returns {undefined}
  */
-function checkBatchIn()
+function batchCheckIn()
 {
-  console.log("In checkBatchIn.");
+  var tempObj = new Object();
+  tempObj.batchID = returningBatchID;
+  tempObj.date = $("#checkindate").val();
+  tempObj.locID = $("#checkinloc").val();
+  tempObj.members = batchMembers;
+  var procData = prepData(tempObj, "procBatchCheckIn");
+  console.log("Construct: ", procData);
+  returningBatchID = 0; //Wipes out this global variable once the batch is sumitted to the AJAX function.
+  ajaxCall(procData, showBatchCheckInResultsCallback);
 }
 
 // Create tape div and add it to the specified container
@@ -697,6 +712,7 @@ var showReturningBatchesCallback = function(data)
   {
     batchMembers = [];  //Wipes out the array at each click of a batch button.
     membersChecked = 0;  //Sets the global variable back to zero for a new batch.
+    returningBatchID = this.value;
     $("#retbatchmbrs").empty();
     getReturningBatchMembers(this.value);
   });
@@ -742,4 +758,13 @@ var showBatchMembersCallback = function(data)
       successVal = "no_res";
     show_tape(document.getElementById("retbatchmbrs"), data[cntr].ID, successVal);
   }
+};
+
+/* This function accepts a status from the AJAX function that is called by the checkBatchIn function
+ * and displays whether or not the batch check in process was completed or not.  It returns nothing.
+ * At the moment it is a stub function.
+ */
+var showBatchCheckInResultsCallback = function(data)
+{
+  console.log("Stub Function: ", data);
 };

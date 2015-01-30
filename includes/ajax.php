@@ -219,4 +219,9 @@ function lookupBatchMembers($batchID)
   }
   return $rawOutput;
 }
+
+function procBatchCheckIn($batchData)
+{
+  error_log(print_r($batchData, true));
+}
 ?>

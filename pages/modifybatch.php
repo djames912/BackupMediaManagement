@@ -3,11 +3,11 @@
   <div class="form1">
     <div class="div_tab">
       <label class="spn">Date</label>
-      <input id="dp" class="iput setDate" type="text">
+      <input  id="checkindate" class="iput setDate" type="text">
     </div>
     <div class="div_tab">
       <label class="spn">Locations</label>
-      <select class="iput">
+      <select id="checkinloc" class="iput">
         <?php
             $tempLocData = getTableContents('locations');
             foreach($tempLocData['DATA'] as $indLocation)
