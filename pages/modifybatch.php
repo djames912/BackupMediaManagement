@@ -17,7 +17,7 @@
       </select>
     </div>
     <div class="div_tab">
-      <label class="spn">Tape Id</label>
+      <label class="spn">Media Id</label>
       <input id="btchmbrid" class="iput batchChkTapeOnCr" type="text">
     </div>
     <button id="checkedbatch" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button admbtn" value="Submit" role="button" disabled="disabled" aria-disabled="false">

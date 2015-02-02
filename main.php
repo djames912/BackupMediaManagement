@@ -31,6 +31,11 @@ and open the template in the editor.
       { 
         add_event(this, events.keyup, tapeInputCapture);
       });
+      // Listener for the modify tape page.
+      $(".modIndTapeOnCr").each(function(index)
+      {
+        add_event(this, events.keyup, modIndTapeInputCapture);
+      });
       $(".setDate").datepicker();
       $(".setDate").datepicker("setDate", time_to_text(today()));
       // Handlers for the submit buttons on the various pages.

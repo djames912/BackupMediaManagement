@@ -34,7 +34,7 @@
         <input name="ponumber" class="iput" type="text" value="11111" onfocus="if(this.value === '11111') this.value = '';">
       </div>
       <div class="div_tab">
-        <label class="spn">Tape Id</label>
+        <label class="spn">Media Id</label>
         <input name="tapeid" class="iput submitOnCr" type="text">
       </div>
     </div>

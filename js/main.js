@@ -190,6 +190,24 @@ tapeInputCapture = function(e)
    }
 }
 
+modIndTapeInputCapture = function(mediaElement)
+{
+  var mediaBarCode = this.value;
+   var successVal = "no_res";
+   // Ignore all key presses except for Enter key
+   //console.log(e.keyCode);
+   //console.log(e);
+   if (mediaElement.keyCode != 13){
+       return;
+   }
+   // Check intput format for [5 or 6 numbers] [1 letter] [1 number]
+   if((match = mediaBarCode.match(/([0-9]{5,6}[L][0-9])/))) {
+     //document.getElementById("addtapeform").submit();
+     console.log("Got :", mediaBarCode);
+   }
+   $('#indmedid').val("");
+}
+
 // This function accepts a json object and converts it to a json string.
 function toJSON(jsonObject)
 {

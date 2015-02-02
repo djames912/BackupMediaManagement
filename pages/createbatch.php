@@ -6,7 +6,7 @@
       <input name="createdate" id="createdate" class="iput setDate" type="text">
     </div>
     <div class="div_tab">
-      <label class="spn">Tape Id</label>
+      <label class="spn">Media Id</label>
       <input id="mediaid" name="mediaid" class="iput batchAddTapeOnCr" type="text">
     </div>
     <button id="submitbatch" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only green-button admbtn" value="Submit" role="button" aria-disabled="false">
