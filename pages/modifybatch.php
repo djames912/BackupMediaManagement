@@ -1,10 +1,9 @@
 <div id="mod_batch" class="page_content" style="">
-  <!-- <form id="modifyBatch" method="POST" action="#"> -->
   <div class="form1">
-    <div class="div_tab">
+    <!-- <div class="div_tab">
       <label class="spn">Date</label>
       <input  id="checkindate" class="iput setDate" type="text">
-    </div>
+    </div> -->
     <div class="div_tab">
       <label class="spn">Locations</label>
       <select id="checkinloc" class="iput">

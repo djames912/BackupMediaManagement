@@ -1023,7 +1023,7 @@ function addType($tableName, $fieldName, $dataValue)
    return $r_val;
  }
  
- /* This function accepts a media barcode and returns the last record in the history table as an array.
+ /* This function accepts a media barcode and returns the last record in the history table as an object.
   * This function is depended on by canUseMedia().
   */
  function getLastRecord($mediaBarCode)
@@ -1090,5 +1090,47 @@ function addType($tableName, $fieldName, $dataValue)
      }
    }
    return $r_val;
+ }
+ 
+ /* This function accepts an object containing batch check in data.  The object must contain the batch
+  * ID number, the new assigned location ID, the user name, the bar code belonging to the media
+  * and the number each tape represents in the batch.
+  * 
+  */
+ function checkBatchIn($batchData)
+ {
+   $r_val = array();
+   $updateStatus = true;
+    foreach($batchData->members as $indMedia)
+    {
+      $rawData = assignTape($indMedia->ID, $batchData->locID, $batchData->uName, $batchData->batchID, $indMedia->BMN);
+      if($rawData['RSLT'] == "1")
+        $updateStatus = false;
+    }
+    if($updateStatus)
+    {
+      try
+      {
+        $dbLink = dbconnect();
+        $bldQuery = "UPDATE batch SET rdate=NULL WHERE ID='$batchData->batchID';";
+        $statement = $dbLink->prepare($bldQuery);
+        $statement->execute();
+        $r_val['RSLT'] = "0";
+        $r_val['MSSG'] = "Database update successful.";
+        $r_val['DATA'] = $batchData->batchID;
+      }
+      catch (PDOException $exception) 
+      {
+        echo "Unable to take requested action.";
+        $r_val['RSLT'] = "1";
+        $r_val['MSSG'] = $exception->getMessage();
+      }
+    }
+    else
+    {
+      $r_val['RSLT'] = "1";
+      $r_val['MSSG'] = "Unable to update history table.  Check in failed.";
+    }
+    return $r_val;
  }
 ?>

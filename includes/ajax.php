@@ -220,8 +220,50 @@ function lookupBatchMembers($batchID)
   return $rawOutput;
 }
 
+/* This function accepts an object containing the batch ID and the member bar code numbers.  It takes
+ * that data and then builds an object with additional information which it then passes to the back end
+ * function checkBatchIn() which requires additional information that does not come over from the
+ * Javascript code.  It returns whether or not the check in was successful.
+ */
 function procBatchCheckIn($batchData)
 {
-  error_log(print_r($batchData, true));
+  $r_val = array();
+  $batchData->uName = $_SESSION['UserName'];
+  foreach($batchData->members as $indMedia)
+  {
+    if($indMedia->CHK == "false")
+    {
+      $r_val['RSLT'] = "1";
+      $r_val['MSSG'] = "Incomplete batch found.";
+    }
+    else
+    {
+      $rawData = getLastRecord($indMedia->ID);
+      if($rawData['RSLT'] == "1")
+      {
+        $r_val['RSLT'] = "1";
+        $r_val['MSSG'] = "Unable to get last record for $indMedia->ID";
+      }
+      else
+      {
+        $dataRecord = $rawData['DATA'];
+        $indMedia->BMN = $dataRecord['0']->batch_num;
+      }
+    }
+  }
+  $rawData = checkBatchIn($batchData);
+  if($rawData['RSLT'] == "1")
+  {
+    $r_val['RSLT'] = "1";
+    $r_val['MSSG'] = "Unable to check batch in.";
+    $r_val['DATA'] = $batchData->batchID;
+  }
+  else
+  {
+    $r_val['RSLT'] = "0";
+    $r_val['MSSG'] = "Batch checked in.";
+    $r_val['DATA'] = $batchData->batchID;
+  }
+  return $r_val;
 }
 ?>

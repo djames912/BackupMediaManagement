@@ -145,7 +145,7 @@ function batchCheckIn()
   tempObj.locID = $("#checkinloc").val();
   tempObj.members = batchMembers;
   var procData = prepData(tempObj, "procBatchCheckIn");
-  console.log("Construct: ", procData);
+  //console.log("Construct: ", procData);
   returningBatchID = 0; //Wipes out this global variable once the batch is sumitted to the AJAX function.
   ajaxCall(procData, showBatchCheckInResultsCallback);
 }
@@ -762,9 +762,14 @@ var showBatchMembersCallback = function(data)
 
 /* This function accepts a status from the AJAX function that is called by the checkBatchIn function
  * and displays whether or not the batch check in process was completed or not.  It returns nothing.
- * At the moment it is a stub function.
  */
 var showBatchCheckInResultsCallback = function(data)
 {
-  console.log("Stub Function: ", data);
+  //console.log("showBatchCheckInResultsCallback: ", data);
+  var targetDiv = document.getElementById("retbatchmbrs");
+  $("#retbatchmbrs").empty();
+  if(data.RSLT == "1")
+    show_tape(document.getElementById("retbatchmbrs"), "Batch check in failed!", "failure");
+  else
+    show_tape(document.getElementById("retbatchmbrs"), "Batch check in successful.", "success");
 };

@@ -74,6 +74,7 @@ and open the template in the editor.
         {
           getReturningBatchIDs();
           $("#mod_batch").show();
+          $("#retbatchmbrs").empty();
         }
         if(this.id == "Modify_TapemMark")
           $("#modtape").show();
