@@ -141,7 +141,7 @@ function batchCheckIn()
 {
   var tempObj = new Object();
   tempObj.batchID = returningBatchID;
-  tempObj.date = $("#checkindate").val();
+  //tempObj.date = $("#checkindate").val();
   tempObj.locID = $("#checkinloc").val();
   tempObj.members = batchMembers;
   var procData = prepData(tempObj, "procBatchCheckIn");
@@ -177,9 +177,6 @@ tapeInputCapture = function(e)
 {
    var str = this.value;
    var successVal = "no_res";
-   // Ignore all key presses except for Enter key
-   //console.log(e.keyCode);
-   //console.log(e);
    if (e.keyCode != 13){
        return;
    }
@@ -190,23 +187,32 @@ tapeInputCapture = function(e)
    }
 }
 
+/* This function is the listener for the text box on modifytape.php.  It listenes for a carriage return and
+ * then calls the appropriate functions to process the input.  It returns nothing.
+ * @param {type} mediaElement
+ * @returns {undefined}
+ */
 modIndTapeInputCapture = function(mediaElement)
 {
+  var tempObj = new Object();
   var mediaBarCode = this.value;
-   var successVal = "no_res";
-   // Ignore all key presses except for Enter key
-   //console.log(e.keyCode);
-   //console.log(e);
    if (mediaElement.keyCode != 13){
        return;
    }
    // Check intput format for [5 or 6 numbers] [1 letter] [1 number]
    if((match = mediaBarCode.match(/([0-9]{5,6}[L][0-9])/))) {
-     //document.getElementById("addtapeform").submit();
-     console.log("Got :", mediaBarCode);
+     tempObj.locID = $("#assignloc").val();
+     tempObj.mediaID = mediaBarCode;
+     var procData = prepData(tempObj, "procIndMedia");
+     //console.log("Data: ", tempObj);
+     ajaxCall(procData, modIndMediaCallback);
+   }
+   else
+   {
+     console.log("Invalid media bar code.");
    }
    $('#indmedid').val("");
-}
+};
 
 // This function accepts a json object and converts it to a json string.
 function toJSON(jsonObject)
@@ -530,24 +536,15 @@ var showAddTapeResultCallback = function(data)
  */
 var batchTapeInputCapture = function(mediaElement) 
 {
-  //console.log("In batchTapeInputCapture");
   var mediaBarCode = this.value;
-  //console.log(mediaBarCode);
   var successVal = "no_res";
-  // Ignore all key presses except for Enter key
-  //console.log(mediaElement.keyCode);
-  //console.log(mediaElement);
   if(mediaElement.keyCode != 13)
   {
     return;
   }
-  //console.log("Final barcode value");
-  //console.log(mediaBarCode);
   // Check intput format for [5 or 6 numbers] [1 letter] [1 number]
   if((match = mediaBarCode.match(/([0-9]{5,6}[L][0-9])/))) 
   {
-     /* make ajax call to check tape (use batchTapeCheckCallback as callback */
-    //console.log("Inside bar code value check conditional");
     //console.log(mediaBarCode);
     var codePresent = $.inArray(mediaBarCode, batchTapes);
     if(codePresent == "-1")
@@ -579,16 +576,12 @@ var batchTapeInputCapture = function(mediaElement)
 var batchMemberInputCapture = function(mediaElement) 
 {
   var mediaBarCode = this.value;
-  //console.log(mediaBarCode);
   var toCheck = batchMembers.length;
-  // Ignore all key presses except for Enter key
-  //console.log(mediaElement.keyCode);
-  //console.log(mediaElement);
+  // Ignore all key presses except the 'enter' key.
   if(mediaElement.keyCode != 13)
   {
     return;
   }
-  //console.log("Final bar code value: ", mediaBarCode);
   // Check intput format for [5 or 6 numbers] [1 letter] [1 number]
   if((match = mediaBarCode.match(/([0-9]{5,6}[L][0-9])/))) 
   {
@@ -790,4 +783,19 @@ var showBatchCheckInResultsCallback = function(data)
     show_tape(document.getElementById("retbatchmbrs"), "Batch check in failed!", "failure");
   else
     show_tape(document.getElementById("retbatchmbrs"), "Batch check in successful.", "success");
+};
+
+
+var modIndMediaCallback = function(data)
+{
+  //console.log("modIndMediaCallback: ", data);
+  $("#indmedassign").empty();
+  if(data.RSLT == "1")
+  {
+    show_tape(document.getElementById("indmedassign"), data.MSSG, "failure");
+  }
+  else
+  {
+    show_tape(document.getElementById("indmedassign"), data.MSSG, "success");
+  }
 };

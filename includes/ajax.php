@@ -266,4 +266,80 @@ function procBatchCheckIn($batchData)
   }
   return $r_val;
 }
+
+/* This function accepts an object that is generated from an assigned location and then a scanned
+ * bar code.  It then adds a user name property to the object.  It checks to see if the media is found
+ * in the database.  If the media is found, it retrieves the last record for the media from the database.
+ * It then checks to see if the location being assigned is the same as found in the last record.  It also
+ * checks to see if the assigned location is one of the exceptions.
+ */
+function procIndMedia($mediaData)
+{
+  $tempData = array();
+  $r_val = array();
+  $mediaData->uName = $_SESSION['UserName'];
+  $tempData = tapeExists(trim($mediaData->mediaID)); //Check to see if the tape exists.
+  if($tempData['RSLT'] == "0") 
+  {
+    $tempData = getIDLabel('locations', $mediaData->locID);
+    $mediaData->locName = $tempData['DATA'];
+    error_log(print_r($mediaData, true));
+    $tempData = getLastRecord(trim($mediaData->mediaID)); //Get the last record for the media.
+    if($tempData['RSLT'] == "0") // If the record is found.
+    {
+      error_log(print_r($tempData,true));
+      if($tempData['DATA']['0']->location == $mediaData->locID) // Is current location the same as new assignment?
+      {
+        $r_val['RSLT'] = "1";
+        $r_val['MSSG'] = "$mediaData->mediaID already assigned to selected location.";
+      }
+      elseif(($tempData['DATA']['0']->batch_id == $GLOBALS['destroyTapeException']['batchID']) && ($_SESSION['AccessLevel'] > $GLOBALS['adminLevel']))
+      {
+        $r_val['RSLT'] = "1";
+        $r_val['MSSG'] = "$mediaData->mediaID assigned to DESTROYED location.  Contact the system administrator to have the media assigned to a different location.";
+      }
+      elseif($mediaData->locName == $GLOBALS['newTapeLocation'])
+      {
+        $rawData = assignTape($mediaData->mediaID, $mediaData->locID, $mediaData->uName, $GLOBALS['recycleTapeException']['batchID'], $GLOBALS['recycleTapeException']['batchCount']);
+        if($rawData['RSLT'] == "1")
+        {
+          $r_val['RSLT'] = "1";
+          $r_val['MSSG'] = "Unable to recycle $mediaData->mediaID.  Contact system administrator.";
+        }
+        else
+        {
+          $r_val['RSLT'] = "0";
+          $r_val['MSSG'] = "Successfully recycled $mediaData->mediaID";
+        }
+      }
+      else
+      {
+        $rawData = assignTape($mediaData->mediaID, $mediaData->locID, $mediaData->uName, $tempData['DATA']['0']->batch_id, $tempData['DATA']['0']->batch_num);
+        if($rawData['RSLT'] == "1")
+        {
+          $r_val['RSLT'] = "1";
+          $r_val['MSSG'] = "Unable to assign $mediaData->mediaID to $mediaData->locName.  Contact system administrator.";
+        }
+        else
+        {
+          $r_val['RSLT'] = "0";
+          $r_val['MSSG'] = "Assigned $mediaData->mediaID to $mediaData->locName.";
+        }
+      }
+    }
+    else
+    {
+      $r_val['RSLT'] = $tempData['RSLT'];
+      $r_val['MSSG'] = $tempData['MSSG'];
+      $r_val['DATA'] = $mediaData->mediaID;
+    }
+  }
+  else
+  {
+    $r_val['RSLT'] = $tempData['RSLT'];
+    $r_val['MSSG'] = $tempData['MSSG'];
+    $r_val['DATA'] = $mediaData->mediaID;
+  }
+  return $r_val;
+}
 ?>
