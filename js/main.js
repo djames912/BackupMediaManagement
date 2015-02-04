@@ -292,8 +292,14 @@ var listUsersCallback = function (data)
 // Call back function for add user form.
 var adduserCallback = function (data)
 {
-  var targetDiv = document.getElementById("adduser");
-  targetDiv.innerHTML = data;
+  if(data.RSLT == 0)
+  {
+    alert(data.MSSG);
+  }
+  else
+  {
+    alert(data.MSSG);
+  }
 };
 
 /* This is the list media types call back function.  It accepts an array of objects from the PHP side of the
@@ -446,6 +452,23 @@ function addLocation()
    var procData = prepData(tempObj, "addNewLocation");
    ajaxCall(procData, showAddLocationResultCallback);
    formObj.reset();
+}
+
+/* This function accepts no arguments.  It gets information out of the appropriate form, creates and object
+ * and then submits the object to the addNewUser() AJAX function.
+ */
+function addUser()
+{
+  var formObj = document.getElementById("addnewuserform");
+  var tempObj = new Object();
+  tempObj.userFirst = formObj.elements['newuserfirst'].value;
+  tempObj.userLast = formObj.elements['newuserlast'].value;
+  tempObj.userName = formObj.elements['newusername'].value;
+  tempObj.passwd = formObj.elements['newuserpasswd'].value;
+  tempObj.accessLvl = formObj.elements['useraccesslevel'].value;
+  var procData = prepData(tempObj, "addNewUser");
+  ajaxCall(procData, adduserCallback);
+  formObj.reset();
 }
 
 /* This function accepts an array from addMedia().  It does some checking to be sure that it actually

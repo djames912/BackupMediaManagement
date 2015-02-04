@@ -54,6 +54,11 @@ and open the template in the editor.
 	addLocation();
 	e.preventDefault();
       });
+      $('#addnewuserform').on('submit', function(e)
+      {
+        addUser();
+        e.preventDefault();
+      });
       $('#addtapeform').on('submit', function(e)
       {
         addTape();
@@ -100,15 +105,12 @@ and open the template in the editor.
         $(".admdetail").hide();
         if(this.id == "list_users")
         {
-          //console.log(toJSON(this));
           var displayData = prepData("User List", "generateUserList");
           ajaxCall(displayData, listUsersCallback);
           $("#show_users").show();
         }
         if(this.id == "add_user")
         {
-          var displayData = prepData("Add User form under development.", "test");
-          ajaxCall(displayData, adduserCallback);
           $("#adduser").show();
         }
         if(this.id == "add_media")

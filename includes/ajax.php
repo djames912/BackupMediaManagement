@@ -220,6 +220,25 @@ function lookupBatchMembers($batchID)
   return $rawOutput;
 }
 
+/* This function accepts an object containing user data as an argument.  It checks to see if the two
+ * optional properties are set or not.  If it finds the optional properties are not set, it sends one data
+ * set to the backend function.  If it finds the optional properties are set, it sends a different data set
+ * to the backend function.  It returns whether or not the user was added to the database.
+ */
+function addNewUser($userData)
+{
+  error_log(print_r($userData, true));
+  if($userData->userName == "" || $userData->passwd == "")
+  {
+    $rawData = addUser($userData->userFirst, $userData->userLast, $userData->accessLvl);
+  }
+  else
+  {
+    $rawData = addUser($userData->userFirst, $userData->userLast, $userData->accessLvl, $userData->userName, $userData->passwd);
+  }
+  return $rawData;
+}
+
 /* This function accepts an object containing the batch ID and the member bar code numbers.  It takes
  * that data and then builds an object with additional information which it then passes to the back end
  * function checkBatchIn() which requires additional information that does not come over from the
@@ -287,7 +306,7 @@ function procIndMedia($mediaData)
     $tempData = getLastRecord(trim($mediaData->mediaID)); //Get the last record for the media.
     if($tempData['RSLT'] == "0") // If the record is found.
     {
-      error_log(print_r($tempData,true));
+      //error_log(print_r($tempData,true));
       if($tempData['DATA']['0']->location == $mediaData->locID) // Is current location the same as new assignment?
       {
         $r_val['RSLT'] = "1";

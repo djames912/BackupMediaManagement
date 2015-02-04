@@ -57,7 +57,7 @@ $modTapeLevel = 6;
 $addTapeLevel = 1;
 $runReportLevel = 3;
 $createBatchLevel = 2;
-$modBatchLevel = 3;
+$modBatchLevel = 4;
 
 // REMOVE THE FOLLOWING LINES FROM THE configure.php.local file:
 include 'configure.php.local';
