@@ -72,9 +72,15 @@ and open the template in the editor.
         if(this.id === "Add_TapemMark")
           $("#addtape").show();
         if(this.id === "ReportsmMark")
+        {
           $("#reports").show();
+          $("#mediadetail").empty();
+        }
         if(this.id == "Create_BatchmMark")
+        {
           $("#batch").show();
+          $("#battprslt").empty();
+        }
         if(this.id == "Modify_BatchmMark")
         {
           getReturningBatchIDs();
@@ -84,7 +90,9 @@ and open the template in the editor.
         if(this.id == "Modify_TapemMark")
           $("#modtape").show();
         if(this.id == "AdminmMark")
-          $("#admin").show();   
+        {
+          $("#admin").show();
+        }
       });
       $(".page_content").hide();
       // Listener for the buttons with the admbtn class.  

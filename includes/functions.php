@@ -1078,7 +1078,7 @@ function addType($tableName, $fieldName, $dataValue)
    {
      $rawData = getLastRecord($mediaBarCode);
      //error_log(print_r($rawData, true));
-     if($rawData['DATA']['0']->location == $defaultNewTapeLocationID || $rawData['DATA']['0']->batch_id == $GLOBALS['recycleTapeException']['batchID'])
+     if($rawData['DATA']['0']->location == $defaultNewTapeLocationID || $rawData['DATA']['0']->batch_id == $GLOBALS['recycleTapeException']['batchID'] || $rawData['DATA']['0']->batch_id == $GLOBALS['newTapeException']['batchID'])
      {
        $r_val['RSLT'] = "0";
        $r_val['MSSG'] = "$mediaBarCode is available to add to this batch.";

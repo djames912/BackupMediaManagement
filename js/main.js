@@ -678,7 +678,7 @@ var showMediaDetailCallback = function(data)
     textOut += "Vendor: " + tempObj.vendor + "<BR>";
     textOut += "PO:        " + tempObj.poNum + "<BR>";
     textOut += "<CENTER>History</CENTER><BR>";
-    textOut += "=========================<BR>";
+    textOut += "=================================<BR>";
     //console.log(tempObj.mediaHistory['0']);
     for(cntr = 0, len = tempObj.mediaHistory.length; cntr < len; cntr++)
     {
@@ -687,7 +687,7 @@ var showMediaDetailCallback = function(data)
       textOut += "User:       " + tempObj.mediaHistory[cntr].user + "<BR>";
       textOut += "Batch:     " + tempObj.mediaHistory[cntr].batch_id + "<BR>";
       textOut += "Member: " + tempObj.mediaHistory[cntr].batch_num + "<BR>";
-      textOut += "=========================<BR>";
+      textOut += "=================================<BR>";
     }
   }
   targetDiv.innerHTML = textOut;

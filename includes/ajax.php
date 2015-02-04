@@ -293,7 +293,7 @@ function procIndMedia($mediaData)
         $r_val['RSLT'] = "1";
         $r_val['MSSG'] = "$mediaData->mediaID already assigned to selected location.";
       }
-      elseif(($tempData['DATA']['0']->batch_id == $GLOBALS['destroyTapeException']['batchID']) && ($_SESSION['AccessLevel'] > $GLOBALS['adminLevel']))
+      elseif(($tempData['DATA']['0']->batch_id == $GLOBALS['destroyTapeException']['batchID']) && ($_SESSION['AccessLevel'] >= $GLOBALS['adminLevel']))
       {
         $r_val['RSLT'] = "1";
         $r_val['MSSG'] = "$mediaData->mediaID assigned to DESTROYED location.  Contact the system administrator to have the media assigned to a different location.";

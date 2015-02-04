@@ -30,7 +30,7 @@
       <span class="ui-button-text">Add Vendor</span>
     </button>
   </div>
-  <div class="results">
+  <div  class="results">
   <div id="show_users" class="admdetail"></div>
     <div id="adduser" class="admdetail">
       <label class="title">Add User Form</label>
