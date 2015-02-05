@@ -1,3 +1,4 @@
+<?php  session_start(); ?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -10,13 +11,12 @@
   </head>
   <body>
     <?php
-    session_start();
     require_once "includes/functions.php";
     $_SESSION['Authenticated'] = false;
     $suppliedUserName = $_SERVER['REMOTE_USER'];
     $userName = cleanUserName($suppliedUserName);
     
-    if($userName == null || $userName = '')
+    if($userName == null || $userName == '')
     {
       $myBaseURL = $_SERVER['HTTP_HOST'] . $applicationRoot . 'locallogin.php';
       echo '<meta http-equiv="refresh" content="0;URL=\'http://' . $myBaseURL . '\'">';     

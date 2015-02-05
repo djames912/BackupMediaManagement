@@ -1,3 +1,4 @@
+<?php  session_start(); ?>
 <!--
 To change this template, choose Tools | Templates
 and open the template in the editor.
@@ -146,7 +147,6 @@ and open the template in the editor.
   </head>
   <body>
     <?php
-    session_start();
     require_once "includes/functions.php";
     
     if(!$_SESSION['Authenticated'])

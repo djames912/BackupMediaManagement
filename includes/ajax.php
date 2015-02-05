@@ -1,6 +1,6 @@
 <?php
-require_once 'functions.php';
 session_start();
+require_once 'functions.php';
 #---------------------------------------------------------------
 # Great/Generic peice of code for handling ajax request/returns 
 # echos a Json string
