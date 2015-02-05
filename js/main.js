@@ -72,14 +72,12 @@ function addTape()
  */
 function addBatch()
 {
-  //console.log("In addBatch function");
   if(batchTapes.length > 0)
   {
     var tempObj = new Object();
     tempObj.date = $("#createdate").val();
     tempObj.bcodes = batchTapes;
     var procData = prepData(tempObj, "submitBatch");
-    //console.log(procData);
     ajaxCall(procData, showCreateBatchResultCallback);
     //formObj.reset(); // reset form
     batchTapes = []; // wipe out batchTapes array
@@ -111,11 +109,10 @@ function getMediaHistory()
  */
 function getReturningBatchIDs()
 {
-  //console.log("In getReturningBatchIDs.");
   var tempObj = new Object();
   tempObj.returnDays = 90;
   var procData = prepData(tempObj, "lookupReturningBatches");
-  //console.log(procData);
+  //console.log("Data: ", procData);
   ajaxCall(procData, showReturningBatchesCallback);
 }
 
@@ -393,7 +390,6 @@ var showAddVendorResultCallback = function(data)
   }
   else
   {
-    //console.log(data);
     if(data.RSLT == "0")
     {
       textOut += "Success!<BR><BR>" + data.MSSG;
@@ -486,7 +482,6 @@ var showAddMediaResultCallback = function(data)
   }
   else
   {
-    //console.log(data);
     if(data.RSLT == "0")
     {
       textOut += "Success!<BR><BR>" + data.MSSG;
@@ -515,7 +510,6 @@ var showAddLocationResultCallback = function(data)
   }
   else
   {
-    //console.log(data);
     if(data.RSLT == "0")
     {
       textOut += "Success!<BR><BR>" + data.MSSG;
@@ -536,7 +530,6 @@ var showAddLocationResultCallback = function(data)
  */
 var showAddTapeResultCallback = function(data)
 {
-  //console.log(data);
   if(data.CALLER == "batch")
     displayLocation = "battprslt";
   else
@@ -568,12 +561,10 @@ var batchTapeInputCapture = function(mediaElement)
   // Check intput format for [5 or 6 numbers] [1 letter] [1 number]
   if((match = mediaBarCode.match(/([0-9]{5,6}[L][0-9])/))) 
   {
-    //console.log(mediaBarCode);
     var codePresent = $.inArray(mediaBarCode, batchTapes);
     if(codePresent == "-1")
     {
       var procData = prepData(mediaBarCode, "checkBatchMembers");
-      //console.log(procData);
       ajaxCall(procData, batchTapeCheckCallback);
     }
   }
@@ -642,8 +633,6 @@ var batchMemberInputCapture = function(mediaElement)
  */
 var batchTapeCheckCallback = function(data) 
 {
-  //console.log("Now in batchTapeCheckCallback");
-  //console.log(data);
   data.CALLER = "batch";
   showAddTapeResultCallback(data);
   // If successful.
@@ -666,8 +655,6 @@ var showCreateBatchResultCallback = function(data)
   var targetDiv = document.getElementById("battprslt");
   var textOut = "";
   // show success/failure message in result box
-  //console.log("In showCreateBatchResultCallback");
-  //console.log(data);
   if(data.RSLT == "0")
   {
     textOut = data.MSSG;
@@ -687,8 +674,6 @@ var showMediaDetailCallback = function(data)
   var tempObj = new Object();
   var targetDiv = document.getElementById("mediadetail");
   var textOut = "";
-  //console.log("In showMediaDetailcallback");
-  //console.log(data);
   if(data.RSLT == "1")
   {
     textOut = data.MSSG;
@@ -702,7 +687,6 @@ var showMediaDetailCallback = function(data)
     textOut += "PO:        " + tempObj.poNum + "<BR>";
     textOut += "<CENTER>History</CENTER><BR>";
     textOut += "=================================<BR>";
-    //console.log(tempObj.mediaHistory['0']);
     for(cntr = 0, len = tempObj.mediaHistory.length; cntr < len; cntr++)
     {
       textOut += "Date:       " + tempObj.mediaHistory[cntr].date + "<BR>";
@@ -723,8 +707,6 @@ var showMediaDetailCallback = function(data)
  */
 var showReturningBatchesCallback = function(data)
 {
-  //console.log("In showReturningBatchesCallback");
-  //console.log(data.DATA[0]);
   var targetDiv = document.getElementById("retbatchlist");
   var htmlOut = "";
   if(data.RSLT == "1")

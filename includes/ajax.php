@@ -76,7 +76,6 @@ function addNewVendor($vendorData)
 {
   //error_log(print_r($vendorData, true));
   $rawOutput = addType('vendors', 'v_name', $vendorData->vendorname);
-  //error_log(print_r($rawOutput, true));
   return $rawOutput;
 }
 
@@ -111,11 +110,9 @@ function testNewTape($mediaData)
   $mediaData->uname = $_SESSION['UserName'];
   //error_log(print_r($mediaData, true));
   $rawOutput = tapeExists(trim($mediaData->tapeID));
-  //error_log(print_r($rawOutput, true));
   if($rawOutput['RSLT'] == "1")
   {
     $insertResult = addTape($mediaData);
-    //error_log(print_r($insertResult, true));
     if($insertResult['RSLT'] == "0")
     {
       $r_val['RSLT'] = "0";
@@ -147,7 +144,6 @@ function checkBatchMembers($mediaBarCode)
   //error_log(print_r($mediaBarCode, true));
   $rawOutput = tapeAvailable($mediaBarCode);
   $rawOutput['DATA'] = trim($mediaBarCode);
-  //error_log(print_r($rawOutput, true));
   return $rawOutput;
 }
 
@@ -166,7 +162,6 @@ function submitBatch($batchData)
     $batchData->rdays = $GLOBALS['defaultReturnTime'];
   if(!property_exists($batchData, 'bloc'))
     $batchData->bloc = $GLOBALS['batchCreateLocation'];
-  //error_log(print_r($batchData, true));
   $rawOutput = addTapeBatch($batchData);
   return $rawOutput;
 }
@@ -178,7 +173,6 @@ function submitBatch($batchData)
 function lookupMediaDetail($mediaID)
 {
   $rawOutput = getMediaDetail($mediaID->mediaid);
-  //error_log(print_r($rawOutput, true));
   return $rawOutput;
 }
 
@@ -197,7 +191,6 @@ function lookupReturningBatches($returnData = NULL)
     $returnDays = $returnData->returnDays;
   }
   $rawOutput = getReturningBatchIDs($returnDays);
-  //error_log(print_r($rawOutput, true));
   return $rawOutput;
 }
 
@@ -215,7 +208,6 @@ function lookupBatchMembers($batchID)
   else
   {
     $rawOutput = getBatchMembers($batchID);
-    //error_log(print_r($rawOutput, true));
   }
   return $rawOutput;
 }
@@ -302,11 +294,9 @@ function procIndMedia($mediaData)
   {
     $tempData = getIDLabel('locations', $mediaData->locID);
     $mediaData->locName = $tempData['DATA'];
-    error_log(print_r($mediaData, true));
     $tempData = getLastRecord(trim($mediaData->mediaID)); //Get the last record for the media.
     if($tempData['RSLT'] == "0") // If the record is found.
     {
-      //error_log(print_r($tempData,true));
       if($tempData['DATA']['0']->location == $mediaData->locID) // Is current location the same as new assignment?
       {
         $r_val['RSLT'] = "1";
