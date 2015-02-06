@@ -777,7 +777,9 @@ var showBatchMembersCallback = function(data)
 };
 
 /* This function accepts a status from the AJAX function that is called by the checkBatchIn function
- * and displays whether or not the batch check in process was completed or not.  It returns nothing.
+ * and displays whether or not the batch check in process was completed or not.  It resets the values
+ * of the various variables involved in processing the batches to be sure they are blank.  It returns
+ * nothing.
  */
 var showBatchCheckInResultsCallback = function(data)
 {
@@ -788,6 +790,9 @@ var showBatchCheckInResultsCallback = function(data)
     show_tape(document.getElementById("retbatchmbrs"), "Batch check in failed!", "failure");
   else
     show_tape(document.getElementById("retbatchmbrs"), "Batch check in successful.", "success");
+  batchMembers = [];  //Wipes out the array at each click of a batch button.
+  membersChecked = 0;  //Sets the global variable back to zero for a new batch.
+  returningBatchID = 0;  // Resets this variable for a new batch.
 };
 
 

@@ -10,9 +10,8 @@ require_once '../includes/functions.php';
 
 $tempVar = addUser('Administrative', 'User', '8', 'admin', '-CHOOSE_A_STRONG_PASSWORD-' );
 
-echo 'Result: ' . $tempVar['RSLT'];
-echo 'Message: ' . $tempVar['MSSG'];
-echo 'UID: ' . $tempVar['DATA'];
-
+echo 'Result: ' . $tempVar['RSLT'] . "\r\n";
+echo 'Message: ' . $tempVar['MSSG'] . "\r\n";
+echo 'UID: ' . $tempVar['DATA'] . "\r\n";
 
 ?>

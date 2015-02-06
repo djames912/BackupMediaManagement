@@ -708,6 +708,9 @@ function addType($tableName, $fieldName, $dataValue)
      $returnedData = getReturnDate($rtnDate);
      $returnDate = $returnedData['DATA'];
    }
+   // This is a convenience and nothing more.  It creates a return date in the form of m/d/y.
+   $returnLabel = date('m/d/y', $returnDate);
+   
    // This block checks to see if the batch location is set.  If it isn't it goes
    // with the default location.  If it is, it checks to see if it's a numeric value
    // and then verifies the value with the database.  If the value is valid, it sets
@@ -780,7 +783,7 @@ function addType($tableName, $fieldName, $dataValue)
          $r_val['DATA'] = $historyUpdate;
        }
        $r_val['RSLT'] = "0";
-       $r_val['MSSG'] = "Batch created successfully.";
+       $r_val['MSSG'] = "Batch created successfully.<BR>Returning on: " . $returnLabel;
      } 
      catch (PDOException $exception) 
      {
