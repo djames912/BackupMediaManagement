@@ -28,6 +28,14 @@ function today()
   return parseInt(temp.getTime()/1000);
 }
 
+// This function sets the return date.
+function setReturnDate(numDays)
+{
+  var rtnDate = new Date();
+  rtnDate.setDate(date.getDate() + numDays);
+  return rtnDate;
+}
+
 // Arrays for specifying events based on an index
 nonie_events = ['click','keyup','mouseover','mouseout'];
 ie_events = ['onclick','onkeyup','onmouseover', 'onmouseout'];
@@ -793,6 +801,7 @@ var showBatchCheckInResultsCallback = function(data)
   batchMembers = [];  //Wipes out the array at each click of a batch button.
   membersChecked = 0;  //Sets the global variable back to zero for a new batch.
   returningBatchID = 0;  // Resets this variable for a new batch.
+  document.getElementById('checkedbatch').disabled = true;
 };
 
 

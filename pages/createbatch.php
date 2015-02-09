@@ -2,9 +2,13 @@
   <!-- <form id="createbatchform" method="POST" action="#"> -->
   <div class="form1">
     <div class="div_tab">
-      <label class="spn">Date</label>
+      <label class="spn">Create Date</label>
       <input name="createdate" id="createdate" class="iput setDate" type="text">
     </div>
+    <!-- <div class="div_tab">
+      <label class="spn">Return Date</label>
+      <input name="returndate" id="returndate" class="iput setDate" type="text">
+    </div> -->
     <div class="div_tab">
       <label class="spn">Media Id</label>
       <input id="mediaid" name="mediaid" class="iput batchAddTapeOnCr" type="text">
